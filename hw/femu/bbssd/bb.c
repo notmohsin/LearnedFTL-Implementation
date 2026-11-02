@@ -1,5 +1,5 @@
 #include "../nvme.h"
-#include "./ld-tpftl.h"
+#include "./leaftl.h"
 
 
 static void bb_init_ctrl_str(FemuCtrl *n)
@@ -57,7 +57,6 @@ static void reset_stat(struct ssd *ssd)
     // st->write_joule = 0;
     // st->erase_joule = 0;
     // st->joule = 0;
-    // count_segments(ssd);
 
     /*LearnedFTL*/
     // st->cmt_hit_cnt = 0;
@@ -109,7 +108,7 @@ static void print_stat(struct ssd *ssd)
     // printf("write joule: %Lf\n", st->write_joule);
     // printf("erase joule: %Lf\n", st->erase_joule);
     // printf("All joule: %Lf\n", st->joule);
-    // count_segments(ssd);
+    count_segments(ssd);
 
     /*LearnedFTL*/
     // st->joule = st->read_joule + st->write_joule + st->erase_joule;
@@ -170,6 +169,7 @@ static void bb_flip(FemuCtrl *n, NvmeCmd *cmd)
         break;
     case FEMU_PRINT_STAT:
         print_stat(ssd);
+        fflush(stdout);
         femu_log("%s,Statistics print!\n", n->devname);
         break;
     default:
@@ -220,4 +220,3 @@ int nvme_register_bbssd(FemuCtrl *n)
 
     return 0;
 }
-

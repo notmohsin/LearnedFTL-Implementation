@@ -10,9 +10,9 @@ int init_dram_backend(SsdDramBackend **mbe, int64_t nbytes)
     b->logical_space = g_malloc0(nbytes);
 
     if (mlock(b->logical_space, nbytes) == -1) {
-        femu_err("Failed to pin the memory backend to the host DRAM\n");
-        g_free(b->logical_space);
-        abort();
+        femu_log("Unable to pin the memory backend; continuing without mlock\n");
+    } else {
+        b->locked = true;
     }
 
     return 0;
@@ -21,7 +21,9 @@ int init_dram_backend(SsdDramBackend **mbe, int64_t nbytes)
 void free_dram_backend(SsdDramBackend *b)
 {
     if (b->logical_space) {
-        munlock(b->logical_space, b->size);
+        if (b->locked) {
+            munlock(b->logical_space, b->size);
+        }
         g_free(b->logical_space);
     }
 }

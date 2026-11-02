@@ -2237,9 +2237,20 @@ void count_segments(struct ssd* ssd) {
 
     printf("access cnt: %lld\n", (long long)ssd->stat.access_cnt);
     printf("cmt_hit_cnt: %lld\n", (long long)ssd->stat.cmt_hit_cnt);
+    printf("cmt_miss_cnt: %lld\n", (long long)ssd->stat.cmt_miss_cnt);
+    uint64_t cmt_access_cnt =
+        ssd->stat.cmt_hit_cnt + ssd->stat.cmt_miss_cnt;
+    printf("cmt_access_cnt: %lld\n", (long long)cmt_access_cnt);
+    printf("cmt_hit_rate: %.9f\n",
+           cmt_access_cnt
+               ? (double)ssd->stat.cmt_hit_cnt / cmt_access_cnt
+               : 0.0);
     printf("single_read_cnt: %d\n", ssd->stat.single_read);
     printf("double_read_cnt: %d\n", ssd->stat.double_read);
     printf("triple_read_cnt: %d\n", ssd->stat.triple_read);
+    printf("translation_read_cnt: %d\n",
+           ssd->stat.single_read + ssd->stat.double_read +
+           ssd->stat.triple_read);
 
     printf("read joule: %Lf\n", ssd->stat.read_joule);
     printf("write joule: %Lf\n", ssd->stat.write_joule);
@@ -2250,6 +2261,7 @@ void count_segments(struct ssd* ssd) {
     ssd->stat.double_read = 0;
     ssd->stat.triple_read = 0;
     ssd->stat.cmt_hit_cnt = 0;
+    ssd->stat.cmt_miss_cnt = 0;
     ssd->stat.access_cnt = 0;
 
     ssd->stat.read_joule = 0;
@@ -2341,6 +2353,7 @@ static uint64_t ssd_read(struct ssd *ssd, NvmeRequest *req)
                 old_lun = get_lun(ssd, &ppa);
             }
         } else {
+            ssd->stat.cmt_miss_cnt++;
             read_cnt++;
             old_lun = process_translation_page_read(ssd, req, lpn, &vppn);
         }

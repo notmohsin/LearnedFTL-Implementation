@@ -2,12 +2,14 @@
 #define __FEMU_MEM_BACKEND
 
 #include <stdint.h>
+#include <stdbool.h>
 
 /* DRAM backend SSD address space */
 typedef struct SsdDramBackend {
     void    *logical_space;
     int64_t size; /* in bytes */
     int     femu_mode;
+    bool    locked;
 } SsdDramBackend;
 
 int init_dram_backend(SsdDramBackend **mbe, int64_t nbytes);
