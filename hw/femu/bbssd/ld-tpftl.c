@@ -997,6 +997,7 @@ static void ssd_init_statistics(struct ssd *ssd)
     st->access_cnt = 0;
     st->model_hit_num = 0;
     st->model_use_num = 0;
+    st->model_miss_num = 0;
     st->model_out_range = 0;
     st->predict_time = 0;
     st->calculate_time = 0;
@@ -2522,9 +2523,32 @@ void count_segments(struct ssd* ssd) {
     printf("total cnt: %lld\n", (long long)ssd->stat.access_cnt);
     printf("cmt cnt: %lld\n", (long long)ssd->stat.cmt_hit_cnt);
     printf("model cnt: %lld\n", (long long)ssd->stat.model_hit_num);
+    uint64_t cmt_accesses = ssd->stat.cmt_hit_cnt + ssd->stat.cmt_miss_cnt;
+    printf("{\"ftl\":\"learnedftl\",\"access_cnt\":%lld,"
+           "\"cmt_hits\":%lld,\"cmt_misses\":%lld,\"cmt_accesses\":%lld,"
+           "\"cmt_hit_rate\":%.9f,\"model_queries\":%lld,"
+           "\"model_hits\":%lld,\"model_misses\":%lld,"
+           "\"model_hit_rate\":%.9f,\"writes\":%lld,\"gc\":%d}\n",
+           (long long)ssd->stat.access_cnt,
+           (long long)ssd->stat.cmt_hit_cnt,
+           (long long)ssd->stat.cmt_miss_cnt,
+           (long long)cmt_accesses,
+           cmt_accesses
+               ? (double)ssd->stat.cmt_hit_cnt / cmt_accesses
+               : 0.0,
+           (long long)ssd->stat.model_use_num,
+           (long long)ssd->stat.model_hit_num,
+           (long long)ssd->stat.model_miss_num,
+           ssd->stat.model_use_num
+               ? (double)ssd->stat.model_hit_num / ssd->stat.model_use_num
+               : 0.0,
+           (long long)ssd->stat.write_num, ssd->stat.gc_cnt);
     ssd->stat.access_cnt = 0;
     ssd->stat.cmt_hit_cnt = 0;
+    ssd->stat.cmt_miss_cnt = 0;
     ssd->stat.model_hit_num = 0;
+    ssd->stat.model_use_num = 0;
+    ssd->stat.model_miss_num = 0;
 }
 
 static uint64_t ssd_read(struct ssd *ssd, NvmeRequest *req)
@@ -2579,7 +2603,6 @@ static uint64_t ssd_read(struct ssd *ssd, NvmeRequest *req)
         } 
 
         if (ssd->bitmaps[lpn] == 1) {
-            ssd->stat.model_hit_num++;
             int gtd_index = lpn/spp->ents_per_pg;
             if (ssd->lr_nodes[gtd_index].u == 1) {
                 
@@ -2588,8 +2611,10 @@ static uint64_t ssd_read(struct ssd *ssd, NvmeRequest *req)
                     bool f = model_predict(ssd, lpn, &ppa);
 
                     if (f) {
+                        ssd->stat.model_hit_num++;
                         goto ssd_read_latency;
                     }
+                    ssd->stat.model_miss_num++;
                 }
             }
         }

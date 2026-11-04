@@ -1,0 +1,23 @@
+{
+  "operations_per_trace": 10000000,
+  "address_range_gib": 25.0,
+  "budget_gib": 3.0,
+  "base_seed": 42,
+  "request_sizes": [
+    4096,
+    8192,
+    16384,
+    65536
+  ],
+  "workloads": [
+    "seq-mixed",
+    "uniform-read",
+    "uniform-write",
+    "uniform-mixed",
+    "zipf-hot20-access80-a1.2",
+    "zipf-hot10-access90-a1.2",
+    "zipf-hot20-access80-a0.8",
+    "mixed-50-seq-50-random"
+  ],
+  "total_bytes": 2135279675
+}

@@ -5,7 +5,9 @@ SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 IMGDIR="${HOME}/images"
 OSIMGF="${IMGDIR}/u20s.qcow2"
 SEEDIMG="${IMGDIR}/femu-seed.iso"
-QEMU="${SCRIPT_DIR}/x86_64-softmmu/qemu-system-x86_64"
+QEMU="${SCRIPT_DIR}/../build-femu/qemu-system-x86_64"
+LOG="${SCRIPT_DIR}/../build-femu/log"
+QMP="${SCRIPT_DIR}/../build-femu/qmp-sock"
 
 if [[ ! -x "$QEMU" ]]; then
     echo "FEMU binary not found: $QEMU" >&2
@@ -38,5 +40,5 @@ exec "$QEMU" \
     -net user,hostfwd=tcp::8080-:22 \
     -net nic,model=virtio \
     -nographic \
-    -qmp "unix:${SCRIPT_DIR}/qmp-sock,server=on,wait=off" \
-    2>&1 | tee "${SCRIPT_DIR}/log"
+    -qmp "unix:${QMP},server=on,wait=off" \
+    2>&1 | tee "${LOG}"

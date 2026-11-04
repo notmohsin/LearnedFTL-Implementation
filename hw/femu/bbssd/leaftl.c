@@ -1509,25 +1509,26 @@ static int segment_search_simple_segment(simple_segment* sg, uint64_t lpn, uint6
     } else {
         cr_bm* tmp = lm->crb->crb_unit[seg_no];
         int i;
-        int flag = 0;
+        bool found = false;
         while (tmp) {
             for (i = 0; i < tmp->cnt; i++) {
                 if (tmp->record[i] == lpn) {
-                    flag = 1;
+                    found = true;
                     break;
                 }
             }
 
-            if (flag)
+            if (found)
                 break;
 
             tmp = tmp->next;
         }
         
-        if (flag) {
+        if (found) {
             simple_segment* crb_sm = tmp->to_sm;
             *ppn = crb_sm->k * off_lpn + crb_sm->inter;
-            lru_en = crb_sm;
+            lru_en->is_accurate = 0;
+            flag = 3;
         }
     }
 
@@ -1737,16 +1738,25 @@ static uint64_t all_seg_get_ppn(all_seg_mgmt* all_segs, segment_param* sp, uint6
     int seg_no = lpn/sp->mapping_per_page;
     segment* sg = ls->level_seg[seg_no];
 
+    lm->owner->stat.model_queries++;
     while (sg) {
         flag = level_seg_mgmt_search(sg, lpn, &ppn, sp, lm, lru_en);
-        if (flag == 1)
+        if (flag == 1) {
+            lm->owner->stat.model_hit++;
             return ppn;
+        }
+        if (flag == 3) {
+            lm->owner->stat.model_correction++;
+            return ppn;
+        }
         if (flag == 2) {
+            lm->owner->stat.model_miss++;
             return INVALID_VAL;
         }
         sg = sg->next;
     }
 
+    lm->owner->stat.model_miss++;
     return INVALID_VAL;
 
     
@@ -1867,6 +1877,7 @@ static void CRB_init(learned_mgmt* lm) {
 
 static learned_mgmt* learned_segments_init(struct ssd* ssd) {
     learned_mgmt* lm = g_malloc0(sizeof(learned_mgmt));
+    lm->owner = ssd;
     lm->sp = segment_param_init(ssd);
     lm->all_segs = all_seg_mgmt_init(lm->sp);
 
@@ -2251,6 +2262,42 @@ void count_segments(struct ssd* ssd) {
     printf("translation_read_cnt: %d\n",
            ssd->stat.single_read + ssd->stat.double_read +
            ssd->stat.triple_read);
+    printf("model_queries: %lld\n",
+           (long long)ssd->stat.model_queries);
+    printf("model_hits: %lld\n", (long long)ssd->stat.model_hit);
+    printf("model_corrections: %lld\n",
+           (long long)ssd->stat.model_correction);
+    printf("model_misses: %lld\n", (long long)ssd->stat.model_miss);
+    printf("model_hit_rate: %.9f\n",
+           ssd->stat.model_queries
+               ? (double)ssd->stat.model_hit / ssd->stat.model_queries
+               : 0.0);
+    printf("{\"ftl\":\"leaftl\",\"access_cnt\":%lld,"
+           "\"cmt_hits\":%lld,\"cmt_misses\":%lld,\"cmt_accesses\":%lld,"
+           "\"cmt_hit_rate\":%.9f,\"model_queries\":%lld,"
+           "\"model_hits\":%lld,\"model_corrections\":%lld,"
+           "\"model_misses\":%lld,\"model_hit_rate\":%.9f,"
+           "\"single_reads\":%d,\"double_reads\":%d,\"triple_reads\":%d,"
+           "\"translation_reads\":%d,\"writes\":%lld,\"gc\":%d}\n",
+           (long long)ssd->stat.access_cnt,
+           (long long)ssd->stat.cmt_hit_cnt,
+           (long long)ssd->stat.cmt_miss_cnt,
+           (long long)cmt_access_cnt,
+           cmt_access_cnt
+               ? (double)ssd->stat.cmt_hit_cnt / cmt_access_cnt
+               : 0.0,
+           (long long)ssd->stat.model_queries,
+           (long long)ssd->stat.model_hit,
+           (long long)ssd->stat.model_correction,
+           (long long)ssd->stat.model_miss,
+           ssd->stat.model_queries
+               ? (double)ssd->stat.model_hit / ssd->stat.model_queries
+               : 0.0,
+           ssd->stat.single_read, ssd->stat.double_read,
+           ssd->stat.triple_read,
+           ssd->stat.single_read + ssd->stat.double_read +
+               ssd->stat.triple_read,
+           (long long)ssd->stat.write_cnt, ssd->stat.gc_cnt);
 
     printf("read joule: %Lf\n", ssd->stat.read_joule);
     printf("write joule: %Lf\n", ssd->stat.write_joule);
@@ -2263,6 +2310,10 @@ void count_segments(struct ssd* ssd) {
     ssd->stat.cmt_hit_cnt = 0;
     ssd->stat.cmt_miss_cnt = 0;
     ssd->stat.access_cnt = 0;
+    ssd->stat.model_queries = 0;
+    ssd->stat.model_hit = 0;
+    ssd->stat.model_correction = 0;
+    ssd->stat.model_miss = 0;
 
     ssd->stat.read_joule = 0;
     ssd->stat.write_joule = 0;

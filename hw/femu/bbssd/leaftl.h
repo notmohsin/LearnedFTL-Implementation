@@ -272,7 +272,10 @@ struct statistics {
     double cmt_hit_ratio;
     uint64_t access_cnt;
     uint64_t write_cnt;
+    uint64_t model_queries;
     uint64_t model_hit;
+    uint64_t model_correction;
+    uint64_t model_miss;
     double model_hit_ratio;
     int single_read;
     int double_read;
@@ -346,6 +349,7 @@ typedef struct group_segments_mgmt {
 
 
 typedef struct learned_mgmt {
+    struct ssd *owner;
     segment_param *sp;
     all_seg_mgmt *all_segs;
     conflict_resolution_buffer *crb;
