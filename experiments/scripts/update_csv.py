@@ -55,7 +55,10 @@ def main() -> int:
     }
     for source, target in mapping.items():
         if source in record:
-            matches[0][target] = str(record[source])
+            value = record[source]
+            if source == "cmt_hit_rate":
+                value = f"{float(value) * 100:.9f}"
+            matches[0][target] = str(value)
 
     row = matches[0]
     single = int(record.get("single_reads", 0))

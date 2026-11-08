@@ -169,7 +169,9 @@ def generate_trace(
         "belady_references": str(len(references)),
         "belady_hits": str(hits),
         "belady_misses": str(misses),
-        "belady_hit_rate": f"{hits / len(references):.9f}" if references else "0.000000000",
+        "belady_hit_rate": (
+            f"{100 * hits / len(references):.9f}" if references else "0.000000000"
+        ),
         "bytes_written": str(path.stat().st_size),
     }
 
