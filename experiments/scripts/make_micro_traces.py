@@ -43,8 +43,12 @@ def main() -> int:
         "learnedftl": {"mapped_read_lpns": ["==", reads], "served_cmt_hits": ["==", reads],
                        "served_translation_free": ["==", reads], "served_flash_reads": ["==", reads],
                        "unmapped_read_lpns": ["==", 0]},
+        # KI-27: the zero-initialised buffer makes LPN 0 look buffered, so the
+        # whole first request (LPNs 0-15) is dropped; LPNs 16-255 fill slots
+        # 0-239 and the slot-0 read hit is LPN 16.
         "leaftl": {"buffer_hits": ["==", 1], "served_lpns": ["==", 0], "mapped_read_lpns": ["==", 1],
-                   "buffer_flushes": ["==", 0], "unmapped_read_lpns": ["==", reads - 1]},
+                   "buffer_flushes": ["==", 0], "unmapped_read_lpns": ["==", reads - 1],
+                   "writes_dropped": ["==", 16], "writes_buffered": ["==", 240]},
     }
 
     # 2. Reads before any write, one write, then reads of never-written LPNs.
@@ -72,8 +76,12 @@ def main() -> int:
     traces["overwrite-then-read"] = ops
     expected["overwrite-then-read"] = {
         "both": {"read_lpns": ["==", 16], "write_lpns": ["==", 4096 + 16]},
-        "leaftl": {"buffer_flushes": ["==", 2], "stale_map_entries": ["==", 16],
-                   "served_stale_page": [">=", 15], "mapped_read_lpns": ["==", 16]},
+        # KI-27: the first request (LPNs 0-63) is dropped (LPN 0 matches the
+        # zero-initialised buffer), so 2048 buffered LPNs are reached at LPN
+        # 2111 (one flush); LPNs 1000-1015 were flushed, then overwritten.
+        "leaftl": {"buffer_flushes": ["==", 1], "writes_dropped": ["==", 64],
+                   "stale_map_entries": ["==", 16], "served_stale_page": ["==", 16],
+                   "mapped_read_lpns": ["==", 16]},
         "learnedftl": {"stale_map_entries": ["==", 0], "served_stale_page": ["==", 0],
                        "mapped_read_lpns": ["==", 16]},
     }
@@ -94,6 +102,7 @@ def main() -> int:
     expected["size-buckets"] = {
         "both": {"read_size_hist": ["==", [1, 2, 2, 2, 2, 2, 2]],
                  "write_size_hist": ["==", [1, 2, 2, 2, 2, 2, 2]]},
+        "leaftl": {"writes_dropped": ["==", 1]},  # the write to LPN 0 (KI-27)
     }
 
     OUT.mkdir(parents=True, exist_ok=True)

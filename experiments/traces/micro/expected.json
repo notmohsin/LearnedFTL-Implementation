@@ -52,6 +52,14 @@
       "unmapped_read_lpns": [
         "==",
         31
+      ],
+      "writes_dropped": [
+        "==",
+        16
+      ],
+      "writes_buffered": [
+        "==",
+        240
       ]
     }
   },
@@ -101,15 +109,19 @@
     "leaftl": {
       "buffer_flushes": [
         "==",
-        2
+        1
+      ],
+      "writes_dropped": [
+        "==",
+        64
       ],
       "stale_map_entries": [
         "==",
         16
       ],
       "served_stale_page": [
-        ">=",
-        15
+        "==",
+        16
       ],
       "mapped_read_lpns": [
         "==",
@@ -156,6 +168,12 @@
           2,
           2
         ]
+      ]
+    },
+    "leaftl": {
+      "writes_dropped": [
+        "==",
+        1
       ]
     }
   }

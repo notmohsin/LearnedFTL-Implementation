@@ -71,35 +71,56 @@ For each read LPN:
 
 ## 4. Headline metrics (used for cross-FTL comparison)
 
-All are computed over **mapped read LPNs**: read LPNs that reach the FTL after the first write and map to written
-data. Unmapped, pre-first-write and invalid reads are reported separately and excluded.
+### How read cost is measured
+
+The authors' `read_cnt` (and so their `single_read`/`double_read`/`triple_read`) is not the number of flash reads:
+LeaFTL counts a translation-page read that never happens when the page is unmapped, misses the translation-page read
+on its stale-segment path, and counts write-buffer hits as single reads (KI-26). Our instrumentation therefore measures
+read cost directly: in `ssd_read`, each read LPN snapshots the NAND read counters (`nand_reads_user`,
+`nand_reads_translation`) when its loop iteration starts, and the difference when it ends is the number of flash
+reads issued while serving it, including translation reads caused by dirty CMT evictions (`ftl_stats.h`,
+`struct ftl_read_acct`). Invariant 4 checks that every read issued inside `ssd_read` is attributed this way, and
+invariant 12 that the NAND counters cover every operation the authors charge energy for.
+
+Each read LPN ends in one bucket:
+
+- **served**: the true page map (`maptbl`) has a mapping and the data page was read from flash
+  (`served_lpns`, with `served_reads_hist[k]` = served LPNs that needed k flash reads, k = 1, 2, 3, 4+);
+- **buffer hit** (LeaFTL only): returned from the write buffer with no flash read;
+- **unmapped**: everything else (never written, read before the first write, or written but not found by the FTL).
+
+**Mapped read LPNs** = buffer hits + served. All headline ratios use this denominator.
 
 | Metric | Definition |
 |---|---|
-| **Translation-free read ratio** | Share of mapped read LPNs served with no translation-page flash read (write-buffer hit, CMT hit, or LearnedFTL model hit). |
-| **Double-read ratio** | Share of mapped read LPNs that needed exactly 2 flash reads. |
-| **Triple-read ratio** | Share needing 3 flash reads (LeaFTL only: TP read + wrong prediction + data). |
-| **Flash reads per read LPN** | `(single + 2·double + 3·triple) / mapped read LPNs`. |
-| **Misprediction rate** | Share of predictions (LeaFTL: CMT segments and models; LearnedFTL: models) that differ from the true page map. |
-| **Flash reads per read LPN, misprediction-charged** | As above, but each LearnedFTL wrong prediction is charged one extra flash read, matching how LeaFTL is charged (KI-20). Reported alongside the as-coded value. |
-| **Unmapped-read share** | Unmapped read LPNs / all read LPNs. Should be 0 under precondition `fill`. |
+| **Translation-free read ratio** | Mapped read LPNs served without any translation-page read (buffer hit, or served with no TP read: CMT hit or LearnedFTL model hit) / mapped. |
+| **Single / double / triple read ratio** | Mapped read LPNs served with 1 (or 0, buffer hit) / 2 / 3 flash reads / mapped. |
+| **Flash reads per mapped read** | All flash reads issued for served LPNs / mapped. |
+| **... misprediction-charged** | As above, plus one read per LearnedFTL wrong model prediction, which the authors' code detects for free (KI-20). |
+| **CMT hit rate (mapped)** | Served LPNs whose CMT lookup hit / served. Same definition for both FTLs, but a LeaFTL entry covers a translation page and a LearnedFTL entry one LPN. |
+| **Unmapped-read share** | Unmapped read LPNs / all read LPNs. Under `fill`/`steady` this is 0 for LearnedFTL and equals LeaFTL's lost-data share. |
+| **Stale-read share** | Mapped reads served from an already-invalidated page (LeaFTL write-buffer window, KI-23) / mapped. |
+| **Lost-data read share** | (Unmapped − never-written) read LPNs / read LPNs of written data: data the FTL failed to return (KI-5, KI-24). |
+| **Gap to Belady** | Belady-OPT hit rate at 8192 entries on the trace's read stream (FTL-native keying) − CMT hit rate (mapped). |
 
 Per-FTL metrics, reported but **not compared across FTLs**:
 
 | Metric | Definition |
 |---|---|
-| CMT hit rate (native) | `cmt_hits / (cmt_hits + cmt_misses)` over that FTL's own counters, with unmapped reads excluded for both. |
-| Model hit rate | LeaFTL: `model_hits / model_queries` (queries happen after a TP read). LearnedFTL: `model_hits / (model_hits + model_misses)` (tried before a TP read). |
+| CMT hit rate (native) | The FTL's own `cmt_hits / (cmt_hits + cmt_misses)`, including lookups of unmapped LPNs. |
+| Model hit rate | LeaFTL: `model_hits / model_queries` (after a TP read). LearnedFTL: correct predictions / predictions tried (before a TP read). |
+| Authors' single/double/triple | Reported for comparison with the papers; `readcnt_mismatch` counts served LPNs where they disagree with the measured reads. |
 
 Device metrics:
 
 | Metric | Definition |
 |---|---|
-| NAND reads | Split into user data, translation-page, GC. |
-| NAND programs | User data + translation-page writes + GC-migrated pages. |
-| WAF | NAND programs / user-written LPNs (derived, not the authors' `wa_cnt`). |
-| GC runs | GC invocations that reclaimed a victim line (KI-12). |
-| Latency, throughput | Per request, KVM runs on exclusive cores only (KI-19); pending until KVM access exists. P50 / P99 / P99.9. |
+| NAND reads | `nand_reads_user` (incl. mispredicted reads), `nand_reads_translation` (read, write and GC paths), `nand_reads_gc` (migrated data). |
+| NAND programs | `nand_writes_user + nand_writes_translation + nand_writes_gc`; equals the authors' `wa_cnt`/`write_num` (invariant 5). LeaFTL never programs GC-migrated data (KI-22) and LearnedFTL never charges translation writes (KI-25). |
+| WAF | NAND programs / host-written LPNs in the workload interval. |
+| GC runs, erases | `gc_runs` (victim reclaimed, delta), `nand_erases`. |
+| Energy | 3.5 / 16.7 / 132 (authors' units) per read / program / erase. |
+| Latency, throughput | KVM on exclusive cores only (KI-19); blank for every TCG run. |
 
 ## 5. Our configuration vs the papers
 

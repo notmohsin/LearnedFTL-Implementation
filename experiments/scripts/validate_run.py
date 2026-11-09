@@ -143,6 +143,8 @@ def headline(rec: dict) -> dict:
                      rec["write_lpns"]),
         "readcnt_mismatch": rec["readcnt_mismatch"],
         "served_stale_page": rec["served_stale_page"],
+        "writes_dropped": rec.get("writes_dropped", 0),
+        "dropped_write_share": ratio(rec.get("writes_dropped", 0), rec["write_lpns"]),
         "stale_read_share": ratio(rec["served_stale_page"], mapped),
         "read_lpns_with_lost_data": None,
     }
@@ -233,6 +235,8 @@ def validate(run_dir: Path) -> dict:
                    rec["model_queries"] == rec["model_hits"] + rec["model_corrections"] + rec["model_misses"])
         report.add("2", "mapped == buffer_hits + served", "HARD",
                    rec["mapped_read_lpns"] == rec["buffer_hits"] + rec["served_lpns"])
+        report.add("2", "write_lpns == buffered + absorbed + dropped", "HARD",
+                   rec["writes_buffered"] + rec["writes_absorbed"] + rec["writes_dropped"] == rec["write_lpns"])
     else:
         report.add("2", "mapped == served", "HARD", rec["mapped_read_lpns"] == rec["served_lpns"])
         report.add("2", "cmt_write_hits + cmt_write_misses == write_lpns", "HARD",
@@ -293,6 +297,9 @@ def validate(run_dir: Path) -> dict:
                    readcnt_mismatch=rec["readcnt_mismatch"],
                    served_stale_page=rec["served_stale_page"],
                    stale_map_entries=rec["stale_map_entries"])
+        report.add("8", "LeaFTL host writes silently dropped (KI-27)", "KNOWN", None,
+                   writes_dropped=rec["writes_dropped"], write_lpns=rec["write_lpns"],
+                   baseline_writes_dropped=base["writes_dropped"])
     else:
         report.add("8", "LearnedFTL wrong model predictions (checked for free, KI-20)", "KNOWN", None,
                    model_misses=rec["model_misses"], readcnt_mismatch=rec["readcnt_mismatch"])

@@ -208,6 +208,93 @@ Severity:
   translation page: a wasted flash read. Here a wrong prediction is detected for free and costs no flash read,
   so LearnedFTL's flash reads are under-counted relative to LeaFTL, which does charge +1 read for a misprediction
   (KI-6, KI-7). The bitmap is meant to make wrong predictions impossible, so the size of this effect is unknown.
-- **Handling:** measured. An additive counter `model_wrong_predictions` counts the `false` returns where the bitmap
-  said the LPN was predictable, and results report "flash reads per read LPN" both as-coded and with each wrong
-  prediction charged one extra read (the LeaFTL convention).
+- **Handling:** measured. `model_misses` (the authors' `model_miss_num`) counts exactly the `false` returns, which
+  only happen when the bitmap said the LPN was predictable. Results report flash reads per mapped read both as-coded
+  (`flash_reads_per_mapped_read`) and with each wrong prediction charged one extra read
+  (`flash_reads_per_mapped_read_mispred_charged`, the LeaFTL convention).
+
+## Found while running the baselines (Phase 2b and 5)
+
+These were found by the invariants in `INVARIANTS.md` on real runs, not by reading the code first. Each was
+then traced to the lines below (line numbers are for the instrumented source at commit `HEAD`; the function names
+are stable). None is fixed; each is measured and reported.
+
+### KI-21: GC updates the wrong translation pages (LeaFTL)
+
+- **Where:** `GC_flush` (`leaftl.c:1990`) is called with the LPNs that GC migrates (`buffer_lpns`, sorted into
+  `lpns[]`), but chooses the translation pages to rewrite with `ssd->buffer_lpns[i]` (`leaftl.c:2029`): the
+  *host write buffer*, not the migrated LPNs. The same line in `buffer_flush` (`leaftl.c:2161`) is correct there.
+- **Effect:** every GC pass rewrites the translation pages of whatever happens to be in the host write buffer
+  (about 340 per victim block on `uniform-mixed`) and never rewrites the translation pages of the LPNs it moved.
+  Measured on `uniform-mixed`, 100k ops after `fill`: 23.1M translation-page writes for 286k host-written LPNs,
+  WAF 81.8. Together with KI-23 it leaves the mapping state inconsistent (KI-24).
+- **Handling:** measured (`nand_writes_translation`, `waf`). Every LeaFTL result in which GC runs (all `fill` and
+  `steady` runs) carries this caveat in its `notes`.
+
+### KI-22: GC data migration is charged as a read of the destination page (LeaFTL)
+
+- **Where:** `GC_flush` issues `NAND_READ` on the newly allocated destination page `wppa[i]`
+  (`leaftl.c:2063-2068`) and no `NAND_WRITE`; the source page was already read by `gc_read_page` in
+  `clean_one_data_block` (`leaftl.c:1323`).
+- **Effect:** GC-migrated user data is never programmed in the cost model: `nand_writes_gc` is always 0 for LeaFTL,
+  GC programs are missing from WAF and energy, and GC reads are counted twice (source and destination).
+- **Handling:** reported as is. LeaFTL's WAF therefore *understates* GC data copies while overstating translation
+  writes (KI-21); the two are reported separately (`nand_writes_translation`, `nand_reads_gc`).
+
+### KI-23: Overwrite invalidates the old page before the map is updated (LeaFTL)
+
+- **Where:** `ssd_write` marks the LPN's current page invalid as soon as the write arrives (`leaftl.c:3045`), but
+  the page map is only updated when the 2048-LPN write buffer is flushed (`buffer_flush`). The buffer is searched
+  only at slot 0 on reads (KI-5).
+- **Effect:** until the flush, the page map points at an invalidated page. A read of that LPN is served from it,
+  which on real hardware returns the previous version of the data (a stale read). If GC erases that block first,
+  the map points at a free, later reused, page.
+- **Handling:** measured by `served_stale_page` (reads served from a non-valid page) and `stale_map_entries`
+  (invariant 7 audit). The micro-trace `overwrite-then-read` reproduces it with 16 LPNs. LearnedFTL updates its
+  map at write time and must show 0 for both (HARD).
+
+### KI-24: Mapping state inconsistent after GC (LeaFTL)
+
+- **Where:** consequence of KI-21 and KI-23 (and KI-4/KI-6 on the read side); visible only once GC has run.
+- **Effect:** after `fill` + 100k `uniform-mixed` ops: 8,651 blocks whose valid-page count differs from the number
+  of map entries pointing into them, 14,274 valid pages whose reverse map does not resolve back, 2,402 map entries
+  pointing at non-valid pages (more than the 2,048-LPN buffer can explain), and 5.1% of reads of written data not
+  returned (`invalid_but_mapped`: the FTL found no mapping although the page map has one).
+- **Handling:** for LeaFTL, invariant 7's block, reverse-map and stale-entry parts are KNOWN (reported with counts);
+  its line-list part stays HARD. The lost reads are reported as `lost_data_read_share`. For LearnedFTL the whole of
+  invariant 7 is HARD.
+
+### KI-25: Translation-page writes not charged (LearnedFTL)
+
+- **Where:** `translation_write_page` (`ld-tpftl.c:1368`) has its `ssd_advance_status(..., NAND_WRITE)` call
+  commented out (`ld-tpftl.c:1378-1382`), while the page is still allocated, marked valid and added to the GTD.
+- **Effect:** `nand_writes_translation` is always 0 for LearnedFTL: translation-page programs are missing from its
+  WAF, energy and timing.
+- **Handling:** reported as is; LearnedFTL's WAF understates translation writes. The count of translation pages
+  written could be added as a further counter if a corrected WAF is needed.
+
+### KI-26: The authors' `read_cnt` is not the number of flash reads (LeaFTL)
+
+- **Where:** `ssd_read` (`leaftl.c`): `read_cnt++` happens before `process_translation_page_read`, which returns
+  without reading when the translation page is unmapped (KI-3); the stale-segment path on a CMT hit reads a
+  translation page without `read_cnt++`; and a write-buffer hit counts as a single read with no flash read.
+- **Effect:** the authors' `single_read`/`double_read`/`triple_read` neither partition read LPNs nor count flash
+  reads exactly.
+- **Handling:** headline metrics use flash reads measured per read LPN (`served_reads_hist`, see `METRICS.md`);
+  the authors' counters are still reported, and `readcnt_mismatch` counts served LPNs where they disagree.
+
+### KI-27: Host writes silently dropped by the buffer duplicate check (LeaFTL)
+
+- **Where:** `ssd_write` (`leaftl.c:3006`) declares `bool update_in_buffer = false` once per request
+  (`leaftl.c:3019`) and sets it when an LPN is found in the write buffer (`leaftl.c:3055-3060`), but never resets it
+  for the next LPN. The search scans all 2048 slots of `buffer_lpns`, which is zero-initialised and never cleared
+  after a flush (`buffer_pointer` is reset to 0 and old LPNs stay in the slots).
+- **Effect:** once one LPN of a request matches any slot (an LPN still live in the buffer, an LPN left over from an
+  earlier flush, or LPN 0 against a zero slot), that LPN and every later LPN of the request are neither buffered nor
+  flushed. If the LPN was mapped, its old page has already been invalidated (KI-23), so the map points at a dead page;
+  if not, the write is lost and later reads are unmapped. The first request of every run touching LPN 0 is dropped
+  entirely: the first 1 MiB of the `fill` precondition, and the first request of the micro-traces.
+- **Handling:** measured: `writes_buffered + writes_absorbed + writes_dropped = write_lpns` (HARD), where absorbed
+  means a genuine live duplicate. `writes_dropped` and `dropped_write_share` are reported (KNOWN). The micro-traces
+  `write-read-buffered`, `overwrite-then-read` and `size-buckets` predict the dropped counts exactly.
+
