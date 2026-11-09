@@ -316,3 +316,17 @@ are stable). None is fixed; each is measured and reported.
   translation-free ratio and flash reads per read are computed over the reads it did serve, so they must always be
   read together with its lost-data share.
 
+### KI-29: GC thrashes on a full device (LearnedFTL)
+
+- **Where:** `should_do_gc_v3` and the batch GC functions (`ld-tpftl.c:444` onwards). Lines are partitioned among
+  many write pointers; once fewer than 4 lines are free (the authors' own "what's wrong?" message, printed before
+  every GC), GC runs for almost every write, and victims are nearly fully valid, so each GC copies almost a whole
+  line and frees almost nothing.
+- **Effect:** measured on `uniform-mixed`, 100k ops after `fill`: 46,578 GC runs, 5.96M block erases and 1.53 billion
+  GC page copies for 286k host-written LPNs (WAF 5,338), at ~15 requests/s of wall-clock time (the FTL thread is
+  CPU-bound; KVM would not help). The constant model retraining during GC also makes almost every read a correct model
+  prediction (translation-free ratio 0.997), which is a side effect of the thrashing, not a property of the cache.
+- **Handling:** `fill` is a GC-stress condition only; LearnedFTL's `fill` rows carry this caveat and are not used for
+  cache comparisons. The `warm` condition (footprint ≤ 15.3 GiB of 30 GiB) keeps LearnedFTL out of this regime;
+  even there, 1M-op write-heavy traces start GC late (`uniform-mixed` 1M: WAF 1.82, 144 GC runs).
+

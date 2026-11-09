@@ -124,7 +124,10 @@ def trace_profile(profiles: dict, trace: str) -> dict | None:
 def belady_8192(profile: dict | None, keying: str):
     if not profile:
         return None
-    for point in profile["cache_bounds_read_stream"][keying]["curve"]:
+    bounds = profile.get("cache_bounds_read_stream", {}).get(keying)
+    if not bounds:  # write-only traces have no read stream
+        return None
+    for point in bounds["curve"]:
         if point["capacity"] == 8192:
             return point
     return None
@@ -272,8 +275,16 @@ def notes(s: dict, members: list[dict]) -> str:
                    "of read LPNs target never-written space")
     if s["runs_valid"].split("/")[0] != s["runs_valid"].split("/")[1]:
         out.append(f"HARD invariant failure in some runs (ids {s['failed_invariant_ids']}): excluded from claims")
+    if s["ftl"] == "leaftl" and (s.get("lost_data_read_share_mean") or 0) > 0:
+        out.append(f"LeaFTL did not return {100 * s['lost_data_read_share_mean']:.1f}% of reads of written data "
+                   "(KI-27/KI-28); its read-cost metrics cover only the reads it served")
     if s["ftl"] == "leaftl" and (s.get("stale_read_share_mean") or 0) > 0:
-        out.append("LeaFTL serves some reads from invalidated pages (write-buffer window, KNOWN)")
+        out.append("LeaFTL serves some reads from invalidated pages (write-buffer window, KI-23)")
+    if s["ftl"] == "leaftl" and s["precondition"] == "fill":
+        out.append("GC active: LeaFTL GC rewrites unrelated translation pages (KI-21) and never programs migrated data (KI-22)")
+    if s["ftl"] == "learnedftl" and s["precondition"] == "fill":
+        out.append("GC thrashing on a full device (KI-29): WAF and model hit rate reflect the thrashing; "
+                   "GC-stress only, not for cache comparison")
     if s["deterministic_across_repeats"] == "n.a.":
         out.append("single run, determinism shown on the 100k validation stage")
     return "; ".join(out)

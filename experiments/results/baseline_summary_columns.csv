@@ -1,0 +1,115 @@
+column,unit,definition,source
+ftl,,FTL under test: leaftl (hw/femu/bbssd/leaftl.c) or learnedftl (hw/femu/bbssd/ld-tpftl.c).,manifest.json
+workload,,Trace name (experiments/traces/TRACES.md).,manifest.json
+workload_description,,"Generator pattern, read share and footprint of the trace.",traces/profiles.json
+trace_ops,requests,"Requests in the replayed trace (100k validation stage, 1M matrix stage).",traces/profiles.json
+precondition,,none: empty device; fill: whole 30 GiB written sequentially first; steady: fill + 30 GiB of random 64 KiB overwrites.,run_femu.py
+repeats,count,Runs aggregated in this row.,results/<run>/
+seeds,,Seeds used (write pattern and steady-state overwrite order).,manifest.json
+ents_per_tp,LPNs,"Mappings per translation page (native constant, not changed).",FEMU record (leaftl.c:502 / ld-tpftl.c:801)
+cmt_entries,entries,"CMT capacity (native constant, not changed).",FEMU record (leaftl.c:505 / ld-tpftl.c:809)
+cmt_entry_type,,What one CMT entry holds.,METRICS.md section 2
+raw_capacity_gib,GiB,Raw flash: 8 ch x 8 LUN x 256 blocks x 512 pages x 4 KiB.,FTL geometry
+logical_capacity_gib,GiB,Device size exposed to the guest (devsz_mb).,launch_femu.sh
+op_percent,%,Over-provisioning: (raw - logical) / logical.,derived
+nand_read_us,us,NAND page read latency constant.,leaftl.h:17 / ld-tpftl.h
+nand_write_us,us,NAND page program latency constant.,leaftl.h:18 / ld-tpftl.h
+nand_erase_us,us,NAND block erase latency constant.,leaftl.h:19 / ld-tpftl.h
+accel,,QEMU accelerator: tcg (software) or kvm. Latency is only valid under kvm.,launch.env
+trace_read_percent,%,Read requests / all requests.,traces/profiles.json mix
+trace_mean_request_kib,KiB,Mean request size.,traces/profiles.json mix
+trace_footprint_gib,GiB,Distinct LPNs touched x 4 KiB.,traces/profiles.json footprint
+trace_unique_tp256,TPs,Distinct translation pages touched at 256 LPNs per TP (LeaFTL keying).,traces/profiles.json footprint
+trace_unique_tp512,TPs,Distinct translation pages touched at 512 LPNs per TP (LearnedFTL keying).,traces/profiles.json footprint
+trace_sequential_request_share,fraction,Requests starting where the previous one ended.,traces/profiles.json locality
+trace_top20pct_lpn_access_share,fraction,Accesses to the hottest 20% of LPNs.,traces/profiles.json locality
+trace_read_after_write_share,fraction,Read LPNs whose address was written earlier (under this precondition).,traces/profiles.json mapping
+bound_belady_hit_rate_8192,fraction,"Belady-OPT hit rate at 8192 entries on the read stream with demand fill, keyed like the FTL's CMT entries (tp256 for LeaFTL, lpn for LearnedFTL). A reference, not a bound, for LearnedFTL (write fill and prefetch).",experiments/tools/cachesim.c via profiles.json
+bound_lru_hit_rate_8192,fraction,"LRU hit rate at 8192 entries, same keying.",experiments/tools/cachesim.c via profiles.json
+translation_free_read_ratio_mean,fraction,"Mapped read LPNs served without any translation-page flash read (buffer hit, CMT hit, model hit) / mapped read LPNs. Mean over valid repeats.",validation.json metrics (FEMU record)
+translation_free_read_ratio_sd,fraction,Sample standard deviation of translation_free_read_ratio over repeats.,derived
+translation_free_read_ratio_ci95,fraction,Half-width of the 95% t-interval of translation_free_read_ratio (blank for one run).,derived
+cmt_hit_rate_mapped_mean,fraction,"Served (mapped, read-from-flash) LPNs whose CMT lookup hit / served LPNs. Comparable definition for both FTLs, but a LeaFTL entry covers a whole translation page and a LearnedFTL entry one LPN. Mean over valid repeats.",validation.json metrics (FEMU record)
+cmt_hit_rate_mapped_sd,fraction,Sample standard deviation of cmt_hit_rate_mapped over repeats.,derived
+cmt_hit_rate_mapped_ci95,fraction,Half-width of the 95% t-interval of cmt_hit_rate_mapped (blank for one run).,derived
+cmt_hit_rate_native_mean,fraction,"The FTL's own cmt_hits / (cmt_hits + cmt_misses), including lookups for unmapped LPNs. Not comparable across FTLs. Mean over valid repeats.",validation.json metrics (FEMU record)
+cmt_hit_rate_native_sd,fraction,Sample standard deviation of cmt_hit_rate_native over repeats.,derived
+cmt_hit_rate_native_ci95,fraction,Half-width of the 95% t-interval of cmt_hit_rate_native (blank for one run).,derived
+model_hit_rate_mean,fraction,LeaFTL: model hits / model queries (after a TP read). LearnedFTL: correct predictions / predictions tried (before a TP read). Mean over valid repeats.,validation.json metrics (FEMU record)
+model_hit_rate_sd,fraction,Sample standard deviation of model_hit_rate over repeats.,derived
+model_hit_rate_ci95,fraction,Half-width of the 95% t-interval of model_hit_rate (blank for one run).,derived
+single_read_ratio_mean,fraction,"Mapped read LPNs served with exactly 1 flash read (or 0, buffer hit) / mapped read LPNs. Mean over valid repeats.",validation.json metrics (FEMU record)
+single_read_ratio_sd,fraction,Sample standard deviation of single_read_ratio over repeats.,derived
+single_read_ratio_ci95,fraction,Half-width of the 95% t-interval of single_read_ratio (blank for one run).,derived
+double_read_ratio_mean,fraction,Mapped read LPNs served with exactly 2 flash reads / mapped read LPNs. Mean over valid repeats.,validation.json metrics (FEMU record)
+double_read_ratio_sd,fraction,Sample standard deviation of double_read_ratio over repeats.,derived
+double_read_ratio_ci95,fraction,Half-width of the 95% t-interval of double_read_ratio (blank for one run).,derived
+triple_read_ratio_mean,fraction,Mapped read LPNs served with exactly 3 flash reads / mapped read LPNs (LeaFTL only). Mean over valid repeats.,validation.json metrics (FEMU record)
+triple_read_ratio_sd,fraction,Sample standard deviation of triple_read_ratio over repeats.,derived
+triple_read_ratio_ci95,fraction,Half-width of the 95% t-interval of triple_read_ratio (blank for one run).,derived
+quad_plus_read_ratio_mean,fraction,Mapped read LPNs served with 4 or more flash reads / mapped read LPNs. Mean over valid repeats.,validation.json metrics (FEMU record)
+quad_plus_read_ratio_sd,fraction,Sample standard deviation of quad_plus_read_ratio over repeats.,derived
+quad_plus_read_ratio_ci95,fraction,Half-width of the 95% t-interval of quad_plus_read_ratio (blank for one run).,derived
+flash_reads_per_mapped_read_mean,flash reads / LPN,"All flash reads issued while serving mapped read LPNs (TP, mispredicted and data reads, incl. eviction write-back reads) / mapped read LPNs. Mean over valid repeats.",validation.json metrics (FEMU record)
+flash_reads_per_mapped_read_sd,flash reads / LPN,Sample standard deviation of flash_reads_per_mapped_read over repeats.,derived
+flash_reads_per_mapped_read_ci95,flash reads / LPN,Half-width of the 95% t-interval of flash_reads_per_mapped_read (blank for one run).,derived
+flash_reads_per_mapped_read_mispred_charged_mean,flash reads / LPN,"As flash_reads_per_mapped_read, but each LearnedFTL wrong model prediction is charged one flash read, as LeaFTL's are (KI-20). Mean over valid repeats.",validation.json metrics (FEMU record)
+flash_reads_per_mapped_read_mispred_charged_sd,flash reads / LPN,Sample standard deviation of flash_reads_per_mapped_read_mispred_charged over repeats.,derived
+flash_reads_per_mapped_read_mispred_charged_ci95,flash reads / LPN,Half-width of the 95% t-interval of flash_reads_per_mapped_read_mispred_charged (blank for one run).,derived
+tp_reads_per_mapped_read_mean,flash reads / LPN,Translation-page reads while serving mapped read LPNs / mapped read LPNs. Mean over valid repeats.,validation.json metrics (FEMU record)
+tp_reads_per_mapped_read_sd,flash reads / LPN,Sample standard deviation of tp_reads_per_mapped_read over repeats.,derived
+tp_reads_per_mapped_read_ci95,flash reads / LPN,Half-width of the 95% t-interval of tp_reads_per_mapped_read (blank for one run).,derived
+unmapped_read_share_mean,fraction,Read LPNs the FTL did not resolve to written data / all read LPNs. Mean over valid repeats.,validation.json metrics (FEMU record)
+unmapped_read_share_sd,fraction,Sample standard deviation of unmapped_read_share over repeats.,derived
+unmapped_read_share_ci95,fraction,Half-width of the 95% t-interval of unmapped_read_share (blank for one run).,derived
+stale_read_share_mean,fraction,Mapped read LPNs served from a page that had already been invalidated (stale data; LeaFTL write-buffer window) / mapped read LPNs. Mean over valid repeats.,validation.json metrics (FEMU record)
+stale_read_share_sd,fraction,Sample standard deviation of stale_read_share over repeats.,derived
+stale_read_share_ci95,fraction,Half-width of the 95% t-interval of stale_read_share (blank for one run).,derived
+lost_data_read_share_mean,fraction,"Read LPNs whose data had been written but which the FTL did not return / read LPNs of written data (KNOWN, LeaFTL KI-5). Mean over valid repeats.",validation.json metrics (FEMU record)
+lost_data_read_share_sd,fraction,Sample standard deviation of lost_data_read_share over repeats.,derived
+lost_data_read_share_ci95,fraction,Half-width of the 95% t-interval of lost_data_read_share (blank for one run).,derived
+gap_to_belady_mean,fraction,"LeaFTL only: Belady-OPT hit rate at 8192 entries on the trace's read stream keyed per 256-LPN translation page, minus cmt_hit_rate_mapped. Headroom for a better replacement policy. Blank for LearnedFTL, whose CMT also fills on writes and prefetches, so demand-fill bounds do not bound it. Mean over valid repeats.",validation.json metrics (FEMU record)
+gap_to_belady_sd,fraction,Sample standard deviation of gap_to_belady over repeats.,derived
+gap_to_belady_ci95,fraction,Half-width of the 95% t-interval of gap_to_belady (blank for one run).,derived
+nand_reads_user,pages,"User-data flash reads in the workload interval, incl. mispredicted reads. Mean over valid repeats.",validation.json metrics (FEMU record)
+nand_reads_translation,pages,"Translation-page flash reads in the workload interval (read path, write path and GC). Mean over valid repeats.",validation.json metrics (FEMU record)
+nand_reads_gc,pages,Flash reads of user data migrated by GC. Mean over valid repeats.,validation.json metrics (FEMU record)
+nand_programs,pages,NAND programs: user data + translation pages + GC-migrated data (see KNOWN_ISSUES for uncharged cases). Mean over valid repeats.,validation.json metrics (FEMU record)
+waf,ratio,nand_programs / host-written LPNs in the workload interval. Mean over valid repeats.,validation.json metrics (FEMU record)
+gc_runs,count,GC invocations that reclaimed a victim during the workload interval (delta of the since-boot counter). Mean over valid repeats.,validation.json metrics (FEMU record)
+nand_erases,blocks,Block erases in the workload interval. Mean over valid repeats.,validation.json metrics (FEMU record)
+energy_mj,mJ,"read/write/erase energy from the authors' per-op constants (3.5/16.7/132 uJ), workload interval. Mean over valid repeats.",validation.json metrics (FEMU record)
+latency_p50_us,us,"Per-request latency P50. Blank: TCG runs, latency needs KVM on exclusive cores (KI-19). Mean over valid repeats.",validation.json metrics (FEMU record)
+latency_p99_us,us,Per-request latency P99. Blank under TCG. Mean over valid repeats.,validation.json metrics (FEMU record)
+latency_p999_us,us,Per-request latency P99.9. Blank under TCG. Mean over valid repeats.,validation.json metrics (FEMU record)
+throughput_mib_s,MiB/s,Workload throughput. Blank under TCG. Mean over valid repeats.,validation.json metrics (FEMU record)
+runs_valid,count,Runs with every HARD invariant passing / runs.,validation.json
+hard_invariants_passed,count,Lowest passed/total HARD invariant count among the runs (INVARIANTS.md).,validation.json
+failed_invariant_ids,,HARD invariant IDs that failed in any run.,validation.json
+known_stale_read_share,fraction,Same as stale_read_share_mean: measured impact of LeaFTL's write-buffer window (KNOWN).,INVARIANTS.md 8
+known_lost_data_read_share,fraction,Same as lost_data_read_share_mean (KNOWN).,INVARIANTS.md 10
+known_readcnt_mismatch,LPNs,Served LPNs where the authors' read_cnt differs from the flash reads actually issued (mean per run).,FEMU record
+known_model_mispredictions,count,"Wrong model predictions per run (LearnedFTL: caught at no flash cost, KI-20).",FEMU record
+deterministic_across_repeats,,"yes if repeats produced identical counters (invariant 11), n.a. for a single run.",determinism.json
+request_flow_match,,yes if FEMU's request log equalled the trace in every run (invariant 1).,validation.json
+paper_reference,,Paper result this row relates to.,papers/
+paper_trend_consistent,,"yes if LearnedFTL's double-read ratio <= LeaFTL's for this workload/precondition, as claimed in LearnedFTL HPCA'24.",derived
+repo_commit,,Git commit the FEMU binary was built from.,build-ftl/<ftl>/build_info.json
+binary_sha256,,SHA-256 of the FEMU binary.,build_info.json
+trace_sha256,,SHA-256 of the replayed trace.,manifest.json
+image_sha256,,SHA-256 of the pristine guest image (a fresh overlay per run).,~/images/femu-pristine.qcow2.sha256
+compiler,,Compiler used to build FEMU.,build_info.json
+host_kernel,,Host kernel release.,manifest.json
+guest_kernel,,Guest kernel release.,guest_prep.sh
+run_dates,,Dates the runs started.,manifest.json
+notes,,Plain-language caveats for the row.,aggregate.py
+run_id,,Run directory name in experiments/results/ (baseline_runs.csv only).,manifest/records
+seed,,Seed of this run (baseline_runs.csv only).,manifest/records
+repeat,,Repeat index (baseline_runs.csv only).,manifest/records
+valid,,True if every HARD invariant passed (baseline_runs.csv only).,manifest/records
+read_lpns,LPNs,Read LPNs in the workload interval (baseline_runs.csv only).,manifest/records
+mapped_read_lpns,LPNs,Read LPNs resolved to written data (baseline_runs.csv only).,manifest/records
+readcnt_mismatch,LPNs,See known_readcnt_mismatch (baseline_runs.csv only).,manifest/records
+model_mispredictions,count,See known_model_mispredictions (baseline_runs.csv only).,manifest/records
+trace,,Replayed trace path (baseline_runs.csv only).,manifest/records
+run_date,,Date the run started (baseline_runs.csv only).,manifest/records

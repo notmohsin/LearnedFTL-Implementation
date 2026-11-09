@@ -374,7 +374,7 @@ These gates apply the Phase 2b invariant catalogue, evaluated by `validate_run.p
    `baseline_summary.csv`, `baseline_runs.csv` and `baseline_summary_columns.csv` regenerate byte-identically from raw JSONL alone.
    Every column in the summary has a dictionary entry, and a test in `aggregate.py` fails if one is missing.
 
-## Status (updated 2026-11-09, evening)
+## Status (updated 2026-11-10)
 
 Living copy of this plan: `LearnedFTL/experiments/docs/BASELINE_PLAN.md`. Keep the two in sync, and update the status there.
 
@@ -413,6 +413,48 @@ Living copy of this plan: `LearnedFTL/experiments/docs/BASELINE_PLAN.md`. Keep t
    mapping state (KI-21..KI-24); it stays HARD for LearnedFTL.
 8. **Memory.** FEMU pins its whole DRAM backend (~32 GB per VM) when allowed to; runs set `MLOCK=0` so memory is
    allocated as written. Use `MLOCK=1` for KVM latency runs.
+
+### Results (2026-11-10)
+
+All runs use TCG on commit `5f2e66c` (both FTL binaries), the 30 GiB device, and the scripts at the commit that
+produced `experiments/results/baseline_summary.csv`.
+
+- **186 runs, 186 valid** (every HARD invariant passes): 8 micro, 144 validation (100k ops: none / warm / fill),
+  24 matrix (1M ops, warm), 10 real (UMass, 1M requests, warm).
+- **Request flow**: FEMU received exactly the trace, request by request, in every run (invariant 1).
+- **Determinism**: all 49 groups with repeats produced identical counters (invariant 11); 39 configurations are single runs.
+- **Micro-traces**: all 8 match the hand-derived expectations; the validator self-test catches all 13 mutations.
+
+Main condition (`warm`, 1M requests, LeaFTL / LearnedFTL):
+
+| Workload | Translation-free | Double reads | Flash reads per mapped read | LeaFTL lost-data share | LeaFTL gap to Belady |
+|---|---|---|---|---|---|
+| financial1 | 0.801 / 0.829 | 0.385 / 0.162 | 1.74 / 1.18 | 0.083 | 0.182 |
+| financial2 | 0.500 / 0.849 | 0.393 / 0.136 | 2.30 / 1.17 | 0.301 | 0.363 |
+| mixed-50-seq-50-random | 0.503 / 0.768 | 0.511 / 0.186 | 2.37 / 1.28 | 0.553 | 0.411 |
+| seq-mixed | 0.955 / 0.845 | 0.829 / 0.150 | 1.89 / 1.16 | 0.303 | 0.005 |
+| uniform-mixed | 0.300 / 0.702 | 0.352 / 0.214 | 2.59 / 1.38 | 0.628 | 0.619 |
+| uniform-read | 0.364 / 0.701 | 0.417 / 0.299 | 2.52 / 1.30 | 0.583 | 0.536 |
+| websearch1 | 0.742 / 0.714 | 0.584 / 0.286 | 2.02 / 1.29 | 0.235 | 0.249 |
+| websearch2 | 0.738 / 0.710 | 0.590 / 0.290 | 2.04 / 1.29 | 0.236 | 0.253 |
+| websearch3 | 0.742 / 0.720 | 0.582 / 0.280 | 2.02 / 1.28 | 0.222 | 0.249 |
+| zipf-hot10-access90-a1.2 | 0.226 / 0.954 | 0.215 / 0.033 | 2.76 / 1.06 | 0.078 | 0.028 |
+| zipf-hot20-access80-a0.8 | 0.560 / 0.798 | 0.526 / 0.149 | 2.35 / 1.26 | 0.227 | 0.269 |
+| zipf-hot20-access80-a1.2 | 0.240 / 0.922 | 0.230 / 0.057 | 2.74 / 1.10 | 0.153 | 0.037 |
+
+How to read it:
+
+- LearnedFTL needs fewer double reads than LeaFTL in 19 of 20 `warm` comparisons (the exception is `zipf-80-20` at
+  100k, where LeaFTL's reads are mostly triple reads instead), consistent with the LearnedFTL paper's trend. Its
+  flash reads per read are 1.06-1.38 against LeaFTL's 1.74-2.76.
+- LeaFTL's numbers cover only the reads it served: it fails to return 8-63% of reads of written data (KI-27, KI-28).
+  Any comparison must quote this alongside.
+- LeaFTL's gap to Belady-OPT is 0.6 on uniform traces, ~0.25 on WebSearch, and ~0.03 on the skewed zipf traces:
+  this is the headroom a better replacement policy could target for a TP-keyed cache.
+- `fill` rows are GC stress only: LeaFTL's translation writes explode (WAF 20-91, KI-21) and LearnedFTL thrashes
+  (WAF up to 5,338, KI-29). Neither is a cache comparison.
+- LearnedFTL's advantage is flattered by two accounting gaps (KI-20 free misprediction checks, KI-25 uncharged
+  translation writes); `flash_reads_per_mapped_read_mispred_charged` and the NAND write split show their size.
 
 ### Findings so far
 
