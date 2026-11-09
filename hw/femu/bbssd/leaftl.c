@@ -660,6 +660,21 @@ static void ssd_init_statistics(struct ssd *ssd)
     st->buffer_hits = 0;
     st->unmapped_tp = 0;
     st->cmt_hit_invalid_gtd = 0;
+    st->nand_reads_user = 0;
+    st->nand_reads_translation = 0;
+    st->nand_reads_gc = 0;
+    st->nand_writes_user = 0;
+    st->nand_writes_translation = 0;
+    st->nand_writes_gc = 0;
+    st->inv2_violations = 0;
+    st->inv4_violations = 0;
+    st->inv6_violations = 0;
+    st->inv7_violations = 0;
+    st->nand_erases = 0;
+    st->inv12_violations = 0;
+    memset(&st->acct, 0, sizeof(st->acct));
+    st->true_unmapped = 0;
+    st->invalid_but_mapped = 0;
     st->read_joule = 0;
     st->write_joule = 0;
     st->erase_joule = 0;
@@ -973,7 +988,8 @@ static uint64_t translation_page_read(struct ssd *ssd, NvmeRequest *req, struct 
     trd.cmd = NAND_READ;
     trd.stime = req->stime;
     lat = ssd_advance_status(ssd, ppa, &trd);
-    
+    ssd->stat.nand_reads_translation++;
+
     return lat;
 }
 
@@ -985,7 +1001,8 @@ static inline uint64_t translation_page_read_no_req(struct ssd *ssd, struct ppa 
     trd.cmd = NAND_READ;
     trd.stime = 0;
     lat = ssd_advance_status(ssd, ppa, &trd);
-    
+    ssd->stat.nand_reads_translation++;
+
     return lat;
 }
 
@@ -1058,6 +1075,7 @@ static uint64_t translation_page_write_via_tvpn(struct ssd *ssd, struct ppa *old
     twr.cmd = NAND_WRITE;
     twr.stime = 0;
     lat = ssd_advance_status(ssd, &new_ppa, &twr);
+    ssd->stat.nand_writes_translation++;
 
     return lat;
 }
@@ -1083,6 +1101,7 @@ static uint64_t translation_page_new_write(struct ssd *ssd, uint64_t tvpn)
     twr.cmd = NAND_WRITE;
     twr.stime = 0;
     lat = ssd_advance_status(ssd, &new_ppa, &twr);
+    ssd->stat.nand_writes_translation++;
 
     return lat;
 }
@@ -1191,6 +1210,7 @@ static void gc_read_page(struct ssd *ssd, struct ppa *ppa)
         gcr.cmd = NAND_READ;
         gcr.stime = 0;
         ssd_advance_status(ssd, ppa, &gcr);
+        ssd->stat.nand_reads_gc++;
     }
 }
 
@@ -1258,6 +1278,11 @@ static uint64_t gc_translation_page_write(struct ssd *ssd, struct ppa *old_ppa)
         gcw.cmd = NAND_WRITE;
         gcw.stime = 0;
         ssd_advance_status(ssd, &new_ppa, &gcw);
+        /* translation-page write, GC-triggered: bucketed under
+         * nand_writes_translation, not nand_writes_gc -- these three
+         * buckets are by page purpose, "_gc" is reserved for migrated
+         * *user data* pages specifically (see ftl_stats.h). */
+        ssd->stat.nand_writes_translation++;
     }
 
     /* advance per-ch gc_endtime as well */
@@ -1407,6 +1432,7 @@ static int do_gc(struct ssd *ssd, bool force)
                 gce.cmd = NAND_ERASE;
                 gce.stime = 0;
                 ssd_advance_status(ssd, &ppa, &gce);
+                ssd->stat.nand_erases++;
             }
 
             lunp->gc_endtime = lunp->next_lun_avail_time;
@@ -2040,8 +2066,14 @@ static void GC_flush(struct ssd *ssd, uint64_t* buffer_lpns, int pointer) {
         gcr.cmd = NAND_READ;
         gcr.stime = 0;
         ssd_advance_status(ssd, &wppa[i], &gcr);
-        
-        
+        ssd->stat.nand_reads_gc++;
+        /* This function never issues a NAND_WRITE for wppa[i] (the newly
+         * allocated destination page for this GC-migrated user data LPN),
+         * so nand_writes_gc has no live call site anywhere in this file
+         * and will read 0 -- a gap in the authors' own write-cost
+         * accounting, not an instrumentation omission. See
+         * experiments/docs/INVARIANTS.md invariant 5. */
+
     }
 
 
@@ -2166,12 +2198,14 @@ static uint64_t buffer_flush(struct ssd *ssd, NvmeRequest *req) {
             gcr.cmd = NAND_READ;
             gcr.stime = 0;
             ssd_advance_status(ssd, &wppa[i], &gcr);
+            ssd->stat.nand_reads_gc++;
         } else {
             struct nand_cmd srd;
             srd.type = USER_IO;
             srd.cmd = NAND_WRITE;
             srd.stime = req->stime;
             sublat = ssd_advance_status(ssd, &wppa[i], &srd);
+            ssd->stat.nand_writes_user++;
             if (sublat > maxlat) maxlat = sublat;
         }
         
@@ -2322,12 +2356,19 @@ void count_segments(struct ssd* ssd) {
         ssd->stat.cmt_hit_cnt + ssd->stat.cmt_miss_cnt;
     uint64_t cmt_miss_partition =
         ssd->stat.unmapped_tp + ssd->stat.model_queries;
-    uint64_t translation_read_cnt =
-        (uint64_t)ssd->stat.single_read + ssd->stat.double_read +
-        ssd->stat.triple_read;
-    uint64_t expected_translation_reads =
-        cmt_access_cnt - ssd->stat.invalid_read_cnt -
-        ssd->stat.cmt_hit_invalid_gtd;
+    /* Terminal read partition: every read LPN leaves ssd_read's loop through
+     * exactly one of these exits (pre-first-write, write-buffer hit, stale
+     * CMT segment with unmapped GTD, vppn == INVALID_VAL, resolved but the
+     * true map says unmapped, or served from flash). The authors'
+     * single/double/triple counters are not used here: read_cnt counts a
+     * translation-page read that never happens when the TP is unmapped,
+     * misses the TP read on the stale-segment path, and counts buffer hits,
+     * so it does not partition read LPNs (see readcnt_mismatch). */
+    uint64_t terminal_partition =
+        ssd->stat.pre_first_write + ssd->stat.buffer_hits +
+        ssd->stat.cmt_hit_invalid_gtd + ssd->stat.invalid_read_cnt +
+        ssd->stat.true_unmapped + ssd->stat.acct.served_lpns;
+    (void)cmt_access_cnt;
     uint64_t invariant_failures = 0;
 
     if (ssd->stat.access_cnt + ssd->stat.invalid_read_cnt !=
@@ -2370,16 +2411,265 @@ void count_segments(struct ssd* ssd) {
                (long long)ssd->stat.model_queries);
         invariant_failures++;
     }
-    if (translation_read_cnt != expected_translation_reads) {
-        printf("INVARIANT FAILED: single+double+triple(%lld) != "
-               "cmt_hit_cnt+cmt_miss_cnt-invalid_read_cnt-cmt_hit_invalid_gtd(%lld)\n",
-               (long long)translation_read_cnt,
-               (long long)expected_translation_reads);
+    if (terminal_partition != ssd->stat.read_lpn_cnt) {
+        printf("INVARIANT FAILED: pre_first_write(%lld) + buffer_hits(%lld) + "
+               "cmt_hit_invalid_gtd(%lld) + invalid_read_cnt(%lld) + "
+               "true_unmapped(%lld) + served_lpns(%lld) = %lld != read_lpn_cnt(%lld)\n",
+               (long long)ssd->stat.pre_first_write,
+               (long long)ssd->stat.buffer_hits,
+               (long long)ssd->stat.cmt_hit_invalid_gtd,
+               (long long)ssd->stat.invalid_read_cnt,
+               (long long)ssd->stat.true_unmapped,
+               (long long)ssd->stat.acct.served_lpns,
+               (long long)terminal_partition,
+               (long long)ssd->stat.read_lpn_cnt);
         invariant_failures++;
     }
-    ssd->stat.invariant_failures = invariant_failures;
-    printf("invariant_failures: %lld\n",
-           (long long)ssd->stat.invariant_failures);
+    ssd->stat.inv2_violations = invariant_failures;
+
+    /* Invariant 4 (INVARIANTS.md): every flash read issued inside ssd_read
+     * (measured per request) is attributed to exactly one read LPN, either
+     * served or unmapped. The early exits (pre-first-write, buffer hit,
+     * stale segment with unmapped GTD) are not given any reads, so a read
+     * issued on one of those paths shows up here as a mismatch. */
+    uint64_t attributed_reads =
+        ssd->stat.acct.served_flash_reads + ssd->stat.acct.unmapped_flash_reads;
+    uint64_t inv4_violations = 0;
+    if (attributed_reads != ssd->stat.acct.read_path_flash_reads) {
+        printf("INVARIANT FAILED (inv4): served_flash_reads(%lld) + "
+               "unmapped_flash_reads(%lld) = %lld != read_path_flash_reads(%lld)\n",
+               (long long)ssd->stat.acct.served_flash_reads,
+               (long long)ssd->stat.acct.unmapped_flash_reads,
+               (long long)attributed_reads,
+               (long long)ssd->stat.acct.read_path_flash_reads);
+        inv4_violations++;
+    }
+    ssd->stat.inv4_violations = inv4_violations;
+
+    /* Invariant 6 (INVARIANTS.md): walk the CMT's LRU list (read-only) and
+     * confirm its length agrees with the authors' own used_cmt_entry_cnt,
+     * and that occupancy never exceeds capacity. */
+    uint64_t inv6_violations = 0;
+    {
+        uint64_t walked_occ = 0;
+        cmt_entry *ce;
+        QTAILQ_FOREACH(ce, &ssd->cm.cmt_entry_list, entry) {
+            walked_occ++;
+        }
+        if ((int)walked_occ != ssd->cm.used_cmt_entry_cnt ||
+            ssd->cm.used_cmt_entry_cnt < 0 ||
+            ssd->cm.used_cmt_entry_cnt > ssd->cm.tt_entries) {
+            printf("INVARIANT FAILED (inv6): walked cmt_entry_list length(%lld) "
+                   "!= used_cmt_entry_cnt(%d), tt_entries(%d)\n",
+                   (long long)walked_occ, ssd->cm.used_cmt_entry_cnt,
+                   ssd->cm.tt_entries);
+            inv6_violations++;
+        }
+    }
+    ssd->stat.inv6_violations = inv6_violations;
+
+    /* Invariant 7 (INVARIANTS.md): read-only mapping/space consistency
+     * audit, O(tt_pgs), run only here (twice per run). Three parts:
+     * (a) free_line_list/full_line_list walk lengths agree with the
+     *     authors' own counters, and free+full+victim <= tt_lines (no
+     *     active victim_line_list in this FTL -- victim_line_cnt is
+     *     self-reported via the priority queue, not independently walked);
+     * (b) per-block valid-page count (via maptbl) agrees with line.vpc;
+     * (c) every PG_VALID page's rmap entry points to an LPN whose maptbl
+     *     entry resolves back to that exact page. */
+    uint64_t inv7_violations = 0;
+    {
+        uint64_t walked_free = 0, walked_full = 0;
+        struct line *li;
+        QTAILQ_FOREACH(li, &ssd->lm.free_line_list, entry) {
+            walked_free++;
+        }
+        QTAILQ_FOREACH(li, &ssd->lm.full_line_list, entry) {
+            walked_full++;
+        }
+        bool line_bad =
+            (int)walked_free != ssd->lm.free_line_cnt ||
+            (int)walked_full != ssd->lm.full_line_cnt ||
+            (walked_free + walked_full + (uint64_t)ssd->lm.victim_line_cnt >
+             (uint64_t)ssd->lm.tt_lines);
+        ssd->stat.inv7_line_bad = line_bad;
+        if (line_bad) {
+            printf("INVARIANT FAILED (inv7-lines): walked free(%lld)/full(%lld) "
+                   "!= free_line_cnt(%d)/full_line_cnt(%d), "
+                   "or free+full+victim_line_cnt(%d) > tt_lines(%d)\n",
+                   (long long)walked_free, (long long)walked_full,
+                   ssd->lm.free_line_cnt, ssd->lm.full_line_cnt,
+                   ssd->lm.victim_line_cnt, ssd->lm.tt_lines);
+            inv7_violations++;
+        }
+
+        /* (b) per-block valid-page tally via maptbl, and (c) reverse-map
+         * consistency via a page-status walk. Share the block-index
+         * arithmetic between both passes (ch,lun,pl,blk nesting matches
+         * struct ssd_channel->lun->pl->blk). */
+        int tt_blks_total = spp->tt_blks;
+        int *block_tally = g_malloc0(sizeof(int) * tt_blks_total);
+        uint64_t stale_entries = 0;
+        for (uint64_t lpn = 0; lpn < (uint64_t)spp->tt_pgs; lpn++) {
+            struct ppa p = ssd->maptbl[lpn];
+            if (mapped_ppa(&p) && valid_ppa(ssd, &p)) {
+                if (get_pg(ssd, &p)->status != PG_VALID) {
+                    stale_entries++;
+                    continue;
+                }
+                int blk_idx =
+                    ((p.g.ch * spp->luns_per_ch + p.g.lun) * spp->pls_per_lun +
+                     p.g.pl) * spp->blks_per_pl + p.g.blk;
+                block_tally[blk_idx]++;
+            }
+        }
+        /* translation pages live in TRANS lines and are owned by the GTD
+         * (rmap holds the tvpn), not by maptbl */
+        for (uint64_t tvpn = 0; tvpn < (uint64_t)spp->tt_gtd_size; tvpn++) {
+            struct ppa p = ssd->gtd[tvpn];
+            if (mapped_ppa(&p) && valid_ppa(ssd, &p)) {
+                if (get_pg(ssd, &p)->status != PG_VALID) {
+                    stale_entries++;
+                    continue;
+                }
+                int blk_idx =
+                    ((p.g.ch * spp->luns_per_ch + p.g.lun) * spp->pls_per_lun +
+                     p.g.pl) * spp->blks_per_pl + p.g.blk;
+                block_tally[blk_idx]++;
+            }
+        }
+
+        uint64_t block_mismatches = 0;
+        uint64_t rmap_mismatches = 0;
+        for (int ch = 0; ch < spp->nchs; ch++) {
+            for (int lun = 0; lun < spp->luns_per_ch; lun++) {
+                for (int pl = 0; pl < spp->pls_per_lun; pl++) {
+                    for (int blk = 0; blk < spp->blks_per_pl; blk++) {
+                        bool trans_blk = ssd->lm.lines[blk].type == TRANS;
+                        struct nand_block *nb =
+                            &ssd->ch[ch].lun[lun].pl[pl].blk[blk];
+                        int blk_idx =
+                            ((ch * spp->luns_per_ch + lun) * spp->pls_per_lun +
+                             pl) * spp->blks_per_pl + blk;
+                        int pg_valid_cnt = 0;
+                        for (int pg = 0; pg < spp->pgs_per_blk; pg++) {
+                            pg_valid_cnt += nb->pg[pg].status == PG_VALID;
+                        }
+                        if (block_tally[blk_idx] != nb->vpc || pg_valid_cnt != nb->vpc) {
+                            if (block_mismatches < 3) {
+                                printf("inv7-block ch=%d lun=%d pl=%d blk=%d line_type=%d "
+                                       "vpc=%d ipc=%d valid_pages=%d mapped_to_it=%d\n",
+                                       ch, lun, pl, blk, ssd->lm.lines[blk].type, nb->vpc,
+                                       nb->ipc, pg_valid_cnt, block_tally[blk_idx]);
+                            }
+                            block_mismatches++;
+                        }
+                        for (int pg = 0; pg < spp->pgs_per_blk; pg++) {
+                            if (nb->pg[pg].status != PG_VALID) {
+                                continue;
+                            }
+                            struct ppa ppa;
+                            ppa.ppa = 0;
+                            ppa.g.ch = ch;
+                            ppa.g.lun = lun;
+                            ppa.g.pl = pl;
+                            ppa.g.blk = blk;
+                            ppa.g.pg = pg;
+                            uint64_t pgidx = ppa2pgidx(ssd, &ppa);
+                            uint64_t rlpn = ssd->rmap[pgidx];
+                            if (rlpn == INVALID_LPN) {
+                                rmap_mismatches++;
+                                continue;
+                            }
+                            if (rlpn >= (uint64_t)(trans_blk ? spp->tt_gtd_size
+                                                             : spp->tt_pgs)) {
+                                rmap_mismatches++;
+                                continue;
+                            }
+                            struct ppa trueppa =
+                                trans_blk ? ssd->gtd[rlpn] : ssd->maptbl[rlpn];
+                            if (!mapped_ppa(&trueppa) ||
+                                ppa2pgidx(ssd, &trueppa) != pgidx) {
+                                rmap_mismatches++;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        g_free(block_tally);
+        ssd->stat.inv7_block_mismatches = block_mismatches;
+        ssd->stat.inv7_rmap_mismatches = rmap_mismatches;
+        /* A mapping entry may point at an already-invalidated page only while
+         * the newer version of that LPN is still in the write buffer
+         * (LeaFTL: at most spp->buffer_size such entries). */
+        ssd->stat.stale_map_entries = stale_entries;
+        if (stale_entries > (uint64_t)(spp->buffer_size)) {
+            printf("INVARIANT FAILED (inv7-stale): %lld mapping entries point at "
+                   "non-valid pages (limit %lld)\n", (long long)stale_entries,
+                   (long long)(spp->buffer_size));
+            inv7_violations++;
+        }
+
+        if (block_mismatches > 0) {
+            printf("INVARIANT FAILED (inv7-blocks): %lld block(s) where "
+                   "maptbl-derived valid-page tally != line.vpc\n",
+                   (long long)block_mismatches);
+            inv7_violations++;
+        }
+        if (rmap_mismatches > 0) {
+            printf("INVARIANT FAILED (inv7-rmap): %lld valid page(s) whose "
+                   "rmap entry doesn't resolve back via maptbl\n",
+                   (long long)rmap_mismatches);
+            inv7_violations++;
+        }
+    }
+    ssd->stat.inv7_violations = inv7_violations;
+
+    /* Invariant 12 (INVARIANTS.md): read/write/erase_joule are accumulated
+     * inside ssd_advance_status purely from operation counts (not
+     * wall-clock time), so this holds under TCG. Compared with a small
+     * absolute tolerance, not exact equality -- 16.7 isn't exactly
+     * representable in binary floating point, so summing it millions of
+     * times can differ from a single multiply by a few ULPs, nowhere near
+     * the ~3.5+ joule gap a single real miscounted op would cause. */
+    long double expected_read_joule =
+        (long double)(ssd->stat.nand_reads_user + ssd->stat.nand_reads_translation +
+                       ssd->stat.nand_reads_gc) * 3.5L;
+    long double expected_write_joule =
+        (long double)(ssd->stat.nand_writes_user + ssd->stat.nand_writes_translation +
+                       ssd->stat.nand_writes_gc) * 16.7L;
+    long double expected_erase_joule = (long double)ssd->stat.nand_erases * 132.0L;
+    /* One miscounted op moves a total by >= 3.5; long double accumulation
+     * of 16.7 drifts by ~1e-4 over 1e7 additions, so 0.5 separates them. */
+    long double joule_tol = 0.5L;
+    uint64_t inv12_violations = 0;
+    if (fabsl(ssd->stat.read_joule - expected_read_joule) > joule_tol ||
+        fabsl(ssd->stat.write_joule - expected_write_joule) > joule_tol ||
+        fabsl(ssd->stat.erase_joule - expected_erase_joule) > joule_tol) {
+        printf("INVARIANT FAILED (inv12): read_joule(%Lf) vs expected(%Lf), "
+               "write_joule(%Lf) vs expected(%Lf), "
+               "erase_joule(%Lf) vs expected(%Lf) [nand_erases=%lld]\n",
+               ssd->stat.read_joule, expected_read_joule,
+               ssd->stat.write_joule, expected_write_joule,
+               ssd->stat.erase_joule, expected_erase_joule,
+               (long long)ssd->stat.nand_erases);
+        inv12_violations++;
+    }
+    ssd->stat.inv12_violations = inv12_violations;
+
+    ssd->stat.invariant_failures = ssd->stat.inv2_violations +
+                                    ssd->stat.inv4_violations +
+                                    ssd->stat.inv6_violations +
+                                    ssd->stat.inv7_violations +
+                                    ssd->stat.inv12_violations;
+    printf("invariant_failures: %lld (inv2=%lld inv4=%lld inv6=%lld inv7=%lld inv12=%lld)\n",
+           (long long)ssd->stat.invariant_failures,
+           (long long)ssd->stat.inv2_violations,
+           (long long)ssd->stat.inv4_violations,
+           (long long)ssd->stat.inv6_violations,
+           (long long)ssd->stat.inv7_violations,
+           (long long)ssd->stat.inv12_violations);
 
     struct ftl_stats_common c = {
         .ftl = "leaftl",
@@ -2396,8 +2686,12 @@ void count_segments(struct ssd* ssd) {
         .write_lpns = ssd->stat.write_lpns,
         .buffer_flushes = ssd->stat.buffer_flushes,
         .gc_runs = ssd->stat.gc_runs,
-        .mapped_read_lpns = ssd->stat.access_cnt,
-        .unmapped_read_lpns = ssd->stat.invalid_read_cnt,
+        /* mapped = written data actually returned: buffer hits + LPNs served
+         * from flash. access_cnt is not used: it also counts pre-first-write
+         * and true-unmapped reads. */
+        .mapped_read_lpns = ssd->stat.buffer_hits + ssd->stat.acct.served_lpns,
+        .unmapped_read_lpns = ssd->stat.read_lpn_cnt - ssd->stat.buffer_hits -
+                              ssd->stat.acct.served_lpns,
         .cmt_hits = ssd->stat.cmt_hit_cnt,
         .cmt_misses = ssd->stat.cmt_miss_cnt,
         .model_queries = ssd->stat.model_queries,
@@ -2408,19 +2702,39 @@ void count_segments(struct ssd* ssd) {
         .triple_reads = (uint64_t)ssd->stat.triple_read,
         .nand_page_writes = (uint64_t)ssd->stat.wa_cnt,
         .gc_cnt = ssd->stat.gc_cnt,
+        .nand_reads_user = ssd->stat.nand_reads_user,
+        .nand_reads_translation = ssd->stat.nand_reads_translation,
+        .nand_reads_gc = ssd->stat.nand_reads_gc,
+        .nand_writes_user = ssd->stat.nand_writes_user,
+        .nand_writes_translation = ssd->stat.nand_writes_translation,
+        .nand_writes_gc = ssd->stat.nand_writes_gc,
         .invariant_failures = ssd->stat.invariant_failures,
+        .inv2_violations = ssd->stat.inv2_violations,
+        .inv4_violations = ssd->stat.inv4_violations,
+        .inv6_violations = ssd->stat.inv6_violations,
+        .inv7_violations = ssd->stat.inv7_violations,
+        .nand_erases = ssd->stat.nand_erases,
+        .inv12_violations = ssd->stat.inv12_violations,
+        .buffer_hits = ssd->stat.buffer_hits,
+        .acct = ssd->stat.acct,
+        .stale_map_entries = ssd->stat.stale_map_entries,
+        .inv7_line_bad = ssd->stat.inv7_line_bad,
+        .inv7_block_mismatches = ssd->stat.inv7_block_mismatches,
+        .inv7_rmap_mismatches = ssd->stat.inv7_rmap_mismatches,
     };
     memcpy(c.read_size_hist, ssd->stat.read_size_hist, sizeof(c.read_size_hist));
     memcpy(c.write_size_hist, ssd->stat.write_size_hist, sizeof(c.write_size_hist));
 
     ftl_stats_print_common_prefix(&c);
     /* LeaFTL-specific keys, appended after the common prefix */
-    printf(",\"pre_first_write\":%" PRIu64 ",\"buffer_hits\":%" PRIu64
+    printf(",\"pre_first_write\":%" PRIu64 ",\"invalid_read_cnt\":%" PRIu64
+           ",\"true_unmapped\":%" PRIu64 ",\"invalid_but_mapped\":%" PRIu64
            ",\"unmapped_tp\":%" PRIu64 ",\"model_corrections\":%" PRIu64
-           ",\"cmt_hit_invalid_gtd\":%" PRIu64 "}\n",
-           ssd->stat.pre_first_write, ssd->stat.buffer_hits,
+           ",\"cmt_hit_invalid_gtd\":%" PRIu64 ",\"access_cnt\":%" PRIu64 "}\n",
+           ssd->stat.pre_first_write, ssd->stat.invalid_read_cnt,
+           ssd->stat.true_unmapped, ssd->stat.invalid_but_mapped,
            ssd->stat.unmapped_tp, (uint64_t)ssd->stat.model_correction,
-           ssd->stat.cmt_hit_invalid_gtd);
+           ssd->stat.cmt_hit_invalid_gtd, ssd->stat.access_cnt);
 
     printf("read joule: %Lf\n", ssd->stat.read_joule);
     printf("write joule: %Lf\n", ssd->stat.write_joule);
@@ -2450,6 +2764,21 @@ void count_segments(struct ssd* ssd) {
     ssd->stat.buffer_hits = 0;
     ssd->stat.unmapped_tp = 0;
     ssd->stat.cmt_hit_invalid_gtd = 0;
+    ssd->stat.nand_reads_user = 0;
+    ssd->stat.nand_reads_translation = 0;
+    ssd->stat.nand_reads_gc = 0;
+    ssd->stat.nand_writes_user = 0;
+    ssd->stat.nand_writes_translation = 0;
+    ssd->stat.nand_writes_gc = 0;
+    ssd->stat.inv2_violations = 0;
+    ssd->stat.inv4_violations = 0;
+    ssd->stat.inv6_violations = 0;
+    ssd->stat.inv7_violations = 0;
+    ssd->stat.nand_erases = 0;
+    ssd->stat.inv12_violations = 0;
+    memset(&ssd->stat.acct, 0, sizeof(ssd->stat.acct));
+    ssd->stat.true_unmapped = 0;
+    ssd->stat.invalid_but_mapped = 0;
     /* gc_runs is a since-boot delta counter like gc_cnt/wa_cnt (KI-17); not reset */
 
     ftl_reqlog_flush(&g_leaftl_reqlog);
@@ -2491,11 +2820,16 @@ static uint64_t ssd_read(struct ssd *ssd, NvmeRequest *req)
     ssd->stat.read_reqs++;
     ssd->stat.read_size_hist[ftl_stats_size_bucket(end_lpn - start_lpn + 1)]++;
     ftl_reqlog_write(&g_leaftl_reqlog, 'R', req->slba, req->nlb);
+    uint64_t req_r0 = ssd->stat.nand_reads_user + ssd->stat.nand_reads_translation;
+    uint64_t req_tw0 = ssd->stat.nand_writes_translation;
 
     /* normal IO read path */
     for (lpn = start_lpn; lpn <= end_lpn; lpn++) {
         ssd->stat.access_cnt++;
         ssd->stat.read_lpn_cnt++;
+        uint64_t lpn_u0 = ssd->stat.nand_reads_user;
+        uint64_t lpn_t0 = ssd->stat.nand_reads_translation;
+        bool lpn_served = false;
         bool find_in_flag = false;
         old_lun = NULL;
         if (!ssd->start_write) {
@@ -2568,14 +2902,26 @@ static uint64_t ssd_read(struct ssd *ssd, NvmeRequest *req)
         if (vppn == INVALID_VAL) {
             ssd->stat.access_cnt--;
             ssd->stat.invalid_read_cnt++;
+            ftl_acct_unmapped(&ssd->stat.acct, ssd->stat.nand_reads_user - lpn_u0,
+                              ssd->stat.nand_reads_translation - lpn_t0);
+            {
+                struct ppa tp = get_maptbl_ent(ssd, lpn);
+                if (mapped_ppa(&tp) && valid_ppa(ssd, &tp)) {
+                    ssd->stat.invalid_but_mapped++;
+                }
+            }
             maxlat = (sublat > maxlat) ? sublat : maxlat;
             continue;
         }
-        
+
         ppa = vppn2ppa(ssd, vppn);
         struct ppa trueppa = get_maptbl_ent(ssd, lpn);
-        
+
         if (valid_ppa(ssd, &trueppa) && mapped_ppa(&trueppa)) {
+            lpn_served = true;
+            if (get_pg(ssd, &trueppa)->status != PG_VALID) {
+                ssd->stat.acct.served_stale_page++;
+            }
 
             
             if (old_lun) {
@@ -2594,6 +2940,7 @@ static uint64_t ssd_read(struct ssd *ssd, NvmeRequest *req)
                 srd.cmd = NAND_READ;
                 srd.stime = req->stime;
                 sublat = ssd_advance_status(ssd, &ppa, &srd);
+                ssd->stat.nand_reads_user++;
                 lun = get_lun(ssd, &trueppa);
                 lun->next_lun_avail_time = (old_lun->next_lun_avail_time > lun->next_lun_avail_time) ? \
                                             old_lun->next_lun_avail_time : lun->next_lun_avail_time;
@@ -2605,7 +2952,8 @@ static uint64_t ssd_read(struct ssd *ssd, NvmeRequest *req)
             srd.cmd = NAND_READ;
             srd.stime = req->stime;
             sublat = ssd_advance_status(ssd, &trueppa, &srd);
-            
+            ssd->stat.nand_reads_user++;
+
         } else {
             sublat = 0;
         }
@@ -2617,8 +2965,23 @@ static uint64_t ssd_read(struct ssd *ssd, NvmeRequest *req)
             default: break;
         };
 
+        {
+            uint64_t du = ssd->stat.nand_reads_user - lpn_u0;
+            uint64_t dt = ssd->stat.nand_reads_translation - lpn_t0;
+            if (lpn_served) {
+                ftl_acct_served(&ssd->stat.acct, du, dt, read_cnt, cmt_ent != NULL);
+            } else {
+                ssd->stat.true_unmapped++;
+                ftl_acct_unmapped(&ssd->stat.acct, du, dt);
+            }
+        }
+
         maxlat = (sublat > maxlat) ? sublat : maxlat;
     }
+
+    ssd->stat.acct.read_path_flash_reads +=
+        ssd->stat.nand_reads_user + ssd->stat.nand_reads_translation - req_r0;
+    ssd->stat.acct.read_path_tp_writes += ssd->stat.nand_writes_translation - req_tw0;
 
     return maxlat;
 }

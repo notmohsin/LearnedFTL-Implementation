@@ -310,6 +310,38 @@ struct statistics {
      * and no invalid_read_cnt, so the read-cost invariant must subtract it. */
     uint64_t cmt_hit_invalid_gtd;
 
+    /* Phase 2b: NAND read/write split by purpose (invariants 4/5) and
+     * per-invariant-ID violation counters (invariant 2 rename, plus new
+     * invariants 4/6/7). See ftl_stats.h for the shared field meanings. */
+    uint64_t nand_reads_user;
+    uint64_t nand_reads_translation;
+    uint64_t nand_reads_gc;
+    uint64_t nand_writes_user;
+    uint64_t nand_writes_translation;
+    uint64_t nand_writes_gc;
+    uint64_t inv2_violations;
+    uint64_t inv4_violations;
+    uint64_t inv6_violations;
+    uint64_t inv7_violations;
+
+    /* Phase 2b, invariant 12: erase has no user/translation/GC split (it's
+     * always GC-triggered structurally), so one plain counter suffices. */
+    uint64_t nand_erases;
+    uint64_t inv12_violations;
+
+    /* Per-read-LPN flash-read accounting (ftl_stats.h) and the two terminal
+     * read buckets the authors' code doesn't count: vppn resolved but the
+     * true map says the LPN is unmapped (true_unmapped), and vppn ==
+     * INVALID_VAL although the true map says the LPN *is* mapped
+     * (invalid_but_mapped: written data the FTL failed to find, KNOWN). */
+    struct ftl_read_acct acct;
+    uint64_t stale_map_entries;
+    uint64_t inv7_line_bad;
+    uint64_t inv7_block_mismatches;
+    uint64_t inv7_rmap_mismatches;
+    uint64_t true_unmapped;
+    uint64_t invalid_but_mapped;
+
     long double read_joule;
     long double write_joule;
     long double erase_joule;
