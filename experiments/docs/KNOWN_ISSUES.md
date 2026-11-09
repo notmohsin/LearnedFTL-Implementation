@@ -301,3 +301,18 @@ are stable). None is fixed; each is measured and reported.
   means a genuine live duplicate. `writes_dropped` and `dropped_write_share` are reported (KNOWN). The micro-traces
   `write-read-buffered`, `overwrite-then-read` and `size-buckets` predict the dropped counts exactly.
 
+### KI-28: The learned lookup fails for many written LPNs (LeaFTL)
+
+- **Where:** `ssd_read` after a CMT miss: `process_translation_page_read` reads the translation page and queries the
+  learned segments; when no segment yields the LPN (`model_miss`), `vppn` stays `INVALID_VAL` and the read is skipped
+  without returning data (`leaftl.c`, the `vppn == INVALID_VAL` branch).
+- **Effect:** measured on the 100k validation traces under `warm` (every read LPN written first, no GC):
+  `model_misses == invalid_read_cnt` exactly, and `invalid_but_mapped` (page map has the LPN, the FTL does not find
+  it) is ~43% of reads on `mixed-50-seq-50-random` and ~40% on `seq-mixed`; ~5% after a sequential `fill`. The share
+  grows as the written LPNs become less contiguous. The segment builder in `buffer_flush` covers every LPN of a flush
+  except the last (KI-9), so the losses come from inside the segment structures (`flush_lpn_ppn_mappings` and the
+  approximate-segment / CRB search). The exact line has not been isolated.
+- **Handling:** measured as `invalid_but_mapped` and `lost_data_read_share` (KNOWN, invariant 10). LeaFTL's
+  translation-free ratio and flash reads per read are computed over the reads it did serve, so they must always be
+  read together with its lost-data share.
+

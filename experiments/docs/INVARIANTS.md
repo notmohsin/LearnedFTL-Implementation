@@ -142,6 +142,12 @@ excess for LeaFTL is reported as KNOWN lost data (`lost_data_read_share`).
 Repeats with the same FTL, trace, seed, precondition and device size produce identical baseline and workload
 records, field for field. Under TCG this includes every counter; there is no latency field to exclude.
 
+This caught a real problem: the first `warm`/`fill` repeats differed. The guest splits an O_DIRECT write larger
+than the device's 127-segment limit at points that depend on the user buffer's physical contiguity, which changes
+between boots (a 1 MiB write became 516 + 508 KiB in one run and 4 + 512 + 508 KiB in another). The trace replay was
+never affected (its requests are at most 64 KiB, and invariant 1 passed on every run), but preconditioning was, and
+under LeaFTL different split points change which writes KI-27 drops. Preconditioning now issues 256 KiB requests.
+
 ### 12. Energy accounting (HARD, in FEMU)
 
 `read_joule`, `write_joule`, `erase_joule` are accumulated inside `ssd_advance_status` from operation counts only
@@ -149,10 +155,11 @@ records, field for field. Under TCG this includes every counter; there is no lat
 holds under TCG. LeaFTL zeroes them at each print; LearnedFTL never does (since-boot), so its check uses the change
 since the previous print (the first `fill` run failed until this was done: the excess was exactly the fill's
 7,864,320 writes × 16.7). The interval values are also printed (`energy_read/write/erase`) and re-checked offline.
-They must equal our NAND read/write/erase counters times those constants within 0.5: a single
-miscounted operation moves a total by at least 3.5, while `long double` accumulation of 16.7 drifts by about 1e-4 over
-10^7 additions (observed: 5e-5 after 2.3e7). This independently confirms that the per-purpose counters of
-invariants 4 and 5 cover every NAND operation.
+They must equal our NAND read/write/erase counters times those constants. 3.5 and 132 are exact in binary
+floating point, so read and erase sums never drift (tolerance 0.5); summing 16.7 does (5e-5 after 2.3e7 writes,
+1.4 after 3.1e9), so writes use 8.0, just under half of one write, which still detects a single miscounted operation.
+The offline check is authoritative; the in-FEMU flag uses a fixed 0.5 and is reported only. This independently
+confirms that the per-purpose counters of invariants 4 and 5 cover every NAND operation.
 
 ## Self-tests
 
