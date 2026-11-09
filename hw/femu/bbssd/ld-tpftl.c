@@ -2819,7 +2819,15 @@ void count_segments(struct ssd* ssd) {
     ssd->stat.inv7_violations = inv7_violations;
 
     /* Invariant 12 (INVARIANTS.md): see leaftl.c's identical check for the
-     * floating-point tolerance rationale. */
+     * floating-point tolerance rationale. Unlike leaftl.c, this file never
+     * zeroes read/write/erase_joule at a print (since-boot, KI-17), so the
+     * check uses the change since the previous print. */
+    long double interval_read_joule = ssd->stat.read_joule - ssd->stat.prev_read_joule;
+    long double interval_write_joule = ssd->stat.write_joule - ssd->stat.prev_write_joule;
+    long double interval_erase_joule = ssd->stat.erase_joule - ssd->stat.prev_erase_joule;
+    ssd->stat.prev_read_joule = ssd->stat.read_joule;
+    ssd->stat.prev_write_joule = ssd->stat.write_joule;
+    ssd->stat.prev_erase_joule = ssd->stat.erase_joule;
     long double expected_read_joule =
         (long double)(ssd->stat.nand_reads_user + ssd->stat.nand_reads_translation +
                        ssd->stat.nand_reads_gc) * 3.5L;
@@ -2831,15 +2839,15 @@ void count_segments(struct ssd* ssd) {
      * of 16.7 drifts by ~1e-4 over 1e7 additions, so 0.5 separates them. */
     long double joule_tol = 0.5L;
     uint64_t inv12_violations = 0;
-    if (fabsl(ssd->stat.read_joule - expected_read_joule) > joule_tol ||
-        fabsl(ssd->stat.write_joule - expected_write_joule) > joule_tol ||
-        fabsl(ssd->stat.erase_joule - expected_erase_joule) > joule_tol) {
+    if (fabsl(interval_read_joule - expected_read_joule) > joule_tol ||
+        fabsl(interval_write_joule - expected_write_joule) > joule_tol ||
+        fabsl(interval_erase_joule - expected_erase_joule) > joule_tol) {
         printf("INVARIANT FAILED (inv12): read_joule(%Lf) vs expected(%Lf), "
                "write_joule(%Lf) vs expected(%Lf), "
                "erase_joule(%Lf) vs expected(%Lf) [nand_erases=%lld]\n",
-               ssd->stat.read_joule, expected_read_joule,
-               ssd->stat.write_joule, expected_write_joule,
-               ssd->stat.erase_joule, expected_erase_joule,
+               interval_read_joule, expected_read_joule,
+               interval_write_joule, expected_write_joule,
+               interval_erase_joule, expected_erase_joule,
                (long long)ssd->stat.nand_erases);
         inv12_violations++;
     }
@@ -2900,6 +2908,9 @@ void count_segments(struct ssd* ssd) {
         .inv12_violations = ssd->stat.inv12_violations,
         .buffer_hits = 0,
         .acct = ssd->stat.acct,
+        .energy_read = interval_read_joule,
+        .energy_write = interval_write_joule,
+        .energy_erase = interval_erase_joule,
         .stale_map_entries = ssd->stat.stale_map_entries,
         .inv7_line_bad = ssd->stat.inv7_line_bad,
         .inv7_block_mismatches = ssd->stat.inv7_block_mismatches,

@@ -74,8 +74,10 @@ Every read LPN leaves `ssd_read` through exactly one exit.
 
 - Served CMT hits ≤ CMT hits; translation-free served LPNs ≤ served LPNs.
 - LeaFTL: `model_queries ≤ cmt_misses`, `unmapped_tp ≤ cmt_misses` (a model is consulted only after a miss).
-- LearnedFTL: model predictions ≤ `read_lpns − cmt_hits` (tried only on a CMT miss), and no served LPN needs a
-  third flash read.
+- LearnedFTL: model predictions ≤ `read_lpns − cmt_hits` (tried only on a CMT miss). LPNs served with three
+  flash reads are reported, not gated: a CMT miss can evict a dirty TP node whose write-back reads another
+  translation page (first seen on `seq-mixed` under `fill`, 1,568 LPNs). The draft rule "LearnedFTL never needs a
+  third read" was wrong.
 
 ### 4. Read-cost attribution (HARD, in FEMU)
 
@@ -144,7 +146,10 @@ records, field for field. Under TCG this includes every counter; there is no lat
 
 `read_joule`, `write_joule`, `erase_joule` are accumulated inside `ssd_advance_status` from operation counts only
 (`+= 3.5` per read, `16.7` per write, `132` per erase; `leaftl.c:811,835,863`, `ld-tpftl.c:1183,1207,1234`), so this
-holds under TCG. They must equal our NAND read/write/erase counters times those constants within 0.5: a single
+holds under TCG. LeaFTL zeroes them at each print; LearnedFTL never does (since-boot), so its check uses the change
+since the previous print (the first `fill` run failed until this was done: the excess was exactly the fill's
+7,864,320 writes × 16.7). The interval values are also printed (`energy_read/write/erase`) and re-checked offline.
+They must equal our NAND read/write/erase counters times those constants within 0.5: a single
 miscounted operation moves a total by at least 3.5, while `long double` accumulation of 16.7 drifts by about 1e-4 over
 10^7 additions (observed: 5e-5 after 2.3e7). This independently confirms that the per-purpose counters of
 invariants 4 and 5 cover every NAND operation.

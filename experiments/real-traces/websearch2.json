@@ -1,0 +1,17 @@
+{
+  "source": "WebSearch2.spc.bz2",
+  "source_url": "https://skulddata.cs.umass.edu/traces/storage/WebSearch2.spc.bz2",
+  "source_sha256": "c1de8427cc995be906af4391b745c072408ff441b9e4bfdba788535bf72c251c",
+  "format": "SPC (ASU,LBA[512 B],size,op,timestamp)",
+  "records_kept": 1000000,
+  "ops_limit": 1000000,
+  "read_percent": 99.98,
+  "requests_widened_to_4k": 0,
+  "chunk_bytes": 2097152,
+  "asus": 6,
+  "chunks_touched": 8205,
+  "packed_footprint_gib": 16.025,
+  "normalisation": "4 KiB alignment by widening; (ASU, chunk) pairs packed densely in (ASU, address) order; offsets within a chunk unchanged",
+  "output_sha256": "1dfa9858798020464bedae0b89cbccea7c1598f245875daaa86363d3f9a865ad",
+  "generator": "experiments/scripts/normalize_trace.py"
+}

@@ -178,6 +178,9 @@ Severity:
 
 ### KI-17: Non-resettable counters (both)
 
+- **Also:** LearnedFTL never zeroes `read_joule`/`write_joule`/`erase_joule` at a print (LeaFTL does), so its energy
+  is since-boot as well; the instrumentation reports and checks per-interval energy for both.
+
 - `write_cnt`, `gc_cnt`, `wa_cnt` are never zeroed. **Handling:** used only as before/after deltas (invariant 9).
 
 ### KI-18: No over-provisioning (both)

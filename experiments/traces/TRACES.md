@@ -70,6 +70,11 @@ Keyings used for cache bounds:
 | [matrix-traces/zipf-hot10-access90-a1.2](#matrix-traceszipf-hot10-access90-a12) | 1,000,000 | 50.0 | 23.0 | 2.904 | 1.15% | 89.41% | 85.41% | 98.51% | 98.52% | 99.05% | 76.78% | 80.27% | 82.71% | yes |
 | [matrix-traces/zipf-hot20-access80-a0.8](#matrix-traceszipf-hot20-access80-a08) | 1,000,000 | 49.9 | 23.0 | 7.678 | 0.01% | 66.47% | 56.25% | 96.05% | 96.52% | 97.96% | 14.83% | 22.75% | 31.10% | yes |
 | [matrix-traces/zipf-hot20-access80-a1.2](#matrix-traceszipf-hot20-access80-a12) | 1,000,000 | 50.1 | 23.0 | 4.858 | 0.89% | 82.25% | 75.77% | 97.20% | 97.23% | 98.46% | 66.13% | 70.01% | 72.77% | yes |
+| [real-traces/financial1](#real-tracesfinancial1) | 1,000,000 | 21.3 | 7.6 | 1.747 | 0.26% | 64.18% | 43.87% | 99.72% | 99.72% | 99.72% | 59.55% | 29.77% | 67.63% | yes |
+| [real-traces/financial2](#real-tracesfinancial2) | 1,000,000 | 81.8 | 5.7 | 0.408 | 0.43% | 82.05% | 26.29% | 99.70% | 99.70% | 99.70% | 81.35% | 65.18% | 88.95% | yes |
+| [real-traces/websearch1](#real-traceswebsearch1) | 1,000,000 | 100.0 | 15.2 | 5.982 | 6.46% | 38.29% | 0.00% | 98.11% | 95.06% | 99.14% | 0.01% | 0.01% | 2.06% | yes |
+| [real-traces/websearch2](#real-traceswebsearch2) | 1,000,000 | 100.0 | 15.0 | 5.932 | 6.35% | 38.40% | 0.00% | 98.05% | 95.00% | 99.12% | 0.00% | 0.00% | 2.11% | yes |
+| [real-traces/websearch3](#real-traceswebsearch3) | 1,000,000 | 100.0 | 15.4 | 6.002 | 8.06% | 38.41% | 0.00% | 98.17% | 95.60% | 99.17% | 0.00% | 0.00% | 2.08% | yes |
 
 ## traces/mixed-50-seq-50-random
 
@@ -1886,8 +1891,8 @@ No reads in this trace, so there are no cache bounds.
 | Operations | 1,000,000 (499,061 R / 500,939 W) |
 | Read % by requests / bytes | 49.91% / 49.86% |
 | Mean request size | 22.98 KiB |
-| Request sizes (R) | 4KiB: 125,001, 8KiB: 124,799, 16KiB: 124,851, 64KiB: 124,410 |
-| Request sizes (W) | 4KiB: 124,936, 8KiB: 125,552, 16KiB: 125,215, 64KiB: 125,236 |
+| Request sizes (R) | 16KiB: 124,851, 4KiB: 125,001, 64KiB: 124,410, 8KiB: 124,799 |
+| Request sizes (W) | 16KiB: 125,215, 4KiB: 124,936, 64KiB: 125,236, 8KiB: 125,552 |
 | Page aligned | yes |
 | Address range | 0 – 26,843,496,448 bytes |
 | Footprint | 15.319 GiB (4,015,753 LPNs: 2,386,171 read, 2,397,289 written) |
@@ -1924,6 +1929,18 @@ No reads in this trace, so there are no cache bounds.
 
 **Cache bounds on the read stream** (hit rates; every miss inserts)
 
+`lpn` - logical page (LearnedFTL CMT entry granularity)
+
+| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
+|---:|---:|---:|---:|---:|
+| 1,024 | 0.01% | 0.01% | 0.01% | 1.44% |
+| 2,048 | 0.02% | 0.02% | 0.02% | 2.05% |
+| 4,096 | 0.05% | 0.04% | 0.05% | 2.86% |
+| 8,192 (CMT) | 0.10% | 0.10% | 0.09% | 3.98% |
+| 16,384 | 0.19% | 0.19% | 0.18% | 5.47% |
+| 32,768 | 0.37% | 0.38% | 0.37% | 7.41% |
+| 65,536 | 0.74% | 0.76% | 0.74% | 9.86% |
+
 `tp256` - translation page, 256 LPNs/page (LeaFTL CMT key)
 
 | Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
@@ -1948,23 +1965,11 @@ No reads in this trace, so there are no cache bounds.
 | 32,768 | 99.55% | 99.55% | 99.55% | 99.55% |
 | 65,536 | 99.55% | 99.55% | 99.55% | 99.55% |
 
-`lpn` - logical page (LearnedFTL CMT entry granularity)
-
-| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
-|---:|---:|---:|---:|---:|
-| 1,024 | 0.01% | 0.01% | 0.01% | 1.44% |
-| 2,048 | 0.02% | 0.02% | 0.02% | 2.05% |
-| 4,096 | 0.05% | 0.04% | 0.05% | 2.86% |
-| 8,192 (CMT) | 0.10% | 0.10% | 0.09% | 3.98% |
-| 16,384 | 0.19% | 0.19% | 0.18% | 5.47% |
-| 32,768 | 0.37% | 0.38% | 0.37% | 7.41% |
-| 65,536 | 0.74% | 0.76% | 0.74% | 9.86% |
-
 | Keying | References | Distinct keys | Compulsory miss rate | Stack distance p50 / p90 / p99 |
 |---|---:|---:|---:|---:|
+| `lpn` | 2,864,563 | 2,386,171 | 83.30% | 854,601 / 2,054,553 / 2,151,748 |
 | `tp256` | 2,864,563 | 25,600 | 0.89% | 0 / 3 / 22,244 |
 | `tp512` | 2,864,563 | 12,800 | 0.45% | 0 / 2 / 11,212 |
-| `lpn` | 2,864,563 | 2,386,171 | 83.30% | 854,601 / 2,054,553 / 2,151,748 |
 
 ## matrix-traces/seq-mixed
 
@@ -1986,8 +1991,8 @@ No reads in this trace, so there are no cache bounds.
 | Operations | 1,000,000 (500,796 R / 499,204 W) |
 | Read % by requests / bytes | 50.08% / 50.15% |
 | Mean request size | 22.98 KiB |
-| Request sizes (R) | 4KiB: 125,378, 8KiB: 124,771, 16KiB: 125,380, 64KiB: 125,267 |
-| Request sizes (W) | 4KiB: 124,949, 8KiB: 124,507, 16KiB: 125,535, 64KiB: 124,213 |
+| Request sizes (R) | 16KiB: 125,380, 4KiB: 125,378, 64KiB: 125,267, 8KiB: 124,771 |
+| Request sizes (W) | 16KiB: 125,535, 4KiB: 124,949, 64KiB: 124,213, 8KiB: 124,507 |
 | Page aligned | yes |
 | Address range | 0 – 26,843,488,256 bytes |
 | Footprint | 14.922 GiB (3,911,616 LPNs: 2,377,100 read, 2,368,886 written) |
@@ -2024,6 +2029,18 @@ No reads in this trace, so there are no cache bounds.
 
 **Cache bounds on the read stream** (hit rates; every miss inserts)
 
+`lpn` - logical page (LearnedFTL CMT entry granularity)
+
+| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
+|---:|---:|---:|---:|---:|
+| 1,024 | 0.00% | 0.00% | 0.00% | 0.07% |
+| 2,048 | 0.00% | 0.00% | 0.00% | 0.14% |
+| 4,096 | 0.00% | 0.00% | 0.00% | 0.28% |
+| 8,192 (CMT) | 0.00% | 0.00% | 0.00% | 0.57% |
+| 16,384 | 0.00% | 0.00% | 0.00% | 1.14% |
+| 32,768 | 0.00% | 0.00% | 0.00% | 2.27% |
+| 65,536 | 0.00% | 0.00% | 0.00% | 4.55% |
+
 `tp256` - translation page, 256 LPNs/page (LeaFTL CMT key)
 
 | Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
@@ -2048,23 +2065,11 @@ No reads in this trace, so there are no cache bounds.
 | 32,768 | 99.56% | 99.56% | 99.56% | 99.56% |
 | 65,536 | 99.56% | 99.56% | 99.56% | 99.56% |
 
-`lpn` - logical page (LearnedFTL CMT entry granularity)
-
-| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
-|---:|---:|---:|---:|---:|
-| 1,024 | 0.00% | 0.00% | 0.00% | 0.07% |
-| 2,048 | 0.00% | 0.00% | 0.00% | 0.14% |
-| 4,096 | 0.00% | 0.00% | 0.00% | 0.28% |
-| 8,192 (CMT) | 0.00% | 0.00% | 0.00% | 0.57% |
-| 16,384 | 0.00% | 0.00% | 0.00% | 1.14% |
-| 32,768 | 0.00% | 0.00% | 0.00% | 2.27% |
-| 65,536 | 0.00% | 0.00% | 0.00% | 4.55% |
-
 | Keying | References | Distinct keys | Compulsory miss rate | Stack distance p50 / p90 / p99 |
 |---|---:|---:|---:|---:|
+| `lpn` | 2,880,712 | 2,377,100 | 82.52% | 1,177,917 / 2,065,993 / 2,071,266 |
 | `tp256` | 2,880,712 | 25,600 | 0.89% | 0 / 0 / 25,599 |
 | `tp512` | 2,880,712 | 12,800 | 0.44% | 0 / 0 / 0 |
-| `lpn` | 2,880,712 | 2,377,100 | 82.52% | 1,177,917 / 2,065,993 / 2,071,266 |
 
 ## matrix-traces/uniform-mixed
 
@@ -2086,8 +2091,8 @@ No reads in this trace, so there are no cache bounds.
 | Operations | 1,000,000 (499,827 R / 500,173 W) |
 | Read % by requests / bytes | 49.98% / 49.97% |
 | Mean request size | 23.01 KiB |
-| Request sizes (R) | 4KiB: 124,663, 8KiB: 124,948, 16KiB: 125,257, 64KiB: 124,959 |
-| Request sizes (W) | 4KiB: 124,968, 8KiB: 125,069, 16KiB: 124,936, 64KiB: 125,200 |
+| Request sizes (R) | 16KiB: 125,257, 4KiB: 124,663, 64KiB: 124,959, 8KiB: 124,948 |
+| Request sizes (W) | 16KiB: 124,936, 4KiB: 124,968, 64KiB: 125,200, 8KiB: 125,069 |
 | Page aligned | yes |
 | Address range | 8,192 – 26,843,545,600 bytes |
 | Footprint | 14.604 GiB (3,828,397 LPNs: 2,325,163 read, 2,329,050 written) |
@@ -2124,6 +2129,18 @@ No reads in this trace, so there are no cache bounds.
 
 **Cache bounds on the read stream** (hit rates; every miss inserts)
 
+`lpn` - logical page (LearnedFTL CMT entry granularity)
+
+| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
+|---:|---:|---:|---:|---:|
+| 1,024 | 0.01% | 0.02% | 0.02% | 1.67% |
+| 2,048 | 0.03% | 0.03% | 0.03% | 2.37% |
+| 4,096 | 0.06% | 0.06% | 0.06% | 3.31% |
+| 8,192 (CMT) | 0.11% | 0.11% | 0.12% | 4.65% |
+| 16,384 | 0.24% | 0.24% | 0.24% | 6.42% |
+| 32,768 | 0.49% | 0.48% | 0.48% | 8.70% |
+| 65,536 | 1.00% | 0.98% | 0.98% | 11.55% |
+
 `tp256` - translation page, 256 LPNs/page (LeaFTL CMT key)
 
 | Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
@@ -2148,23 +2165,11 @@ No reads in this trace, so there are no cache bounds.
 | 32,768 | 99.55% | 99.55% | 99.55% | 99.55% |
 | 65,536 | 99.55% | 99.55% | 99.55% | 99.55% |
 
-`lpn` - logical page (LearnedFTL CMT entry granularity)
-
-| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
-|---:|---:|---:|---:|---:|
-| 1,024 | 0.01% | 0.02% | 0.02% | 1.67% |
-| 2,048 | 0.03% | 0.03% | 0.03% | 2.37% |
-| 4,096 | 0.06% | 0.06% | 0.06% | 3.31% |
-| 8,192 (CMT) | 0.11% | 0.11% | 0.12% | 4.65% |
-| 16,384 | 0.24% | 0.24% | 0.24% | 6.42% |
-| 32,768 | 0.49% | 0.48% | 0.48% | 8.70% |
-| 65,536 | 1.00% | 0.98% | 0.98% | 11.55% |
-
 | Keying | References | Distinct keys | Compulsory miss rate | Stack distance p50 / p90 / p99 |
 |---|---:|---:|---:|---:|
+| `lpn` | 2,874,931 | 2,325,163 | 80.88% | 717,677 / 1,627,735 / 2,104,311 |
 | `tp256` | 2,874,931 | 25,600 | 0.89% | 0 / 10,105 / 23,824 |
 | `tp512` | 2,874,931 | 12,800 | 0.45% | 0 / 5,239 / 12,002 |
-| `lpn` | 2,874,931 | 2,325,163 | 80.88% | 717,677 / 1,627,735 / 2,104,311 |
 
 ## matrix-traces/uniform-read
 
@@ -2186,7 +2191,7 @@ No reads in this trace, so there are no cache bounds.
 | Operations | 1,000,000 (1,000,000 R / 0 W) |
 | Read % by requests / bytes | 100.00% / 100.00% |
 | Mean request size | 23.03 KiB |
-| Request sizes (R) | 4KiB: 249,898, 8KiB: 249,316, 16KiB: 250,379, 64KiB: 250,407 |
+| Request sizes (R) | 16KiB: 250,379, 4KiB: 249,898, 64KiB: 250,407, 8KiB: 249,316 |
 | Request sizes (W) | none |
 | Page aligned | yes |
 | Address range | 4,096 – 26,843,533,312 bytes |
@@ -2224,6 +2229,18 @@ No reads in this trace, so there are no cache bounds.
 
 **Cache bounds on the read stream** (hit rates; every miss inserts)
 
+`lpn` - logical page (LearnedFTL CMT entry granularity)
+
+| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
+|---:|---:|---:|---:|---:|
+| 1,024 | 0.02% | 0.02% | 0.02% | 1.68% |
+| 2,048 | 0.03% | 0.03% | 0.03% | 2.40% |
+| 4,096 | 0.06% | 0.06% | 0.06% | 3.41% |
+| 8,192 (CMT) | 0.12% | 0.13% | 0.13% | 4.78% |
+| 16,384 | 0.25% | 0.25% | 0.25% | 6.70% |
+| 32,768 | 0.50% | 0.50% | 0.49% | 9.28% |
+| 65,536 | 0.99% | 1.00% | 1.00% | 12.68% |
+
 `tp256` - translation page, 256 LPNs/page (LeaFTL CMT key)
 
 | Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
@@ -2248,23 +2265,11 @@ No reads in this trace, so there are no cache bounds.
 | 32,768 | 99.78% | 99.78% | 99.78% | 99.78% |
 | 65,536 | 99.78% | 99.78% | 99.78% | 99.78% |
 
-`lpn` - logical page (LearnedFTL CMT entry granularity)
-
-| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
-|---:|---:|---:|---:|---:|
-| 1,024 | 0.02% | 0.02% | 0.02% | 1.68% |
-| 2,048 | 0.03% | 0.03% | 0.03% | 2.40% |
-| 4,096 | 0.06% | 0.06% | 0.06% | 3.41% |
-| 8,192 (CMT) | 0.12% | 0.13% | 0.13% | 4.78% |
-| 16,384 | 0.25% | 0.25% | 0.25% | 6.70% |
-| 32,768 | 0.50% | 0.50% | 0.49% | 9.28% |
-| 65,536 | 0.99% | 1.00% | 1.00% | 12.68% |
-
 | Keying | References | Distinct keys | Compulsory miss rate | Stack distance p50 / p90 / p99 |
 |---|---:|---:|---:|---:|
+| `lpn` | 5,756,558 | 3,827,774 | 66.49% | 1,236,933 / 2,740,076 / 3,499,802 |
 | `tp256` | 5,756,558 | 25,600 | 0.44% | 0 / 10,625 / 24,011 |
 | `tp512` | 5,756,558 | 12,800 | 0.22% | 0 / 5,377 / 12,034 |
-| `lpn` | 5,756,558 | 3,827,774 | 66.49% | 1,236,933 / 2,740,076 / 3,499,802 |
 
 ## matrix-traces/uniform-write
 
@@ -2287,7 +2292,7 @@ No reads in this trace, so there are no cache bounds.
 | Read % by requests / bytes | 0.00% / 0.00% |
 | Mean request size | 23.01 KiB |
 | Request sizes (R) | none |
-| Request sizes (W) | 4KiB: 249,680, 8KiB: 250,123, 16KiB: 250,087, 64KiB: 250,110 |
+| Request sizes (W) | 16KiB: 250,087, 4KiB: 249,680, 64KiB: 250,110, 8KiB: 250,123 |
 | Page aligned | yes |
 | Address range | 4,096 – 26,843,512,832 bytes |
 | Footprint | 14.600 GiB (3,827,408 LPNs: 0 read, 3,827,408 written) |
@@ -2344,8 +2349,8 @@ No reads in this trace, so there are no cache bounds.
 | Operations | 1,000,000 (499,909 R / 500,091 W) |
 | Read % by requests / bytes | 49.99% / 50.00% |
 | Mean request size | 23.00 KiB |
-| Request sizes (R) | 4KiB: 124,836, 8KiB: 125,068, 16KiB: 125,019, 64KiB: 124,986 |
-| Request sizes (W) | 4KiB: 125,308, 8KiB: 124,689, 16KiB: 125,145, 64KiB: 124,949 |
+| Request sizes (R) | 16KiB: 125,019, 4KiB: 124,836, 64KiB: 124,986, 8KiB: 125,068 |
+| Request sizes (W) | 16KiB: 125,145, 4KiB: 125,308, 64KiB: 124,949, 8KiB: 124,689 |
 | Page aligned | yes |
 | Address range | 0 – 26,843,512,832 bytes |
 | Footprint | 2.904 GiB (761,155 LPNs: 419,813 read, 420,356 written) |
@@ -2382,6 +2387,18 @@ No reads in this trace, so there are no cache bounds.
 
 **Cache bounds on the read stream** (hit rates; every miss inserts)
 
+`lpn` - logical page (LearnedFTL CMT entry granularity)
+
+| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
+|---:|---:|---:|---:|---:|
+| 1,024 | 67.21% | 73.42% | 74.38% | 76.16% |
+| 2,048 | 70.89% | 76.11% | 77.10% | 78.73% |
+| 4,096 | 74.05% | 78.37% | 79.30% | 80.90% |
+| 8,192 (CMT) | 76.78% | 80.27% | 81.16% | 82.71% |
+| 16,384 | 79.15% | 81.65% | 82.56% | 84.15% |
+| 32,768 | 81.17% | 82.81% | 83.52% | 85.12% |
+| 65,536 | 82.87% | 83.77% | 84.10% | 85.40% |
+
 `tp256` - translation page, 256 LPNs/page (LeaFTL CMT key)
 
 | Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
@@ -2406,23 +2423,11 @@ No reads in this trace, so there are no cache bounds.
 | 32,768 | 99.56% | 99.56% | 99.56% | 99.56% |
 | 65,536 | 99.56% | 99.56% | 99.56% | 99.56% |
 
-`lpn` - logical page (LearnedFTL CMT entry granularity)
-
-| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
-|---:|---:|---:|---:|---:|
-| 1,024 | 67.21% | 73.42% | 74.38% | 76.16% |
-| 2,048 | 70.89% | 76.11% | 77.10% | 78.73% |
-| 4,096 | 74.05% | 78.37% | 79.30% | 80.90% |
-| 8,192 (CMT) | 76.78% | 80.27% | 81.16% | 82.71% |
-| 16,384 | 79.15% | 81.65% | 82.56% | 84.15% |
-| 32,768 | 81.17% | 82.81% | 83.52% | 85.12% |
-| 65,536 | 82.87% | 83.77% | 84.10% | 85.40% |
-
 | Keying | References | Distinct keys | Compulsory miss rate | Stack distance p50 / p90 / p99 |
 |---|---:|---:|---:|---:|
+| `lpn` | 2,874,824 | 419,813 | 14.60% | 65 / 8,354 / 157,536 |
 | `tp256` | 2,874,824 | 23,051 | 0.80% | 0 / 0 / 4,750 |
 | `tp512` | 2,874,824 | 12,644 | 0.44% | 0 / 0 / 4,106 |
-| `lpn` | 2,874,824 | 419,813 | 14.60% | 65 / 8,354 / 157,536 |
 
 ## matrix-traces/zipf-hot20-access80-a0.8
 
@@ -2444,8 +2449,8 @@ No reads in this trace, so there are no cache bounds.
 | Operations | 1,000,000 (499,452 R / 500,548 W) |
 | Read % by requests / bytes | 49.95% / 49.94% |
 | Mean request size | 22.99 KiB |
-| Request sizes (R) | 4KiB: 124,734, 8KiB: 124,909, 16KiB: 125,085, 64KiB: 124,724 |
-| Request sizes (W) | 4KiB: 124,930, 8KiB: 125,113, 16KiB: 125,448, 64KiB: 125,057 |
+| Request sizes (R) | 16KiB: 125,085, 4KiB: 124,734, 64KiB: 124,724, 8KiB: 124,909 |
+| Request sizes (W) | 16KiB: 125,448, 4KiB: 124,930, 64KiB: 125,057, 8KiB: 125,113 |
 | Page aligned | yes |
 | Address range | 0 – 26,843,529,216 bytes |
 | Footprint | 7.678 GiB (2,012,865 LPNs: 1,256,636 read, 1,256,909 written) |
@@ -2482,6 +2487,18 @@ No reads in this trace, so there are no cache bounds.
 
 **Cache bounds on the read stream** (hit rates; every miss inserts)
 
+`lpn` - logical page (LearnedFTL CMT entry granularity)
+
+| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
+|---:|---:|---:|---:|---:|
+| 1,024 | 6.61% | 13.74% | 15.65% | 19.10% |
+| 2,048 | 9.01% | 16.32% | 18.60% | 22.64% |
+| 4,096 | 11.63% | 19.50% | 21.84% | 26.62% |
+| 8,192 (CMT) | 14.83% | 22.75% | 25.39% | 31.10% |
+| 16,384 | 18.63% | 26.44% | 29.23% | 36.03% |
+| 32,768 | 23.13% | 30.38% | 33.34% | 41.41% |
+| 65,536 | 28.60% | 34.85% | 37.63% | 47.03% |
+
 `tp256` - translation page, 256 LPNs/page (LeaFTL CMT key)
 
 | Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
@@ -2506,23 +2523,11 @@ No reads in this trace, so there are no cache bounds.
 | 32,768 | 99.55% | 99.55% | 99.55% | 99.55% |
 | 65,536 | 99.55% | 99.55% | 99.55% | 99.55% |
 
-`lpn` - logical page (LearnedFTL CMT entry granularity)
-
-| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
-|---:|---:|---:|---:|---:|
-| 1,024 | 6.61% | 13.74% | 15.65% | 19.10% |
-| 2,048 | 9.01% | 16.32% | 18.60% | 22.64% |
-| 4,096 | 11.63% | 19.50% | 21.84% | 26.62% |
-| 8,192 (CMT) | 14.83% | 22.75% | 25.39% | 31.10% |
-| 16,384 | 18.63% | 26.44% | 29.23% | 36.03% |
-| 32,768 | 23.13% | 30.38% | 33.34% | 41.41% |
-| 65,536 | 28.60% | 34.85% | 37.63% | 47.03% |
-
 | Keying | References | Distinct keys | Compulsory miss rate | Stack distance p50 / p90 / p99 |
 |---|---:|---:|---:|---:|
+| `lpn` | 2,870,476 | 1,256,636 | 43.78% | 61,890 / 545,154 / 1,005,591 |
 | `tp256` | 2,870,476 | 25,447 | 0.89% | 0 / 697 / 16,795 |
 | `tp512` | 2,870,476 | 12,799 | 0.45% | 0 / 401 / 9,180 |
-| `lpn` | 2,870,476 | 1,256,636 | 43.78% | 61,890 / 545,154 / 1,005,591 |
 
 ## matrix-traces/zipf-hot20-access80-a1.2
 
@@ -2544,8 +2549,8 @@ No reads in this trace, so there are no cache bounds.
 | Operations | 1,000,000 (501,066 R / 498,934 W) |
 | Read % by requests / bytes | 50.11% / 50.06% |
 | Mean request size | 22.96 KiB |
-| Request sizes (R) | 4KiB: 125,415, 8KiB: 125,575, 16KiB: 125,313, 64KiB: 124,763 |
-| Request sizes (W) | 4KiB: 124,511, 8KiB: 125,239, 16KiB: 124,564, 64KiB: 124,620 |
+| Request sizes (R) | 16KiB: 125,313, 4KiB: 125,415, 64KiB: 124,763, 8KiB: 125,575 |
+| Request sizes (W) | 16KiB: 124,564, 4KiB: 124,511, 64KiB: 124,620, 8KiB: 125,239 |
 | Page aligned | yes |
 | Address range | 0 – 26,843,516,928 bytes |
 | Footprint | 4.858 GiB (1,273,490 LPNs: 696,009 read, 694,821 written) |
@@ -2582,6 +2587,18 @@ No reads in this trace, so there are no cache bounds.
 
 **Cache bounds on the read stream** (hit rates; every miss inserts)
 
+`lpn` - logical page (LearnedFTL CMT entry granularity)
+
+| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
+|---:|---:|---:|---:|---:|
+| 1,024 | 57.55% | 64.49% | 65.26% | 66.88% |
+| 2,048 | 60.79% | 66.75% | 67.62% | 69.16% |
+| 4,096 | 63.64% | 68.59% | 69.61% | 71.10% |
+| 8,192 (CMT) | 66.13% | 70.01% | 71.23% | 72.77% |
+| 16,384 | 68.31% | 71.23% | 72.41% | 74.14% |
+| 32,768 | 70.20% | 72.22% | 73.12% | 75.19% |
+| 65,536 | 71.89% | 73.12% | 73.63% | 75.78% |
+
 `tp256` - translation page, 256 LPNs/page (LeaFTL CMT key)
 
 | Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
@@ -2606,20 +2623,523 @@ No reads in this trace, so there are no cache bounds.
 | 32,768 | 99.56% | 99.56% | 99.56% | 99.56% |
 | 65,536 | 99.56% | 99.56% | 99.56% | 99.56% |
 
+| Keying | References | Distinct keys | Compulsory miss rate | Stack distance p50 / p90 / p99 |
+|---|---:|---:|---:|---:|
+| `lpn` | 2,874,025 | 696,009 | 24.22% | 79 / 15,779 / 325,753 |
+| `tp256` | 2,874,025 | 24,688 | 0.86% | 0 / 1 / 14,481 |
+| `tp512` | 2,874,025 | 12,687 | 0.44% | 0 / 1 / 8,241 |
+
+## real-traces/financial1
+
+**Provenance**
+
+- chunk_bytes: `2097152`
+- file: `experiments/real-traces/financial1.trace`
+- generator: `experiments/scripts/normalize_trace.py`
+- normalisation: `4 KiB alignment by widening; (ASU, chunk) pairs packed densely in (ASU, address) order; offsets within a chunk unchanged`
+- requests_widened_to_4k: `988391`
+- sha256: `dbfd0c6bdb9fad57d370a840f2723ef30d8cc0d8b7c4468c174818473fd9d03a`
+- sha256_matches_sidecar: `True`
+- size_bytes: `29571536`
+- source: `Financial1.spc.bz2`
+- source_sha256: `0c40999c48102f5f0b6a33c754e2d766bd4b5d1578b07a7323b4580bf4c132a5`
+- source_url: `https://skulddata.cs.umass.edu/traces/storage/Financial1.spc.bz2`
+
+**Mix and footprint**
+
+| | |
+|---|---|
+| Operations | 1,000,000 (212,681 R / 787,319 W) |
+| Read % by requests / bytes | 21.27% / 18.24% |
+| Mean request size | 7.58 KiB |
+| Request sizes (R) | 4KiB: 116,889, 8KiB: 67,977, 12KiB: 25,809, 16KiB: 324, 20KiB: 150, 24KiB: 136, 28KiB: 25, 32KiB: 244, 36KiB: 1,116, 56KiB: 3, 64KiB: 2, 68KiB: 6 |
+| Request sizes (W) | 4KiB: 401,785, 8KiB: 308,883, 12KiB: 30,828, 16KiB: 7,299, 20KiB: 8,431, 24KiB: 7,701, 28KiB: 1,011, 32KiB: 794, 36KiB: 2,159, 40KiB: 26, 44KiB: 33, 48KiB: 227, 52KiB: 6,280, 56KiB: 19, 60KiB: 21, 64KiB: 3,607, 68KiB: 8,205, 92KiB: 1, 104KiB: 1, 180KiB: 1, 512KiB: 1, 612KiB: 1, 1508KiB: 1, 1564KiB: 1, 1988KiB: 1, 2924KiB: 1, 3152KiB: 1 |
+| Page aligned | yes |
+| Address range | 0 – 2,711,457,792 bytes |
+| Footprint | 1.747 GiB (457,930 LPNs: 108,295 read, 416,831 written) |
+| Unique translation pages | 2,325 @256, 1,293 @512 |
+| Fits 30 GiB device | yes |
+
+**Locality**
+
+| | |
+|---|---|
+| Sequential request share | 0.26% |
+| Access share of hottest 1% / 10% / 20% LPNs | 23.30% / 49.05% / 64.18% |
+| Working set per 100,000 refs (mean / max) | 33,701.3 / 82,286 LPNs (max 0.314 GiB) |
+
+**Mapping-relevant behaviour**
+
+| | |
+|---|---|
+| Read-after-write share (precondition none / fill) | 43.87% / 100.00% |
+| Never-written read LPNs (precondition none) | 193,922 |
+| Overwrite share of written LPNs | 73.08% |
+
+**Expected FTL counters** (invariant 10)
+
+| Counter | Expected |
+|---|---:|
+| `read_reqs` | 212,681 |
+| `write_reqs` | 787,319 |
+| `read_lpns` | 345,479 |
+| `write_lpns` | 1,548,376 |
+| `never_written_read_lpns_precondition_none` | 193,922 |
+| `never_written_read_lpns_precondition_fill` | 0 |
+| `request_size_histogram_lpns` | 1: 518,674, 2: 376,860, 3-4: 64,260, 5-8: 18,492, 9-16: 13,493, 17-32: 8,213, 33-64: 1, >64: 7 |
+
+**Cache bounds on the read stream** (hit rates; every miss inserts)
+
+`tp256` - translation page, 256 LPNs/page (LeaFTL CMT key)
+
+| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
+|---:|---:|---:|---:|---:|
+| 1,024 | 99.72% | 99.72% | 99.72% | 99.72% |
+| 2,048 | 99.72% | 99.72% | 99.72% | 99.72% |
+| 4,096 | 99.72% | 99.72% | 99.72% | 99.72% |
+| 8,192 (CMT) | 99.72% | 99.72% | 99.72% | 99.72% |
+| 16,384 | 99.72% | 99.72% | 99.72% | 99.72% |
+| 32,768 | 99.72% | 99.72% | 99.72% | 99.72% |
+| 65,536 | 99.72% | 99.72% | 99.72% | 99.72% |
+
+`tp512` - translation page, 512 LPNs/page
+
+| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
+|---:|---:|---:|---:|---:|
+| 1,024 | 99.82% | 99.82% | 99.82% | 99.82% |
+| 2,048 | 99.82% | 99.82% | 99.82% | 99.82% |
+| 4,096 | 99.82% | 99.82% | 99.82% | 99.82% |
+| 8,192 (CMT) | 99.82% | 99.82% | 99.82% | 99.82% |
+| 16,384 | 99.82% | 99.82% | 99.82% | 99.82% |
+| 32,768 | 99.82% | 99.82% | 99.82% | 99.82% |
+| 65,536 | 99.82% | 99.82% | 99.82% | 99.82% |
+
 `lpn` - logical page (LearnedFTL CMT entry granularity)
 
 | Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
 |---:|---:|---:|---:|---:|
-| 1,024 | 57.55% | 64.49% | 65.26% | 66.88% |
-| 2,048 | 60.79% | 66.75% | 67.62% | 69.16% |
-| 4,096 | 63.64% | 68.59% | 69.61% | 71.10% |
-| 8,192 (CMT) | 66.13% | 70.01% | 71.23% | 72.77% |
-| 16,384 | 68.31% | 71.23% | 72.41% | 74.14% |
-| 32,768 | 70.20% | 72.22% | 73.12% | 75.19% |
-| 65,536 | 71.89% | 73.12% | 73.63% | 75.78% |
+| 1,024 | 54.58% | 13.98% | 27.05% | 61.11% |
+| 2,048 | 56.15% | 16.24% | 33.98% | 62.93% |
+| 4,096 | 57.73% | 23.09% | 38.49% | 65.22% |
+| 8,192 (CMT) | 59.55% | 29.77% | 43.25% | 67.63% |
+| 16,384 | 63.33% | 36.60% | 48.26% | 68.65% |
+| 32,768 | 67.59% | 47.73% | 56.02% | 68.65% |
+| 65,536 | 68.62% | 64.29% | 65.58% | 68.65% |
 
 | Keying | References | Distinct keys | Compulsory miss rate | Stack distance p50 / p90 / p99 |
 |---|---:|---:|---:|---:|
-| `tp256` | 2,874,025 | 24,688 | 0.86% | 0 / 1 / 14,481 |
-| `tp512` | 2,874,025 | 12,687 | 0.44% | 0 / 1 / 8,241 |
-| `lpn` | 2,874,025 | 696,009 | 24.22% | 79 / 15,779 / 325,753 |
+| `tp256` | 345,479 | 979 | 0.28% | 1 / 14 / 152 |
+| `tp512` | 345,479 | 609 | 0.18% | 1 / 13 / 98 |
+| `lpn` | 345,479 | 108,295 | 31.35% | 36 / 14,102 / 40,347 |
+
+## real-traces/financial2
+
+**Provenance**
+
+- chunk_bytes: `2097152`
+- file: `experiments/real-traces/financial2.trace`
+- generator: `experiments/scripts/normalize_trace.py`
+- normalisation: `4 KiB alignment by widening; (ASU, chunk) pairs packed densely in (ASU, address) order; offsets within a chunk unchanged`
+- requests_widened_to_4k: `991905`
+- sha256: `4594057b48598f42e1fd378baf2fe6f047c50298df33225510ce61e956e1ab04`
+- sha256_matches_sidecar: `True`
+- size_bytes: `29466632`
+- source: `Financial2.spc.bz2`
+- source_sha256: `6b68d0fe7664419738c13d2282f65a7676af3b8305dc67461deebc7d192e17b4`
+- source_url: `https://skulddata.cs.umass.edu/traces/storage/Financial2.spc.bz2`
+
+**Mix and footprint**
+
+| | |
+|---|---|
+| Operations | 1,000,000 (818,059 R / 181,941 W) |
+| Read % by requests / bytes | 81.81% / 79.93% |
+| Mean request size | 5.74 KiB |
+| Request sizes (R) | 4KiB: 584,281, 8KiB: 202,098, 12KiB: 13,359, 16KiB: 3,425, 20KiB: 5,217, 24KiB: 979, 28KiB: 802, 32KiB: 3,214, 36KiB: 4,636, 40KiB: 11, 44KiB: 23, 48KiB: 5, 52KiB: 1, 56KiB: 6, 60KiB: 1, 68KiB: 1 |
+| Request sizes (W) | 4KiB: 137,655, 8KiB: 26,225, 12KiB: 8,440, 16KiB: 6,023, 20KiB: 420, 24KiB: 37, 28KiB: 18, 32KiB: 342, 36KiB: 2,307, 40KiB: 7, 48KiB: 2, 52KiB: 78, 56KiB: 60, 60KiB: 2, 64KiB: 2, 68KiB: 5, 260KiB: 318 |
+| Page aligned | yes |
+| Address range | 0 – 4,557,484,032 bytes |
+| Footprint | 0.408 GiB (106,948 LPNs: 76,714 read, 61,079 written) |
+| Unique translation pages | 3,614 @256, 2,174 @512 |
+| Fits 30 GiB device | yes |
+
+**Locality**
+
+| | |
+|---|---|
+| Sequential request share | 0.43% |
+| Access share of hottest 1% / 10% / 20% LPNs | 36.27% / 72.03% / 82.05% |
+| Working set per 100,000 refs (mean / max) | 18,857.3 / 23,509 LPNs (max 0.090 GiB) |
+
+**Mapping-relevant behaviour**
+
+| | |
+|---|---|
+| Read-after-write share (precondition none / fill) | 26.29% / 100.00% |
+| Never-written read LPNs (precondition none) | 846,017 |
+| Overwrite share of written LPNs | 78.81% |
+
+**Expected FTL counters** (invariant 10)
+
+| Counter | Expected |
+|---|---:|
+| `read_reqs` | 818,059 |
+| `write_reqs` | 181,941 |
+| `read_lpns` | 1,147,815 |
+| `write_lpns` | 288,229 |
+| `never_written_read_lpns_precondition_none` | 846,017 |
+| `never_written_read_lpns_precondition_fill` | 0 |
+| `request_size_histogram_lpns` | 1: 721,936, 2: 228,323, 3-4: 31,247, 5-8: 11,029, 9-16: 7,141, 17-32: 6, >64: 318 |
+
+**Cache bounds on the read stream** (hit rates; every miss inserts)
+
+`tp256` - translation page, 256 LPNs/page (LeaFTL CMT key)
+
+| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
+|---:|---:|---:|---:|---:|
+| 1,024 | 97.60% | 91.90% | 95.24% | 98.84% |
+| 2,048 | 99.22% | 98.27% | 98.85% | 99.59% |
+| 4,096 | 99.70% | 99.70% | 99.70% | 99.70% |
+| 8,192 (CMT) | 99.70% | 99.70% | 99.70% | 99.70% |
+| 16,384 | 99.70% | 99.70% | 99.70% | 99.70% |
+| 32,768 | 99.70% | 99.70% | 99.70% | 99.70% |
+| 65,536 | 99.70% | 99.70% | 99.70% | 99.70% |
+
+`tp512` - translation page, 512 LPNs/page
+
+| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
+|---:|---:|---:|---:|---:|
+| 1,024 | 98.97% | 96.84% | 98.17% | 99.53% |
+| 2,048 | 99.81% | 99.81% | 99.81% | 99.82% |
+| 4,096 | 99.82% | 99.82% | 99.82% | 99.82% |
+| 8,192 (CMT) | 99.82% | 99.82% | 99.82% | 99.82% |
+| 16,384 | 99.82% | 99.82% | 99.82% | 99.82% |
+| 32,768 | 99.82% | 99.82% | 99.82% | 99.82% |
+| 65,536 | 99.82% | 99.82% | 99.82% | 99.82% |
+
+`lpn` - logical page (LearnedFTL CMT entry granularity)
+
+| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
+|---:|---:|---:|---:|---:|
+| 1,024 | 54.96% | 31.32% | 42.07% | 71.54% |
+| 2,048 | 64.15% | 41.01% | 52.28% | 78.43% |
+| 4,096 | 73.51% | 53.72% | 64.94% | 84.34% |
+| 8,192 (CMT) | 81.35% | 65.18% | 75.86% | 88.95% |
+| 16,384 | 86.95% | 76.78% | 84.45% | 91.85% |
+| 32,768 | 90.90% | 87.70% | 90.35% | 93.32% |
+| 65,536 | 93.26% | 93.25% | 93.25% | 93.32% |
+
+| Keying | References | Distinct keys | Compulsory miss rate | Stack distance p50 / p90 / p99 |
+|---|---:|---:|---:|---:|
+| `tp256` | 1,147,815 | 3,494 | 0.30% | 4 / 183 / 1,574 |
+| `tp512` | 1,147,815 | 2,115 | 0.18% | 3 / 126 / 956 |
+| `lpn` | 1,147,815 | 76,714 | 6.68% | 477 / 10,948 / 44,760 |
+
+## real-traces/websearch1
+
+**Provenance**
+
+- chunk_bytes: `2097152`
+- file: `experiments/real-traces/websearch1.trace`
+- generator: `experiments/scripts/normalize_trace.py`
+- normalisation: `4 KiB alignment by widening; (ASU, chunk) pairs packed densely in (ASU, address) order; offsets within a chunk unchanged`
+- requests_widened_to_4k: `26`
+- sha256: `2e071a40cd0bdd698951fd24f8584473a902a5ac57e5b6732b867414fe59b70d`
+- sha256_matches_sidecar: `True`
+- size_bytes: `30343399`
+- source: `WebSearch1.spc.bz2`
+- source_sha256: `af0fdbd26834387c8b8ad3d5052c8a1310136a1fd3514f00f663726bd679b15a`
+- source_url: `https://skulddata.cs.umass.edu/traces/storage/WebSearch1.spc.bz2`
+
+**Mix and footprint**
+
+| | |
+|---|---|
+| Operations | 1,000,000 (999,800 R / 200 W) |
+| Read % by requests / bytes | 99.98% / 99.99% |
+| Mean request size | 15.16 KiB |
+| Request sizes (R) | 4KiB: 24, 8KiB: 598,840, 16KiB: 108,806, 24KiB: 89,976, 32KiB: 202,152, 1112KiB: 2 |
+| Request sizes (W) | 8KiB: 196, 16KiB: 2, 64KiB: 2 |
+| Page aligned | yes |
+| Address range | 155,648 – 17,379,344,384 bytes |
+| Footprint | 5.982 GiB (1,568,247 LPNs: 1,568,227 read, 42 written) |
+| Unique translation pages | 15,348 @256, 8,288 @512 |
+| Fits 30 GiB device | yes |
+
+**Locality**
+
+| | |
+|---|---|
+| Sequential request share | 6.46% |
+| Access share of hottest 1% / 10% / 20% LPNs | 2.60% / 21.75% / 38.29% |
+| Working set per 100,000 refs (mean / max) | 99,749.0 / 99,996 LPNs (max 0.382 GiB) |
+
+**Mapping-relevant behaviour**
+
+| | |
+|---|---|
+| Read-after-write share (precondition none / fill) | 0.00% / 100.00% |
+| Never-written read LPNs (precondition none) | 3,790,540 |
+| Overwrite share of written LPNs | 90.28% |
+
+**Expected FTL counters** (invariant 10)
+
+| Counter | Expected |
+|---|---:|
+| `read_reqs` | 999,800 |
+| `write_reqs` | 200 |
+| `read_lpns` | 3,790,556 |
+| `write_lpns` | 432 |
+| `never_written_read_lpns_precondition_none` | 3,790,540 |
+| `never_written_read_lpns_precondition_fill` | 0 |
+| `request_size_histogram_lpns` | 1: 24, 2: 599,036, 3-4: 108,808, 5-8: 292,128, 9-16: 2, >64: 2 |
+
+**Cache bounds on the read stream** (hit rates; every miss inserts)
+
+`tp256` - translation page, 256 LPNs/page (LeaFTL CMT key)
+
+| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
+|---:|---:|---:|---:|---:|
+| 1,024 | 91.72% | 78.36% | 80.47% | 95.24% |
+| 2,048 | 93.75% | 81.31% | 83.83% | 96.81% |
+| 4,096 | 96.26% | 86.97% | 89.43% | 98.12% |
+| 8,192 (CMT) | 98.11% | 95.06% | 96.48% | 99.14% |
+| 16,384 | 99.60% | 99.60% | 99.60% | 99.60% |
+| 32,768 | 99.60% | 99.60% | 99.60% | 99.60% |
+| 65,536 | 99.60% | 99.60% | 99.60% | 99.60% |
+
+`tp512` - translation page, 512 LPNs/page
+
+| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
+|---:|---:|---:|---:|---:|
+| 1,024 | 94.09% | 80.88% | 83.54% | 96.98% |
+| 2,048 | 96.49% | 86.26% | 88.94% | 98.27% |
+| 4,096 | 98.29% | 94.00% | 95.94% | 99.27% |
+| 8,192 (CMT) | 99.78% | 99.78% | 99.78% | 99.78% |
+| 16,384 | 99.78% | 99.78% | 99.78% | 99.78% |
+| 32,768 | 99.78% | 99.78% | 99.78% | 99.78% |
+| 65,536 | 99.78% | 99.78% | 99.78% | 99.78% |
+
+`lpn` - logical page (LearnedFTL CMT entry granularity)
+
+| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
+|---:|---:|---:|---:|---:|
+| 1,024 | 0.01% | 0.01% | 0.01% | 0.36% |
+| 2,048 | 0.01% | 0.01% | 0.01% | 0.67% |
+| 4,096 | 0.01% | 0.01% | 0.01% | 1.19% |
+| 8,192 (CMT) | 0.01% | 0.01% | 0.02% | 2.06% |
+| 16,384 | 0.01% | 0.01% | 0.07% | 3.78% |
+| 32,768 | 0.01% | 0.01% | 0.24% | 6.86% |
+| 65,536 | 0.01% | 0.01% | 0.62% | 12.21% |
+
+| Keying | References | Distinct keys | Compulsory miss rate | Stack distance p50 / p90 / p99 |
+|---|---:|---:|---:|---:|
+| `tp256` | 3,790,556 | 15,347 | 0.40% | 0 / 229 / 9,828 |
+| `tp512` | 3,790,556 | 8,287 | 0.22% | 0 / 135 / 4,959 |
+| `lpn` | 3,790,556 | 1,568,227 | 41.37% | 750,219 / 1,167,747 / 1,424,791 |
+
+## real-traces/websearch2
+
+**Provenance**
+
+- chunk_bytes: `2097152`
+- file: `experiments/real-traces/websearch2.trace`
+- generator: `experiments/scripts/normalize_trace.py`
+- normalisation: `4 KiB alignment by widening; (ASU, chunk) pairs packed densely in (ASU, address) order; offsets within a chunk unchanged`
+- requests_widened_to_4k: `0`
+- sha256: `1dfa9858798020464bedae0b89cbccea7c1598f245875daaa86363d3f9a865ad`
+- sha256_matches_sidecar: `True`
+- size_bytes: `30349488`
+- source: `WebSearch2.spc.bz2`
+- source_sha256: `c1de8427cc995be906af4391b745c072408ff441b9e4bfdba788535bf72c251c`
+- source_url: `https://skulddata.cs.umass.edu/traces/storage/WebSearch2.spc.bz2`
+
+**Mix and footprint**
+
+| | |
+|---|---|
+| Operations | 1,000,000 (999,800 R / 200 W) |
+| Read % by requests / bytes | 99.98% / 99.99% |
+| Mean request size | 14.98 KiB |
+| Request sizes (R) | 8KiB: 607,662, 16KiB: 107,858, 24KiB: 87,635, 32KiB: 196,645 |
+| Request sizes (W) | 8KiB: 197, 16KiB: 3 |
+| Page aligned | yes |
+| Address range | 2,023,424 – 17,206,681,600 bytes |
+| Footprint | 5.932 GiB (1,554,972 LPNs: 1,554,966 read, 12 written) |
+| Unique translation pages | 15,251 @256, 8,205 @512 |
+| Fits 30 GiB device | yes |
+
+**Locality**
+
+| | |
+|---|---|
+| Sequential request share | 6.35% |
+| Access share of hottest 1% / 10% / 20% LPNs | 2.68% / 21.80% / 38.40% |
+| Working set per 100,000 refs (mean / max) | 98,575.8 / 99,996 LPNs (max 0.382 GiB) |
+
+**Mapping-relevant behaviour**
+
+| | |
+|---|---|
+| Read-after-write share (precondition none / fill) | 0.00% / 100.00% |
+| Never-written read LPNs (precondition none) | 3,745,726 |
+| Overwrite share of written LPNs | 97.04% |
+
+**Expected FTL counters** (invariant 10)
+
+| Counter | Expected |
+|---|---:|
+| `read_reqs` | 999,800 |
+| `write_reqs` | 200 |
+| `read_lpns` | 3,745,726 |
+| `write_lpns` | 406 |
+| `never_written_read_lpns_precondition_none` | 3,745,726 |
+| `never_written_read_lpns_precondition_fill` | 0 |
+| `request_size_histogram_lpns` | 2: 607,859, 3-4: 107,861, 5-8: 284,280 |
+
+**Cache bounds on the read stream** (hit rates; every miss inserts)
+
+`tp256` - translation page, 256 LPNs/page (LeaFTL CMT key)
+
+| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
+|---:|---:|---:|---:|---:|
+| 1,024 | 91.50% | 78.33% | 80.24% | 95.11% |
+| 2,048 | 93.58% | 81.31% | 83.64% | 96.72% |
+| 4,096 | 96.14% | 86.87% | 89.34% | 98.06% |
+| 8,192 (CMT) | 98.05% | 95.00% | 96.39% | 99.12% |
+| 16,384 | 99.59% | 99.59% | 99.59% | 99.59% |
+| 32,768 | 99.59% | 99.59% | 99.59% | 99.59% |
+| 65,536 | 99.59% | 99.59% | 99.59% | 99.59% |
+
+`tp512` - translation page, 512 LPNs/page
+
+| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
+|---:|---:|---:|---:|---:|
+| 1,024 | 93.92% | 80.80% | 83.38% | 96.90% |
+| 2,048 | 96.38% | 86.47% | 88.86% | 98.21% |
+| 4,096 | 98.23% | 93.98% | 95.80% | 99.25% |
+| 8,192 (CMT) | 99.78% | 99.78% | 99.78% | 99.78% |
+| 16,384 | 99.78% | 99.78% | 99.78% | 99.78% |
+| 32,768 | 99.78% | 99.78% | 99.78% | 99.78% |
+| 65,536 | 99.78% | 99.78% | 99.78% | 99.78% |
+
+`lpn` - logical page (LearnedFTL CMT entry granularity)
+
+| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
+|---:|---:|---:|---:|---:|
+| 1,024 | 0.00% | 0.00% | 0.00% | 0.37% |
+| 2,048 | 0.00% | 0.00% | 0.00% | 0.66% |
+| 4,096 | 0.00% | 0.00% | 0.01% | 1.17% |
+| 8,192 (CMT) | 0.00% | 0.00% | 0.02% | 2.11% |
+| 16,384 | 0.00% | 0.00% | 0.07% | 3.85% |
+| 32,768 | 0.00% | 0.00% | 0.31% | 7.05% |
+| 65,536 | 0.00% | 0.00% | 0.85% | 12.39% |
+
+| Keying | References | Distinct keys | Compulsory miss rate | Stack distance p50 / p90 / p99 |
+|---|---:|---:|---:|---:|
+| `tp256` | 3,745,726 | 15,249 | 0.41% | 0 / 311 / 9,942 |
+| `tp512` | 3,745,726 | 8,203 | 0.22% | 0 / 157 / 5,040 |
+| `lpn` | 3,745,726 | 1,554,966 | 41.51% | 743,483 / 1,159,655 / 1,420,423 |
+
+## real-traces/websearch3
+
+**Provenance**
+
+- chunk_bytes: `2097152`
+- file: `experiments/real-traces/websearch3.trace`
+- generator: `experiments/scripts/normalize_trace.py`
+- normalisation: `4 KiB alignment by widening; (ASU, chunk) pairs packed densely in (ASU, address) order; offsets within a chunk unchanged`
+- requests_widened_to_4k: `0`
+- sha256: `c3199a93e56ecd6e3b805fabc0acfc5bc919e78324069030b42ae0d0fb2fb031`
+- sha256_matches_sidecar: `True`
+- size_bytes: `30487441`
+- source: `WebSearch3.spc.bz2`
+- source_sha256: `41d96460460ffb3b40388ec5ede43bbeb653e78e53ca26e8364a10c6b68e6d01`
+- source_url: `https://skulddata.cs.umass.edu/traces/storage/WebSearch3.spc.bz2`
+
+**Mix and footprint**
+
+| | |
+|---|---|
+| Operations | 1,000,000 (999,726 R / 274 W) |
+| Read % by requests / bytes | 99.97% / 99.99% |
+| Mean request size | 15.38 KiB |
+| Request sizes (R) | 8KiB: 586,172, 16KiB: 112,507, 24KiB: 93,114, 32KiB: 207,933 |
+| Request sizes (W) | 8KiB: 272, 16KiB: 2 |
+| Page aligned | yes |
+| Address range | 581,632 – 16,908,443,648 bytes |
+| Footprint | 6.002 GiB (1,573,398 LPNs: 1,573,394 read, 8 written) |
+| Unique translation pages | 15,145 @256, 8,063 @512 |
+| Fits 30 GiB device | yes |
+
+**Locality**
+
+| | |
+|---|---|
+| Sequential request share | 8.06% |
+| Access share of hottest 1% / 10% / 20% LPNs | 2.61% / 21.78% / 38.41% |
+| Working set per 100,000 refs (mean / max) | 98,581.5 / 99,996 LPNs (max 0.382 GiB) |
+
+**Mapping-relevant behaviour**
+
+| | |
+|---|---|
+| Read-after-write share (precondition none / fill) | 0.00% / 100.00% |
+| Never-written read LPNs (precondition none) | 3,844,520 |
+| Overwrite share of written LPNs | 98.55% |
+
+**Expected FTL counters** (invariant 10)
+
+| Counter | Expected |
+|---|---:|
+| `read_reqs` | 999,726 |
+| `write_reqs` | 274 |
+| `read_lpns` | 3,844,520 |
+| `write_lpns` | 552 |
+| `never_written_read_lpns_precondition_none` | 3,844,520 |
+| `never_written_read_lpns_precondition_fill` | 0 |
+| `request_size_histogram_lpns` | 2: 586,444, 3-4: 112,509, 5-8: 301,047 |
+
+**Cache bounds on the read stream** (hit rates; every miss inserts)
+
+`tp256` - translation page, 256 LPNs/page (LeaFTL CMT key)
+
+| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
+|---:|---:|---:|---:|---:|
+| 1,024 | 91.96% | 79.30% | 81.17% | 95.41% |
+| 2,048 | 93.97% | 82.06% | 84.52% | 96.93% |
+| 4,096 | 96.39% | 87.80% | 90.08% | 98.18% |
+| 8,192 (CMT) | 98.17% | 95.60% | 96.88% | 99.17% |
+| 16,384 | 99.61% | 99.61% | 99.61% | 99.61% |
+| 32,768 | 99.61% | 99.61% | 99.61% | 99.61% |
+| 65,536 | 99.61% | 99.61% | 99.61% | 99.61% |
+
+`tp512` - translation page, 512 LPNs/page
+
+| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
+|---:|---:|---:|---:|---:|
+| 1,024 | 94.33% | 81.99% | 84.27% | 97.12% |
+| 2,048 | 96.65% | 87.20% | 89.59% | 98.34% |
+| 4,096 | 98.36% | 94.64% | 96.42% | 99.30% |
+| 8,192 (CMT) | 99.79% | 99.79% | 99.79% | 99.79% |
+| 16,384 | 99.79% | 99.79% | 99.79% | 99.79% |
+| 32,768 | 99.79% | 99.79% | 99.79% | 99.79% |
+| 65,536 | 99.79% | 99.79% | 99.79% | 99.79% |
+
+`lpn` - logical page (LearnedFTL CMT entry granularity)
+
+| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
+|---:|---:|---:|---:|---:|
+| 1,024 | 0.00% | 0.00% | 0.00% | 0.36% |
+| 2,048 | 0.00% | 0.00% | 0.00% | 0.66% |
+| 4,096 | 0.00% | 0.00% | 0.01% | 1.18% |
+| 8,192 (CMT) | 0.00% | 0.00% | 0.02% | 2.08% |
+| 16,384 | 0.00% | 0.00% | 0.05% | 3.79% |
+| 32,768 | 0.00% | 0.00% | 0.20% | 6.88% |
+| 65,536 | 0.00% | 0.00% | 0.58% | 12.12% |
+
+| Keying | References | Distinct keys | Compulsory miss rate | Stack distance p50 / p90 / p99 |
+|---|---:|---:|---:|---:|
+| `tp256` | 3,844,520 | 15,144 | 0.39% | 0 / 148 / 9,668 |
+| `tp512` | 3,844,520 | 8,062 | 0.21% | 0 / 80 / 4,881 |
+| `lpn` | 3,844,520 | 1,573,394 | 40.93% | 743,987 / 1,161,679 / 1,429,795 |

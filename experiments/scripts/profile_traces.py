@@ -514,7 +514,7 @@ def main() -> int:
     parser.add_argument("--only", action="append", help="profile only traces with this stem (repeatable)")
     parser.add_argument("--group", action="append",
                         help="profile only this trace directory: traces, validation-traces, "
-                             "matrix-traces (repeatable)")
+                             "matrix-traces, real-traces (repeatable)")
     parser.add_argument("--output-dir", type=Path, default=EXPERIMENTS_DIR / "traces")
     args = parser.parse_args()
 
@@ -528,6 +528,7 @@ def main() -> int:
     sources = [("traces", p) for p in sorted((EXPERIMENTS_DIR / "traces").glob("*.trace"))]
     sources += [("validation-traces", p) for p in sorted((EXPERIMENTS_DIR / "validation-traces").glob("*.trace"))]
     sources += [("matrix-traces", p) for p in sorted((EXPERIMENTS_DIR / "matrix-traces").glob("*.trace"))]
+    sources += [("real-traces", p) for p in sorted((EXPERIMENTS_DIR / "real-traces").glob("*.trace"))]
 
     profiles: dict[str, dict] = {}
     with tempfile.TemporaryDirectory(prefix="profile_traces.") as tmp:
@@ -555,6 +556,13 @@ def main() -> int:
                     prov.update(EXTRA_PROVENANCE.get(path.stem, {"source": "unknown - add provenance"}))
                 if rel in oids:
                     prov["sha256_matches_git_lfs_oid"] = oids[rel] == digest
+            elif group == "real-traces":
+                sidecar = path.with_suffix(".json")
+                if sidecar.exists():
+                    meta = json.loads(sidecar.read_text())
+                    prov.update({k: meta[k] for k in ("source", "source_url", "source_sha256", "normalisation",
+                                                      "chunk_bytes", "requests_widened_to_4k", "generator")})
+                    prov["sha256_matches_sidecar"] = meta.get("output_sha256") == digest
             else:
                 parent = EXPERIMENTS_DIR / "traces" / path.name
                 prov["generator"] = "experiments/scripts/prepare_validation_traces.py"

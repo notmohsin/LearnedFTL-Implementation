@@ -1,0 +1,17 @@
+{
+  "source": "Financial2.spc.bz2",
+  "source_url": "https://skulddata.cs.umass.edu/traces/storage/Financial2.spc.bz2",
+  "source_sha256": "6b68d0fe7664419738c13d2282f65a7676af3b8305dc67461deebc7d192e17b4",
+  "format": "SPC (ASU,LBA[512 B],size,op,timestamp)",
+  "records_kept": 1000000,
+  "ops_limit": 1000000,
+  "read_percent": 81.806,
+  "requests_widened_to_4k": 991905,
+  "chunk_bytes": 2097152,
+  "asus": 18,
+  "chunks_touched": 2174,
+  "packed_footprint_gib": 4.246,
+  "normalisation": "4 KiB alignment by widening; (ASU, chunk) pairs packed densely in (ASU, address) order; offsets within a chunk unchanged",
+  "output_sha256": "4594057b48598f42e1fd378baf2fe6f047c50298df33225510ce61e956e1ab04",
+  "generator": "experiments/scripts/normalize_trace.py"
+}

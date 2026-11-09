@@ -2521,6 +2521,1824 @@
       "size_bytes": 23693852
     }
   },
+  "real-traces/financial1": {
+    "cache_bounds_read_stream": {
+      "lpn": {
+        "compulsory_miss_rate": 0.313463,
+        "curve": [
+          {
+            "belady_hit_rate": 0.611068,
+            "belady_hits": 211111,
+            "capacity": 1024,
+            "lfu_hit_rate": 0.139794,
+            "lfu_hits": 48296,
+            "lru_hit_rate": 0.545839,
+            "lru_hits": 188576,
+            "plfu_hit_rate": 0.270456,
+            "plfu_hits": 93437
+          },
+          {
+            "belady_hit_rate": 0.629338,
+            "belady_hits": 217423,
+            "capacity": 2048,
+            "lfu_hit_rate": 0.162404,
+            "lfu_hits": 56107,
+            "lru_hit_rate": 0.561478,
+            "lru_hits": 193979,
+            "plfu_hit_rate": 0.33983,
+            "plfu_hits": 117404
+          },
+          {
+            "belady_hit_rate": 0.652199,
+            "belady_hits": 225321,
+            "capacity": 4096,
+            "lfu_hit_rate": 0.230897,
+            "lfu_hits": 79770,
+            "lru_hit_rate": 0.577265,
+            "lru_hits": 199433,
+            "plfu_hit_rate": 0.384863,
+            "plfu_hits": 132962
+          },
+          {
+            "belady_hit_rate": 0.676278,
+            "belady_hits": 233640,
+            "capacity": 8192,
+            "lfu_hit_rate": 0.297685,
+            "lfu_hits": 102844,
+            "lru_hit_rate": 0.595541,
+            "lru_hits": 205747,
+            "plfu_hit_rate": 0.432469,
+            "plfu_hits": 149409
+          },
+          {
+            "belady_hit_rate": 0.686537,
+            "belady_hits": 237184,
+            "capacity": 16384,
+            "lfu_hit_rate": 0.365973,
+            "lfu_hits": 126436,
+            "lru_hit_rate": 0.633292,
+            "lru_hits": 218789,
+            "plfu_hit_rate": 0.482579,
+            "plfu_hits": 166721
+          },
+          {
+            "belady_hit_rate": 0.686537,
+            "belady_hits": 237184,
+            "capacity": 32768,
+            "lfu_hit_rate": 0.477253,
+            "lfu_hits": 164881,
+            "lru_hit_rate": 0.675891,
+            "lru_hits": 233506,
+            "plfu_hit_rate": 0.56017,
+            "plfu_hits": 193527
+          },
+          {
+            "belady_hit_rate": 0.686537,
+            "belady_hits": 237184,
+            "capacity": 65536,
+            "lfu_hit_rate": 0.642942,
+            "lfu_hits": 222123,
+            "lru_hit_rate": 0.68625,
+            "lru_hits": 237085,
+            "plfu_hit_rate": 0.655814,
+            "plfu_hits": 226570
+          }
+        ],
+        "distinct_keys": 108295,
+        "references": 345479,
+        "stack_distance_percentiles": {
+          "p50": 36,
+          "p90": 14102,
+          "p99": 40347
+        }
+      },
+      "tp256": {
+        "compulsory_miss_rate": 0.002834,
+        "curve": [
+          {
+            "belady_hit_rate": 0.997166,
+            "belady_hits": 344500,
+            "capacity": 1024,
+            "lfu_hit_rate": 0.997166,
+            "lfu_hits": 344500,
+            "lru_hit_rate": 0.997166,
+            "lru_hits": 344500,
+            "plfu_hit_rate": 0.997166,
+            "plfu_hits": 344500
+          },
+          {
+            "belady_hit_rate": 0.997166,
+            "belady_hits": 344500,
+            "capacity": 2048,
+            "lfu_hit_rate": 0.997166,
+            "lfu_hits": 344500,
+            "lru_hit_rate": 0.997166,
+            "lru_hits": 344500,
+            "plfu_hit_rate": 0.997166,
+            "plfu_hits": 344500
+          },
+          {
+            "belady_hit_rate": 0.997166,
+            "belady_hits": 344500,
+            "capacity": 4096,
+            "lfu_hit_rate": 0.997166,
+            "lfu_hits": 344500,
+            "lru_hit_rate": 0.997166,
+            "lru_hits": 344500,
+            "plfu_hit_rate": 0.997166,
+            "plfu_hits": 344500
+          },
+          {
+            "belady_hit_rate": 0.997166,
+            "belady_hits": 344500,
+            "capacity": 8192,
+            "lfu_hit_rate": 0.997166,
+            "lfu_hits": 344500,
+            "lru_hit_rate": 0.997166,
+            "lru_hits": 344500,
+            "plfu_hit_rate": 0.997166,
+            "plfu_hits": 344500
+          },
+          {
+            "belady_hit_rate": 0.997166,
+            "belady_hits": 344500,
+            "capacity": 16384,
+            "lfu_hit_rate": 0.997166,
+            "lfu_hits": 344500,
+            "lru_hit_rate": 0.997166,
+            "lru_hits": 344500,
+            "plfu_hit_rate": 0.997166,
+            "plfu_hits": 344500
+          },
+          {
+            "belady_hit_rate": 0.997166,
+            "belady_hits": 344500,
+            "capacity": 32768,
+            "lfu_hit_rate": 0.997166,
+            "lfu_hits": 344500,
+            "lru_hit_rate": 0.997166,
+            "lru_hits": 344500,
+            "plfu_hit_rate": 0.997166,
+            "plfu_hits": 344500
+          },
+          {
+            "belady_hit_rate": 0.997166,
+            "belady_hits": 344500,
+            "capacity": 65536,
+            "lfu_hit_rate": 0.997166,
+            "lfu_hits": 344500,
+            "lru_hit_rate": 0.997166,
+            "lru_hits": 344500,
+            "plfu_hit_rate": 0.997166,
+            "plfu_hits": 344500
+          }
+        ],
+        "distinct_keys": 979,
+        "references": 345479,
+        "stack_distance_percentiles": {
+          "p50": 1,
+          "p90": 14,
+          "p99": 152
+        }
+      },
+      "tp512": {
+        "compulsory_miss_rate": 0.001763,
+        "curve": [
+          {
+            "belady_hit_rate": 0.998237,
+            "belady_hits": 344870,
+            "capacity": 1024,
+            "lfu_hit_rate": 0.998237,
+            "lfu_hits": 344870,
+            "lru_hit_rate": 0.998237,
+            "lru_hits": 344870,
+            "plfu_hit_rate": 0.998237,
+            "plfu_hits": 344870
+          },
+          {
+            "belady_hit_rate": 0.998237,
+            "belady_hits": 344870,
+            "capacity": 2048,
+            "lfu_hit_rate": 0.998237,
+            "lfu_hits": 344870,
+            "lru_hit_rate": 0.998237,
+            "lru_hits": 344870,
+            "plfu_hit_rate": 0.998237,
+            "plfu_hits": 344870
+          },
+          {
+            "belady_hit_rate": 0.998237,
+            "belady_hits": 344870,
+            "capacity": 4096,
+            "lfu_hit_rate": 0.998237,
+            "lfu_hits": 344870,
+            "lru_hit_rate": 0.998237,
+            "lru_hits": 344870,
+            "plfu_hit_rate": 0.998237,
+            "plfu_hits": 344870
+          },
+          {
+            "belady_hit_rate": 0.998237,
+            "belady_hits": 344870,
+            "capacity": 8192,
+            "lfu_hit_rate": 0.998237,
+            "lfu_hits": 344870,
+            "lru_hit_rate": 0.998237,
+            "lru_hits": 344870,
+            "plfu_hit_rate": 0.998237,
+            "plfu_hits": 344870
+          },
+          {
+            "belady_hit_rate": 0.998237,
+            "belady_hits": 344870,
+            "capacity": 16384,
+            "lfu_hit_rate": 0.998237,
+            "lfu_hits": 344870,
+            "lru_hit_rate": 0.998237,
+            "lru_hits": 344870,
+            "plfu_hit_rate": 0.998237,
+            "plfu_hits": 344870
+          },
+          {
+            "belady_hit_rate": 0.998237,
+            "belady_hits": 344870,
+            "capacity": 32768,
+            "lfu_hit_rate": 0.998237,
+            "lfu_hits": 344870,
+            "lru_hit_rate": 0.998237,
+            "lru_hits": 344870,
+            "plfu_hit_rate": 0.998237,
+            "plfu_hits": 344870
+          },
+          {
+            "belady_hit_rate": 0.998237,
+            "belady_hits": 344870,
+            "capacity": 65536,
+            "lfu_hit_rate": 0.998237,
+            "lfu_hits": 344870,
+            "lru_hit_rate": 0.998237,
+            "lru_hits": 344870,
+            "plfu_hit_rate": 0.998237,
+            "plfu_hits": 344870
+          }
+        ],
+        "distinct_keys": 609,
+        "references": 345479,
+        "stack_distance_percentiles": {
+          "p50": 1,
+          "p90": 13,
+          "p99": 98
+        }
+      }
+    },
+    "duration_seconds": 9725.58789,
+    "expected_ftl_counters": {
+      "never_written_read_lpns_precondition_fill": 0,
+      "never_written_read_lpns_precondition_none": 193922,
+      "read_lpns": 345479,
+      "read_reqs": 212681,
+      "request_size_histogram_lpns": {
+        "1": 518674,
+        "17-32": 8213,
+        "2": 376860,
+        "3-4": 64260,
+        "33-64": 1,
+        "5-8": 18492,
+        "9-16": 13493,
+        ">64": 7
+      },
+      "write_lpns": 1548376,
+      "write_reqs": 787319
+    },
+    "footprint": {
+      "fits_logical_device": true,
+      "footprint_gib": 1.7469,
+      "max_end_bytes": 2711457792,
+      "min_offset_bytes": 0,
+      "unique_lpns": 457930,
+      "unique_read_lpns": 108295,
+      "unique_tp256": 2325,
+      "unique_tp512": 1293,
+      "unique_written_lpns": 416831
+    },
+    "locality": {
+      "sequential_request_share": 0.002637,
+      "top10pct_lpn_access_share": 0.490504,
+      "top1pct_lpn_access_share": 0.232953,
+      "top20pct_lpn_access_share": 0.641762,
+      "working_set_gib_max": 0.3139,
+      "working_set_lpns_max": 82286,
+      "working_set_lpns_mean": 33701.3,
+      "working_set_window_refs": 100000
+    },
+    "mapping": {
+      "never_written_read_lpns_precondition_none": 193922,
+      "overwrite_share_of_written_lpns": 0.730795,
+      "read_after_write_share_precondition_fill": 1.0,
+      "read_after_write_share_precondition_none": 0.438687
+    },
+    "mix": {
+      "mean_request_kib": 7.575,
+      "read_percent_by_bytes": 18.242,
+      "read_percent_by_requests": 21.268,
+      "read_reqs": 212681,
+      "request_sizes": {
+        "R": {
+          "12KiB": 25809,
+          "16KiB": 324,
+          "20KiB": 150,
+          "24KiB": 136,
+          "28KiB": 25,
+          "32KiB": 244,
+          "36KiB": 1116,
+          "4KiB": 116889,
+          "56KiB": 3,
+          "64KiB": 2,
+          "68KiB": 6,
+          "8KiB": 67977
+        },
+        "W": {
+          "104KiB": 1,
+          "12KiB": 30828,
+          "1508KiB": 1,
+          "1564KiB": 1,
+          "16KiB": 7299,
+          "180KiB": 1,
+          "1988KiB": 1,
+          "20KiB": 8431,
+          "24KiB": 7701,
+          "28KiB": 1011,
+          "2924KiB": 1,
+          "3152KiB": 1,
+          "32KiB": 794,
+          "36KiB": 2159,
+          "40KiB": 26,
+          "44KiB": 33,
+          "48KiB": 227,
+          "4KiB": 401785,
+          "512KiB": 1,
+          "52KiB": 6280,
+          "56KiB": 19,
+          "60KiB": 21,
+          "612KiB": 1,
+          "64KiB": 3607,
+          "68KiB": 8205,
+          "8KiB": 308883,
+          "92KiB": 1
+        }
+      },
+      "write_reqs": 787319
+    },
+    "operations": 1000000,
+    "page_aligned": true,
+    "provenance": {
+      "chunk_bytes": 2097152,
+      "file": "experiments/real-traces/financial1.trace",
+      "generator": "experiments/scripts/normalize_trace.py",
+      "normalisation": "4 KiB alignment by widening; (ASU, chunk) pairs packed densely in (ASU, address) order; offsets within a chunk unchanged",
+      "requests_widened_to_4k": 988391,
+      "sha256": "dbfd0c6bdb9fad57d370a840f2723ef30d8cc0d8b7c4468c174818473fd9d03a",
+      "sha256_matches_sidecar": true,
+      "size_bytes": 29571536,
+      "source": "Financial1.spc.bz2",
+      "source_sha256": "0c40999c48102f5f0b6a33c754e2d766bd4b5d1578b07a7323b4580bf4c132a5",
+      "source_url": "https://skulddata.cs.umass.edu/traces/storage/Financial1.spc.bz2"
+    }
+  },
+  "real-traces/financial2": {
+    "cache_bounds_read_stream": {
+      "lpn": {
+        "compulsory_miss_rate": 0.066835,
+        "curve": [
+          {
+            "belady_hit_rate": 0.715367,
+            "belady_hits": 821109,
+            "capacity": 1024,
+            "lfu_hit_rate": 0.313212,
+            "lfu_hits": 359510,
+            "lru_hit_rate": 0.549589,
+            "lru_hits": 630827,
+            "plfu_hit_rate": 0.4207,
+            "plfu_hits": 482886
+          },
+          {
+            "belady_hit_rate": 0.784318,
+            "belady_hits": 900252,
+            "capacity": 2048,
+            "lfu_hit_rate": 0.410087,
+            "lfu_hits": 470704,
+            "lru_hit_rate": 0.64149,
+            "lru_hits": 736312,
+            "plfu_hit_rate": 0.522793,
+            "plfu_hits": 600070
+          },
+          {
+            "belady_hit_rate": 0.843423,
+            "belady_hits": 968093,
+            "capacity": 4096,
+            "lfu_hit_rate": 0.53719,
+            "lfu_hits": 616595,
+            "lru_hit_rate": 0.735136,
+            "lru_hits": 843800,
+            "plfu_hit_rate": 0.64943,
+            "plfu_hits": 745426
+          },
+          {
+            "belady_hit_rate": 0.889534,
+            "belady_hits": 1021021,
+            "capacity": 8192,
+            "lfu_hit_rate": 0.65181,
+            "lfu_hits": 748157,
+            "lru_hit_rate": 0.813485,
+            "lru_hits": 933730,
+            "plfu_hit_rate": 0.758613,
+            "plfu_hits": 870747
+          },
+          {
+            "belady_hit_rate": 0.918476,
+            "belady_hits": 1054240,
+            "capacity": 16384,
+            "lfu_hit_rate": 0.767837,
+            "lfu_hits": 881335,
+            "lru_hit_rate": 0.869452,
+            "lru_hits": 997970,
+            "plfu_hit_rate": 0.844524,
+            "plfu_hits": 969357
+          },
+          {
+            "belady_hit_rate": 0.933165,
+            "belady_hits": 1071101,
+            "capacity": 32768,
+            "lfu_hit_rate": 0.876957,
+            "lfu_hits": 1006584,
+            "lru_hit_rate": 0.908965,
+            "lru_hits": 1043324,
+            "plfu_hit_rate": 0.903471,
+            "plfu_hits": 1037018
+          },
+          {
+            "belady_hit_rate": 0.933165,
+            "belady_hits": 1071101,
+            "capacity": 65536,
+            "lfu_hit_rate": 0.93253,
+            "lfu_hits": 1070372,
+            "lru_hit_rate": 0.93262,
+            "lru_hits": 1070475,
+            "plfu_hit_rate": 0.93253,
+            "plfu_hits": 1070372
+          }
+        ],
+        "distinct_keys": 76714,
+        "references": 1147815,
+        "stack_distance_percentiles": {
+          "p50": 477,
+          "p90": 10948,
+          "p99": 44760
+        }
+      },
+      "tp256": {
+        "compulsory_miss_rate": 0.003044,
+        "curve": [
+          {
+            "belady_hit_rate": 0.988409,
+            "belady_hits": 1134511,
+            "capacity": 1024,
+            "lfu_hit_rate": 0.919045,
+            "lfu_hits": 1054894,
+            "lru_hit_rate": 0.975987,
+            "lru_hits": 1120253,
+            "plfu_hit_rate": 0.952429,
+            "plfu_hits": 1093212
+          },
+          {
+            "belady_hit_rate": 0.995857,
+            "belady_hits": 1143060,
+            "capacity": 2048,
+            "lfu_hit_rate": 0.982745,
+            "lfu_hits": 1128009,
+            "lru_hit_rate": 0.992236,
+            "lru_hits": 1138903,
+            "plfu_hit_rate": 0.988499,
+            "plfu_hits": 1134614
+          },
+          {
+            "belady_hit_rate": 0.996956,
+            "belady_hits": 1144321,
+            "capacity": 4096,
+            "lfu_hit_rate": 0.996956,
+            "lfu_hits": 1144321,
+            "lru_hit_rate": 0.996956,
+            "lru_hits": 1144321,
+            "plfu_hit_rate": 0.996956,
+            "plfu_hits": 1144321
+          },
+          {
+            "belady_hit_rate": 0.996956,
+            "belady_hits": 1144321,
+            "capacity": 8192,
+            "lfu_hit_rate": 0.996956,
+            "lfu_hits": 1144321,
+            "lru_hit_rate": 0.996956,
+            "lru_hits": 1144321,
+            "plfu_hit_rate": 0.996956,
+            "plfu_hits": 1144321
+          },
+          {
+            "belady_hit_rate": 0.996956,
+            "belady_hits": 1144321,
+            "capacity": 16384,
+            "lfu_hit_rate": 0.996956,
+            "lfu_hits": 1144321,
+            "lru_hit_rate": 0.996956,
+            "lru_hits": 1144321,
+            "plfu_hit_rate": 0.996956,
+            "plfu_hits": 1144321
+          },
+          {
+            "belady_hit_rate": 0.996956,
+            "belady_hits": 1144321,
+            "capacity": 32768,
+            "lfu_hit_rate": 0.996956,
+            "lfu_hits": 1144321,
+            "lru_hit_rate": 0.996956,
+            "lru_hits": 1144321,
+            "plfu_hit_rate": 0.996956,
+            "plfu_hits": 1144321
+          },
+          {
+            "belady_hit_rate": 0.996956,
+            "belady_hits": 1144321,
+            "capacity": 65536,
+            "lfu_hit_rate": 0.996956,
+            "lfu_hits": 1144321,
+            "lru_hit_rate": 0.996956,
+            "lru_hits": 1144321,
+            "plfu_hit_rate": 0.996956,
+            "plfu_hits": 1144321
+          }
+        ],
+        "distinct_keys": 3494,
+        "references": 1147815,
+        "stack_distance_percentiles": {
+          "p50": 4,
+          "p90": 183,
+          "p99": 1574
+        }
+      },
+      "tp512": {
+        "compulsory_miss_rate": 0.001843,
+        "curve": [
+          {
+            "belady_hit_rate": 0.995342,
+            "belady_hits": 1142468,
+            "capacity": 1024,
+            "lfu_hit_rate": 0.968404,
+            "lfu_hits": 1111549,
+            "lru_hit_rate": 0.989713,
+            "lru_hits": 1136007,
+            "plfu_hit_rate": 0.981744,
+            "plfu_hits": 1126861
+          },
+          {
+            "belady_hit_rate": 0.998157,
+            "belady_hits": 1145700,
+            "capacity": 2048,
+            "lfu_hit_rate": 0.998139,
+            "lfu_hits": 1145679,
+            "lru_hit_rate": 0.998146,
+            "lru_hits": 1145687,
+            "plfu_hit_rate": 0.99814,
+            "plfu_hits": 1145680
+          },
+          {
+            "belady_hit_rate": 0.998157,
+            "belady_hits": 1145700,
+            "capacity": 4096,
+            "lfu_hit_rate": 0.998157,
+            "lfu_hits": 1145700,
+            "lru_hit_rate": 0.998157,
+            "lru_hits": 1145700,
+            "plfu_hit_rate": 0.998157,
+            "plfu_hits": 1145700
+          },
+          {
+            "belady_hit_rate": 0.998157,
+            "belady_hits": 1145700,
+            "capacity": 8192,
+            "lfu_hit_rate": 0.998157,
+            "lfu_hits": 1145700,
+            "lru_hit_rate": 0.998157,
+            "lru_hits": 1145700,
+            "plfu_hit_rate": 0.998157,
+            "plfu_hits": 1145700
+          },
+          {
+            "belady_hit_rate": 0.998157,
+            "belady_hits": 1145700,
+            "capacity": 16384,
+            "lfu_hit_rate": 0.998157,
+            "lfu_hits": 1145700,
+            "lru_hit_rate": 0.998157,
+            "lru_hits": 1145700,
+            "plfu_hit_rate": 0.998157,
+            "plfu_hits": 1145700
+          },
+          {
+            "belady_hit_rate": 0.998157,
+            "belady_hits": 1145700,
+            "capacity": 32768,
+            "lfu_hit_rate": 0.998157,
+            "lfu_hits": 1145700,
+            "lru_hit_rate": 0.998157,
+            "lru_hits": 1145700,
+            "plfu_hit_rate": 0.998157,
+            "plfu_hits": 1145700
+          },
+          {
+            "belady_hit_rate": 0.998157,
+            "belady_hits": 1145700,
+            "capacity": 65536,
+            "lfu_hit_rate": 0.998157,
+            "lfu_hits": 1145700,
+            "lru_hit_rate": 0.998157,
+            "lru_hits": 1145700,
+            "plfu_hit_rate": 0.998157,
+            "plfu_hits": 1145700
+          }
+        ],
+        "distinct_keys": 2115,
+        "references": 1147815,
+        "stack_distance_percentiles": {
+          "p50": 3,
+          "p90": 126,
+          "p99": 956
+        }
+      }
+    },
+    "duration_seconds": 9282.505859,
+    "expected_ftl_counters": {
+      "never_written_read_lpns_precondition_fill": 0,
+      "never_written_read_lpns_precondition_none": 846017,
+      "read_lpns": 1147815,
+      "read_reqs": 818059,
+      "request_size_histogram_lpns": {
+        "1": 721936,
+        "17-32": 6,
+        "2": 228323,
+        "3-4": 31247,
+        "33-64": 0,
+        "5-8": 11029,
+        "9-16": 7141,
+        ">64": 318
+      },
+      "write_lpns": 288229,
+      "write_reqs": 181941
+    },
+    "footprint": {
+      "fits_logical_device": true,
+      "footprint_gib": 0.408,
+      "max_end_bytes": 4557484032,
+      "min_offset_bytes": 0,
+      "unique_lpns": 106948,
+      "unique_read_lpns": 76714,
+      "unique_tp256": 3614,
+      "unique_tp512": 2174,
+      "unique_written_lpns": 61079
+    },
+    "locality": {
+      "sequential_request_share": 0.004309,
+      "top10pct_lpn_access_share": 0.720272,
+      "top1pct_lpn_access_share": 0.362742,
+      "top20pct_lpn_access_share": 0.820487,
+      "working_set_gib_max": 0.0897,
+      "working_set_lpns_max": 23509,
+      "working_set_lpns_mean": 18857.3,
+      "working_set_window_refs": 100000
+    },
+    "mapping": {
+      "never_written_read_lpns_precondition_none": 846017,
+      "overwrite_share_of_written_lpns": 0.788089,
+      "read_after_write_share_precondition_fill": 1.0,
+      "read_after_write_share_precondition_none": 0.262933
+    },
+    "mix": {
+      "mean_request_kib": 5.744,
+      "read_percent_by_bytes": 79.929,
+      "read_percent_by_requests": 81.806,
+      "read_reqs": 818059,
+      "request_sizes": {
+        "R": {
+          "12KiB": 13359,
+          "16KiB": 3425,
+          "20KiB": 5217,
+          "24KiB": 979,
+          "28KiB": 802,
+          "32KiB": 3214,
+          "36KiB": 4636,
+          "40KiB": 11,
+          "44KiB": 23,
+          "48KiB": 5,
+          "4KiB": 584281,
+          "52KiB": 1,
+          "56KiB": 6,
+          "60KiB": 1,
+          "68KiB": 1,
+          "8KiB": 202098
+        },
+        "W": {
+          "12KiB": 8440,
+          "16KiB": 6023,
+          "20KiB": 420,
+          "24KiB": 37,
+          "260KiB": 318,
+          "28KiB": 18,
+          "32KiB": 342,
+          "36KiB": 2307,
+          "40KiB": 7,
+          "48KiB": 2,
+          "4KiB": 137655,
+          "52KiB": 78,
+          "56KiB": 60,
+          "60KiB": 2,
+          "64KiB": 2,
+          "68KiB": 5,
+          "8KiB": 26225
+        }
+      },
+      "write_reqs": 181941
+    },
+    "operations": 1000000,
+    "page_aligned": true,
+    "provenance": {
+      "chunk_bytes": 2097152,
+      "file": "experiments/real-traces/financial2.trace",
+      "generator": "experiments/scripts/normalize_trace.py",
+      "normalisation": "4 KiB alignment by widening; (ASU, chunk) pairs packed densely in (ASU, address) order; offsets within a chunk unchanged",
+      "requests_widened_to_4k": 991905,
+      "sha256": "4594057b48598f42e1fd378baf2fe6f047c50298df33225510ce61e956e1ab04",
+      "sha256_matches_sidecar": true,
+      "size_bytes": 29466632,
+      "source": "Financial2.spc.bz2",
+      "source_sha256": "6b68d0fe7664419738c13d2282f65a7676af3b8305dc67461deebc7d192e17b4",
+      "source_url": "https://skulddata.cs.umass.edu/traces/storage/Financial2.spc.bz2"
+    }
+  },
+  "real-traces/websearch1": {
+    "cache_bounds_read_stream": {
+      "lpn": {
+        "compulsory_miss_rate": 0.41372,
+        "curve": [
+          {
+            "belady_hit_rate": 0.003638,
+            "belady_hits": 13789,
+            "capacity": 1024,
+            "lfu_hit_rate": 7.3e-05,
+            "lfu_hits": 278,
+            "lru_hit_rate": 7.3e-05,
+            "lru_hits": 278,
+            "plfu_hit_rate": 9.4e-05,
+            "plfu_hits": 356
+          },
+          {
+            "belady_hit_rate": 0.00674,
+            "belady_hits": 25550,
+            "capacity": 2048,
+            "lfu_hit_rate": 7.3e-05,
+            "lfu_hits": 278,
+            "lru_hit_rate": 7.3e-05,
+            "lru_hits": 278,
+            "plfu_hit_rate": 0.000109,
+            "plfu_hits": 414
+          },
+          {
+            "belady_hit_rate": 0.011906,
+            "belady_hits": 45131,
+            "capacity": 4096,
+            "lfu_hit_rate": 7.3e-05,
+            "lfu_hits": 278,
+            "lru_hit_rate": 7.3e-05,
+            "lru_hits": 278,
+            "plfu_hit_rate": 0.000137,
+            "plfu_hits": 518
+          },
+          {
+            "belady_hit_rate": 0.020551,
+            "belady_hits": 77899,
+            "capacity": 8192,
+            "lfu_hit_rate": 7.3e-05,
+            "lfu_hits": 278,
+            "lru_hit_rate": 7.3e-05,
+            "lru_hits": 278,
+            "plfu_hit_rate": 0.000208,
+            "plfu_hits": 788
+          },
+          {
+            "belady_hit_rate": 0.03784,
+            "belady_hits": 143435,
+            "capacity": 16384,
+            "lfu_hit_rate": 7.5e-05,
+            "lfu_hits": 283,
+            "lru_hit_rate": 7.4e-05,
+            "lru_hits": 279,
+            "plfu_hit_rate": 0.000738,
+            "plfu_hits": 2799
+          },
+          {
+            "belady_hit_rate": 0.068628,
+            "belady_hits": 260138,
+            "capacity": 32768,
+            "lfu_hit_rate": 7.5e-05,
+            "lfu_hits": 283,
+            "lru_hit_rate": 7.4e-05,
+            "lru_hits": 279,
+            "plfu_hit_rate": 0.002366,
+            "plfu_hits": 8969
+          },
+          {
+            "belady_hit_rate": 0.122118,
+            "belady_hits": 462896,
+            "capacity": 65536,
+            "lfu_hit_rate": 7.5e-05,
+            "lfu_hits": 283,
+            "lru_hit_rate": 7.4e-05,
+            "lru_hits": 279,
+            "plfu_hit_rate": 0.006219,
+            "plfu_hits": 23573
+          }
+        ],
+        "distinct_keys": 1568227,
+        "references": 3790556,
+        "stack_distance_percentiles": {
+          "p50": 750219,
+          "p90": 1167747,
+          "p99": 1424791
+        }
+      },
+      "tp256": {
+        "compulsory_miss_rate": 0.004049,
+        "curve": [
+          {
+            "belady_hit_rate": 0.95243,
+            "belady_hits": 3610240,
+            "capacity": 1024,
+            "lfu_hit_rate": 0.783649,
+            "lfu_hits": 2970465,
+            "lru_hit_rate": 0.917203,
+            "lru_hits": 3476711,
+            "plfu_hit_rate": 0.804741,
+            "plfu_hits": 3050417
+          },
+          {
+            "belady_hit_rate": 0.968148,
+            "belady_hits": 3669820,
+            "capacity": 2048,
+            "lfu_hit_rate": 0.81307,
+            "lfu_hits": 3081988,
+            "lru_hit_rate": 0.937491,
+            "lru_hits": 3553614,
+            "plfu_hit_rate": 0.838292,
+            "plfu_hits": 3177593
+          },
+          {
+            "belady_hit_rate": 0.981211,
+            "belady_hits": 3719334,
+            "capacity": 4096,
+            "lfu_hit_rate": 0.869672,
+            "lfu_hits": 3296540,
+            "lru_hit_rate": 0.962559,
+            "lru_hits": 3648634,
+            "plfu_hit_rate": 0.894275,
+            "plfu_hits": 3389801
+          },
+          {
+            "belady_hit_rate": 0.991389,
+            "belady_hits": 3757915,
+            "capacity": 8192,
+            "lfu_hit_rate": 0.950633,
+            "lfu_hits": 3603428,
+            "lru_hit_rate": 0.981139,
+            "lru_hits": 3719061,
+            "plfu_hit_rate": 0.964803,
+            "plfu_hits": 3657140
+          },
+          {
+            "belady_hit_rate": 0.995951,
+            "belady_hits": 3775209,
+            "capacity": 16384,
+            "lfu_hit_rate": 0.995951,
+            "lfu_hits": 3775209,
+            "lru_hit_rate": 0.995951,
+            "lru_hits": 3775209,
+            "plfu_hit_rate": 0.995951,
+            "plfu_hits": 3775209
+          },
+          {
+            "belady_hit_rate": 0.995951,
+            "belady_hits": 3775209,
+            "capacity": 32768,
+            "lfu_hit_rate": 0.995951,
+            "lfu_hits": 3775209,
+            "lru_hit_rate": 0.995951,
+            "lru_hits": 3775209,
+            "plfu_hit_rate": 0.995951,
+            "plfu_hits": 3775209
+          },
+          {
+            "belady_hit_rate": 0.995951,
+            "belady_hits": 3775209,
+            "capacity": 65536,
+            "lfu_hit_rate": 0.995951,
+            "lfu_hits": 3775209,
+            "lru_hit_rate": 0.995951,
+            "lru_hits": 3775209,
+            "plfu_hit_rate": 0.995951,
+            "plfu_hits": 3775209
+          }
+        ],
+        "distinct_keys": 15347,
+        "references": 3790556,
+        "stack_distance_percentiles": {
+          "p50": 0,
+          "p90": 229,
+          "p99": 9828
+        }
+      },
+      "tp512": {
+        "compulsory_miss_rate": 0.002186,
+        "curve": [
+          {
+            "belady_hit_rate": 0.96983,
+            "belady_hits": 3676196,
+            "capacity": 1024,
+            "lfu_hit_rate": 0.808835,
+            "lfu_hits": 3065933,
+            "lru_hit_rate": 0.94087,
+            "lru_hits": 3566419,
+            "plfu_hit_rate": 0.8354,
+            "plfu_hits": 3166629
+          },
+          {
+            "belady_hit_rate": 0.982704,
+            "belady_hits": 3724993,
+            "capacity": 2048,
+            "lfu_hit_rate": 0.86256,
+            "lfu_hits": 3269583,
+            "lru_hit_rate": 0.964856,
+            "lru_hits": 3657339,
+            "plfu_hit_rate": 0.889392,
+            "plfu_hits": 3371289
+          },
+          {
+            "belady_hit_rate": 0.992707,
+            "belady_hits": 3762910,
+            "capacity": 4096,
+            "lfu_hit_rate": 0.940037,
+            "lfu_hits": 3563261,
+            "lru_hit_rate": 0.982934,
+            "lru_hits": 3725866,
+            "plfu_hit_rate": 0.959384,
+            "plfu_hits": 3636597
+          },
+          {
+            "belady_hit_rate": 0.997814,
+            "belady_hits": 3782269,
+            "capacity": 8192,
+            "lfu_hit_rate": 0.997814,
+            "lfu_hits": 3782268,
+            "lru_hit_rate": 0.997814,
+            "lru_hits": 3782268,
+            "plfu_hit_rate": 0.997814,
+            "plfu_hits": 3782268
+          },
+          {
+            "belady_hit_rate": 0.997814,
+            "belady_hits": 3782269,
+            "capacity": 16384,
+            "lfu_hit_rate": 0.997814,
+            "lfu_hits": 3782269,
+            "lru_hit_rate": 0.997814,
+            "lru_hits": 3782269,
+            "plfu_hit_rate": 0.997814,
+            "plfu_hits": 3782269
+          },
+          {
+            "belady_hit_rate": 0.997814,
+            "belady_hits": 3782269,
+            "capacity": 32768,
+            "lfu_hit_rate": 0.997814,
+            "lfu_hits": 3782269,
+            "lru_hit_rate": 0.997814,
+            "lru_hits": 3782269,
+            "plfu_hit_rate": 0.997814,
+            "plfu_hits": 3782269
+          },
+          {
+            "belady_hit_rate": 0.997814,
+            "belady_hits": 3782269,
+            "capacity": 65536,
+            "lfu_hit_rate": 0.997814,
+            "lfu_hits": 3782269,
+            "lru_hit_rate": 0.997814,
+            "lru_hits": 3782269,
+            "plfu_hit_rate": 0.997814,
+            "plfu_hits": 3782269
+          }
+        ],
+        "distinct_keys": 8287,
+        "references": 3790556,
+        "stack_distance_percentiles": {
+          "p50": 0,
+          "p90": 135,
+          "p99": 4959
+        }
+      }
+    },
+    "duration_seconds": 2961.417432,
+    "expected_ftl_counters": {
+      "never_written_read_lpns_precondition_fill": 0,
+      "never_written_read_lpns_precondition_none": 3790540,
+      "read_lpns": 3790556,
+      "read_reqs": 999800,
+      "request_size_histogram_lpns": {
+        "1": 24,
+        "17-32": 0,
+        "2": 599036,
+        "3-4": 108808,
+        "33-64": 0,
+        "5-8": 292128,
+        "9-16": 2,
+        ">64": 2
+      },
+      "write_lpns": 432,
+      "write_reqs": 200
+    },
+    "footprint": {
+      "fits_logical_device": true,
+      "footprint_gib": 5.9824,
+      "max_end_bytes": 17379344384,
+      "min_offset_bytes": 155648,
+      "unique_lpns": 1568247,
+      "unique_read_lpns": 1568227,
+      "unique_tp256": 15348,
+      "unique_tp512": 8288,
+      "unique_written_lpns": 42
+    },
+    "locality": {
+      "sequential_request_share": 0.064599,
+      "top10pct_lpn_access_share": 0.217461,
+      "top1pct_lpn_access_share": 0.026005,
+      "top20pct_lpn_access_share": 0.382933,
+      "working_set_gib_max": 0.3815,
+      "working_set_lpns_max": 99996,
+      "working_set_lpns_mean": 99749.0,
+      "working_set_window_refs": 100000
+    },
+    "mapping": {
+      "never_written_read_lpns_precondition_none": 3790540,
+      "overwrite_share_of_written_lpns": 0.902778,
+      "read_after_write_share_precondition_fill": 1.0,
+      "read_after_write_share_precondition_none": 4e-06
+    },
+    "mix": {
+      "mean_request_kib": 15.164,
+      "read_percent_by_bytes": 99.989,
+      "read_percent_by_requests": 99.98,
+      "read_reqs": 999800,
+      "request_sizes": {
+        "R": {
+          "1112KiB": 2,
+          "16KiB": 108806,
+          "24KiB": 89976,
+          "32KiB": 202152,
+          "4KiB": 24,
+          "8KiB": 598840
+        },
+        "W": {
+          "16KiB": 2,
+          "64KiB": 2,
+          "8KiB": 196
+        }
+      },
+      "write_reqs": 200
+    },
+    "operations": 1000000,
+    "page_aligned": true,
+    "provenance": {
+      "chunk_bytes": 2097152,
+      "file": "experiments/real-traces/websearch1.trace",
+      "generator": "experiments/scripts/normalize_trace.py",
+      "normalisation": "4 KiB alignment by widening; (ASU, chunk) pairs packed densely in (ASU, address) order; offsets within a chunk unchanged",
+      "requests_widened_to_4k": 26,
+      "sha256": "2e071a40cd0bdd698951fd24f8584473a902a5ac57e5b6732b867414fe59b70d",
+      "sha256_matches_sidecar": true,
+      "size_bytes": 30343399,
+      "source": "WebSearch1.spc.bz2",
+      "source_sha256": "af0fdbd26834387c8b8ad3d5052c8a1310136a1fd3514f00f663726bd679b15a",
+      "source_url": "https://skulddata.cs.umass.edu/traces/storage/WebSearch1.spc.bz2"
+    }
+  },
+  "real-traces/websearch2": {
+    "cache_bounds_read_stream": {
+      "lpn": {
+        "compulsory_miss_rate": 0.415131,
+        "curve": [
+          {
+            "belady_hit_rate": 0.0037,
+            "belady_hits": 13858,
+            "capacity": 1024,
+            "lfu_hit_rate": 0.0,
+            "lfu_hits": 0,
+            "lru_hit_rate": 0.0,
+            "lru_hits": 0,
+            "plfu_hit_rate": 1.4e-05,
+            "plfu_hits": 52
+          },
+          {
+            "belady_hit_rate": 0.006632,
+            "belady_hits": 24842,
+            "capacity": 2048,
+            "lfu_hit_rate": 0.0,
+            "lfu_hits": 0,
+            "lru_hit_rate": 0.0,
+            "lru_hits": 0,
+            "plfu_hit_rate": 2.9e-05,
+            "plfu_hits": 108
+          },
+          {
+            "belady_hit_rate": 0.011719,
+            "belady_hits": 43897,
+            "capacity": 4096,
+            "lfu_hit_rate": 0.0,
+            "lfu_hits": 0,
+            "lru_hit_rate": 0.0,
+            "lru_hits": 0,
+            "plfu_hit_rate": 6.4e-05,
+            "plfu_hits": 238
+          },
+          {
+            "belady_hit_rate": 0.021054,
+            "belady_hits": 78861,
+            "capacity": 8192,
+            "lfu_hit_rate": 0.0,
+            "lfu_hits": 0,
+            "lru_hit_rate": 0.0,
+            "lru_hits": 0,
+            "plfu_hit_rate": 0.000171,
+            "plfu_hits": 642
+          },
+          {
+            "belady_hit_rate": 0.03855,
+            "belady_hits": 144397,
+            "capacity": 16384,
+            "lfu_hit_rate": 0.0,
+            "lfu_hits": 0,
+            "lru_hit_rate": 0.0,
+            "lru_hits": 0,
+            "plfu_hit_rate": 0.000697,
+            "plfu_hits": 2612
+          },
+          {
+            "belady_hit_rate": 0.070536,
+            "belady_hits": 264209,
+            "capacity": 32768,
+            "lfu_hit_rate": 0.0,
+            "lfu_hits": 0,
+            "lru_hit_rate": 0.0,
+            "lru_hits": 0,
+            "plfu_hit_rate": 0.003116,
+            "plfu_hits": 11672
+          },
+          {
+            "belady_hit_rate": 0.123927,
+            "belady_hits": 464198,
+            "capacity": 65536,
+            "lfu_hit_rate": 0.0,
+            "lfu_hits": 0,
+            "lru_hit_rate": 0.0,
+            "lru_hits": 0,
+            "plfu_hit_rate": 0.00854,
+            "plfu_hits": 31988
+          }
+        ],
+        "distinct_keys": 1554966,
+        "references": 3745726,
+        "stack_distance_percentiles": {
+          "p50": 743483,
+          "p90": 1159655,
+          "p99": 1420423
+        }
+      },
+      "tp256": {
+        "compulsory_miss_rate": 0.004071,
+        "curve": [
+          {
+            "belady_hit_rate": 0.951084,
+            "belady_hits": 3562499,
+            "capacity": 1024,
+            "lfu_hit_rate": 0.783285,
+            "lfu_hits": 2933971,
+            "lru_hit_rate": 0.914959,
+            "lru_hits": 3427185,
+            "plfu_hit_rate": 0.802393,
+            "plfu_hits": 3005544
+          },
+          {
+            "belady_hit_rate": 0.967192,
+            "belady_hits": 3622838,
+            "capacity": 2048,
+            "lfu_hit_rate": 0.813082,
+            "lfu_hits": 3045581,
+            "lru_hit_rate": 0.935845,
+            "lru_hits": 3505420,
+            "plfu_hit_rate": 0.836432,
+            "plfu_hits": 3133046
+          },
+          {
+            "belady_hit_rate": 0.980591,
+            "belady_hits": 3673027,
+            "capacity": 4096,
+            "lfu_hit_rate": 0.868679,
+            "lfu_hits": 3253835,
+            "lru_hit_rate": 0.961408,
+            "lru_hits": 3601170,
+            "plfu_hit_rate": 0.893398,
+            "plfu_hits": 3346423
+          },
+          {
+            "belady_hit_rate": 0.991176,
+            "belady_hits": 3712673,
+            "capacity": 8192,
+            "lfu_hit_rate": 0.95003,
+            "lfu_hits": 3558551,
+            "lru_hit_rate": 0.980544,
+            "lru_hits": 3672849,
+            "plfu_hit_rate": 0.963942,
+            "plfu_hits": 3610661
+          },
+          {
+            "belady_hit_rate": 0.995929,
+            "belady_hits": 3730477,
+            "capacity": 16384,
+            "lfu_hit_rate": 0.995929,
+            "lfu_hits": 3730477,
+            "lru_hit_rate": 0.995929,
+            "lru_hits": 3730477,
+            "plfu_hit_rate": 0.995929,
+            "plfu_hits": 3730477
+          },
+          {
+            "belady_hit_rate": 0.995929,
+            "belady_hits": 3730477,
+            "capacity": 32768,
+            "lfu_hit_rate": 0.995929,
+            "lfu_hits": 3730477,
+            "lru_hit_rate": 0.995929,
+            "lru_hits": 3730477,
+            "plfu_hit_rate": 0.995929,
+            "plfu_hits": 3730477
+          },
+          {
+            "belady_hit_rate": 0.995929,
+            "belady_hits": 3730477,
+            "capacity": 65536,
+            "lfu_hit_rate": 0.995929,
+            "lfu_hits": 3730477,
+            "lru_hit_rate": 0.995929,
+            "lru_hits": 3730477,
+            "plfu_hit_rate": 0.995929,
+            "plfu_hits": 3730477
+          }
+        ],
+        "distinct_keys": 15249,
+        "references": 3745726,
+        "stack_distance_percentiles": {
+          "p50": 0,
+          "p90": 311,
+          "p99": 9942
+        }
+      },
+      "tp512": {
+        "compulsory_miss_rate": 0.00219,
+        "curve": [
+          {
+            "belady_hit_rate": 0.968952,
+            "belady_hits": 3629428,
+            "capacity": 1024,
+            "lfu_hit_rate": 0.807978,
+            "lfu_hits": 3026465,
+            "lru_hit_rate": 0.939232,
+            "lru_hits": 3518104,
+            "plfu_hit_rate": 0.833793,
+            "plfu_hits": 3123161
+          },
+          {
+            "belady_hit_rate": 0.982146,
+            "belady_hits": 3678849,
+            "capacity": 2048,
+            "lfu_hit_rate": 0.864664,
+            "lfu_hits": 3238796,
+            "lru_hit_rate": 0.963754,
+            "lru_hits": 3609960,
+            "plfu_hit_rate": 0.888575,
+            "plfu_hits": 3328359
+          },
+          {
+            "belady_hit_rate": 0.992502,
+            "belady_hits": 3717641,
+            "capacity": 4096,
+            "lfu_hit_rate": 0.939763,
+            "lfu_hits": 3520095,
+            "lru_hit_rate": 0.982345,
+            "lru_hits": 3679595,
+            "plfu_hit_rate": 0.958047,
+            "plfu_hits": 3588580
+          },
+          {
+            "belady_hit_rate": 0.99781,
+            "belady_hits": 3737523,
+            "capacity": 8192,
+            "lfu_hit_rate": 0.99781,
+            "lfu_hits": 3737523,
+            "lru_hit_rate": 0.99781,
+            "lru_hits": 3737523,
+            "plfu_hit_rate": 0.99781,
+            "plfu_hits": 3737523
+          },
+          {
+            "belady_hit_rate": 0.99781,
+            "belady_hits": 3737523,
+            "capacity": 16384,
+            "lfu_hit_rate": 0.99781,
+            "lfu_hits": 3737523,
+            "lru_hit_rate": 0.99781,
+            "lru_hits": 3737523,
+            "plfu_hit_rate": 0.99781,
+            "plfu_hits": 3737523
+          },
+          {
+            "belady_hit_rate": 0.99781,
+            "belady_hits": 3737523,
+            "capacity": 32768,
+            "lfu_hit_rate": 0.99781,
+            "lfu_hits": 3737523,
+            "lru_hit_rate": 0.99781,
+            "lru_hits": 3737523,
+            "plfu_hit_rate": 0.99781,
+            "plfu_hits": 3737523
+          },
+          {
+            "belady_hit_rate": 0.99781,
+            "belady_hits": 3737523,
+            "capacity": 65536,
+            "lfu_hit_rate": 0.99781,
+            "lfu_hits": 3737523,
+            "lru_hit_rate": 0.99781,
+            "lru_hits": 3737523,
+            "plfu_hit_rate": 0.99781,
+            "plfu_hits": 3737523
+          }
+        ],
+        "distinct_keys": 8203,
+        "references": 3745726,
+        "stack_distance_percentiles": {
+          "p50": 0,
+          "p90": 157,
+          "p99": 5040
+        }
+      }
+    },
+    "duration_seconds": 3010.412445,
+    "expected_ftl_counters": {
+      "never_written_read_lpns_precondition_fill": 0,
+      "never_written_read_lpns_precondition_none": 3745726,
+      "read_lpns": 3745726,
+      "read_reqs": 999800,
+      "request_size_histogram_lpns": {
+        "1": 0,
+        "17-32": 0,
+        "2": 607859,
+        "3-4": 107861,
+        "33-64": 0,
+        "5-8": 284280,
+        "9-16": 0,
+        ">64": 0
+      },
+      "write_lpns": 406,
+      "write_reqs": 200
+    },
+    "footprint": {
+      "fits_logical_device": true,
+      "footprint_gib": 5.9317,
+      "max_end_bytes": 17206681600,
+      "min_offset_bytes": 2023424,
+      "unique_lpns": 1554972,
+      "unique_read_lpns": 1554966,
+      "unique_tp256": 15251,
+      "unique_tp512": 8205,
+      "unique_written_lpns": 12
+    },
+    "locality": {
+      "sequential_request_share": 0.063503,
+      "top10pct_lpn_access_share": 0.217979,
+      "top1pct_lpn_access_share": 0.026807,
+      "top20pct_lpn_access_share": 0.384014,
+      "working_set_gib_max": 0.3815,
+      "working_set_lpns_max": 99996,
+      "working_set_lpns_mean": 98575.8,
+      "working_set_window_refs": 100000
+    },
+    "mapping": {
+      "never_written_read_lpns_precondition_none": 3745726,
+      "overwrite_share_of_written_lpns": 0.970443,
+      "read_after_write_share_precondition_fill": 1.0,
+      "read_after_write_share_precondition_none": 0.0
+    },
+    "mix": {
+      "mean_request_kib": 14.985,
+      "read_percent_by_bytes": 99.989,
+      "read_percent_by_requests": 99.98,
+      "read_reqs": 999800,
+      "request_sizes": {
+        "R": {
+          "16KiB": 107858,
+          "24KiB": 87635,
+          "32KiB": 196645,
+          "8KiB": 607662
+        },
+        "W": {
+          "16KiB": 3,
+          "8KiB": 197
+        }
+      },
+      "write_reqs": 200
+    },
+    "operations": 1000000,
+    "page_aligned": true,
+    "provenance": {
+      "chunk_bytes": 2097152,
+      "file": "experiments/real-traces/websearch2.trace",
+      "generator": "experiments/scripts/normalize_trace.py",
+      "normalisation": "4 KiB alignment by widening; (ASU, chunk) pairs packed densely in (ASU, address) order; offsets within a chunk unchanged",
+      "requests_widened_to_4k": 0,
+      "sha256": "1dfa9858798020464bedae0b89cbccea7c1598f245875daaa86363d3f9a865ad",
+      "sha256_matches_sidecar": true,
+      "size_bytes": 30349488,
+      "source": "WebSearch2.spc.bz2",
+      "source_sha256": "c1de8427cc995be906af4391b745c072408ff441b9e4bfdba788535bf72c251c",
+      "source_url": "https://skulddata.cs.umass.edu/traces/storage/WebSearch2.spc.bz2"
+    }
+  },
+  "real-traces/websearch3": {
+    "cache_bounds_read_stream": {
+      "lpn": {
+        "compulsory_miss_rate": 0.409256,
+        "curve": [
+          {
+            "belady_hit_rate": 0.003648,
+            "belady_hits": 14025,
+            "capacity": 1024,
+            "lfu_hit_rate": 0.0,
+            "lfu_hits": 0,
+            "lru_hit_rate": 0.0,
+            "lru_hits": 0,
+            "plfu_hit_rate": 1e-05,
+            "plfu_hits": 40
+          },
+          {
+            "belady_hit_rate": 0.006627,
+            "belady_hits": 25479,
+            "capacity": 2048,
+            "lfu_hit_rate": 0.0,
+            "lfu_hits": 0,
+            "lru_hit_rate": 0.0,
+            "lru_hits": 0,
+            "plfu_hit_rate": 3.5e-05,
+            "plfu_hits": 134
+          },
+          {
+            "belady_hit_rate": 0.011844,
+            "belady_hits": 45533,
+            "capacity": 4096,
+            "lfu_hit_rate": 0.0,
+            "lfu_hits": 0,
+            "lru_hit_rate": 0.0,
+            "lru_hits": 0,
+            "plfu_hit_rate": 8e-05,
+            "plfu_hits": 306
+          },
+          {
+            "belady_hit_rate": 0.020807,
+            "belady_hits": 79992,
+            "capacity": 8192,
+            "lfu_hit_rate": 0.0,
+            "lfu_hits": 0,
+            "lru_hit_rate": 0.0,
+            "lru_hits": 0,
+            "plfu_hit_rate": 0.000162,
+            "plfu_hits": 624
+          },
+          {
+            "belady_hit_rate": 0.037853,
+            "belady_hits": 145528,
+            "capacity": 16384,
+            "lfu_hit_rate": 0.0,
+            "lfu_hits": 0,
+            "lru_hit_rate": 0.0,
+            "lru_hits": 0,
+            "plfu_hit_rate": 0.000539,
+            "plfu_hits": 2074
+          },
+          {
+            "belady_hit_rate": 0.068768,
+            "belady_hits": 264381,
+            "capacity": 32768,
+            "lfu_hit_rate": 0.0,
+            "lfu_hits": 0,
+            "lru_hit_rate": 0.0,
+            "lru_hits": 0,
+            "plfu_hit_rate": 0.002044,
+            "plfu_hits": 7858
+          },
+          {
+            "belady_hit_rate": 0.121175,
+            "belady_hits": 465860,
+            "capacity": 65536,
+            "lfu_hit_rate": 0.0,
+            "lfu_hits": 0,
+            "lru_hit_rate": 0.0,
+            "lru_hits": 0,
+            "plfu_hit_rate": 0.00581,
+            "plfu_hits": 22336
+          }
+        ],
+        "distinct_keys": 1573394,
+        "references": 3844520,
+        "stack_distance_percentiles": {
+          "p50": 743987,
+          "p90": 1161679,
+          "p99": 1429795
+        }
+      },
+      "tp256": {
+        "compulsory_miss_rate": 0.003939,
+        "curve": [
+          {
+            "belady_hit_rate": 0.954075,
+            "belady_hits": 3667961,
+            "capacity": 1024,
+            "lfu_hit_rate": 0.793028,
+            "lfu_hits": 3048811,
+            "lru_hit_rate": 0.919555,
+            "lru_hits": 3535248,
+            "plfu_hit_rate": 0.811745,
+            "plfu_hits": 3120770
+          },
+          {
+            "belady_hit_rate": 0.969256,
+            "belady_hits": 3726324,
+            "capacity": 2048,
+            "lfu_hit_rate": 0.82065,
+            "lfu_hits": 3155004,
+            "lru_hit_rate": 0.939735,
+            "lru_hits": 3612830,
+            "plfu_hit_rate": 0.845207,
+            "plfu_hits": 3249417
+          },
+          {
+            "belady_hit_rate": 0.981845,
+            "belady_hits": 3774721,
+            "capacity": 4096,
+            "lfu_hit_rate": 0.877957,
+            "lfu_hits": 3375324,
+            "lru_hit_rate": 0.963947,
+            "lru_hits": 3705914,
+            "plfu_hit_rate": 0.900781,
+            "plfu_hits": 3463071
+          },
+          {
+            "belady_hit_rate": 0.991702,
+            "belady_hits": 3812619,
+            "capacity": 8192,
+            "lfu_hit_rate": 0.956031,
+            "lfu_hits": 3675480,
+            "lru_hit_rate": 0.981711,
+            "lru_hits": 3774207,
+            "plfu_hit_rate": 0.968774,
+            "plfu_hits": 3724471
+          },
+          {
+            "belady_hit_rate": 0.996061,
+            "belady_hits": 3829376,
+            "capacity": 16384,
+            "lfu_hit_rate": 0.996061,
+            "lfu_hits": 3829376,
+            "lru_hit_rate": 0.996061,
+            "lru_hits": 3829376,
+            "plfu_hit_rate": 0.996061,
+            "plfu_hits": 3829376
+          },
+          {
+            "belady_hit_rate": 0.996061,
+            "belady_hits": 3829376,
+            "capacity": 32768,
+            "lfu_hit_rate": 0.996061,
+            "lfu_hits": 3829376,
+            "lru_hit_rate": 0.996061,
+            "lru_hits": 3829376,
+            "plfu_hit_rate": 0.996061,
+            "plfu_hits": 3829376
+          },
+          {
+            "belady_hit_rate": 0.996061,
+            "belady_hits": 3829376,
+            "capacity": 65536,
+            "lfu_hit_rate": 0.996061,
+            "lfu_hits": 3829376,
+            "lru_hit_rate": 0.996061,
+            "lru_hits": 3829376,
+            "plfu_hit_rate": 0.996061,
+            "plfu_hits": 3829376
+          }
+        ],
+        "distinct_keys": 15144,
+        "references": 3844520,
+        "stack_distance_percentiles": {
+          "p50": 0,
+          "p90": 148,
+          "p99": 9668
+        }
+      },
+      "tp512": {
+        "compulsory_miss_rate": 0.002097,
+        "curve": [
+          {
+            "belady_hit_rate": 0.971172,
+            "belady_hits": 3733690,
+            "capacity": 1024,
+            "lfu_hit_rate": 0.81993,
+            "lfu_hits": 3152236,
+            "lru_hit_rate": 0.943262,
+            "lru_hits": 3626390,
+            "plfu_hit_rate": 0.842735,
+            "plfu_hits": 3239913
+          },
+          {
+            "belady_hit_rate": 0.983403,
+            "belady_hits": 3780714,
+            "capacity": 2048,
+            "lfu_hit_rate": 0.871971,
+            "lfu_hits": 3352310,
+            "lru_hit_rate": 0.96646,
+            "lru_hits": 3715576,
+            "plfu_hit_rate": 0.895903,
+            "plfu_hits": 3444317
+          },
+          {
+            "belady_hit_rate": 0.992955,
+            "belady_hits": 3817435,
+            "capacity": 4096,
+            "lfu_hit_rate": 0.946392,
+            "lfu_hits": 3638423,
+            "lru_hit_rate": 0.983614,
+            "lru_hits": 3781523,
+            "plfu_hit_rate": 0.964163,
+            "plfu_hits": 3706743
+          },
+          {
+            "belady_hit_rate": 0.997903,
+            "belady_hits": 3836458,
+            "capacity": 8192,
+            "lfu_hit_rate": 0.997903,
+            "lfu_hits": 3836458,
+            "lru_hit_rate": 0.997903,
+            "lru_hits": 3836458,
+            "plfu_hit_rate": 0.997903,
+            "plfu_hits": 3836458
+          },
+          {
+            "belady_hit_rate": 0.997903,
+            "belady_hits": 3836458,
+            "capacity": 16384,
+            "lfu_hit_rate": 0.997903,
+            "lfu_hits": 3836458,
+            "lru_hit_rate": 0.997903,
+            "lru_hits": 3836458,
+            "plfu_hit_rate": 0.997903,
+            "plfu_hits": 3836458
+          },
+          {
+            "belady_hit_rate": 0.997903,
+            "belady_hits": 3836458,
+            "capacity": 32768,
+            "lfu_hit_rate": 0.997903,
+            "lfu_hits": 3836458,
+            "lru_hit_rate": 0.997903,
+            "lru_hits": 3836458,
+            "plfu_hit_rate": 0.997903,
+            "plfu_hits": 3836458
+          },
+          {
+            "belady_hit_rate": 0.997903,
+            "belady_hits": 3836458,
+            "capacity": 65536,
+            "lfu_hit_rate": 0.997903,
+            "lfu_hits": 3836458,
+            "lru_hit_rate": 0.997903,
+            "lru_hits": 3836458,
+            "plfu_hit_rate": 0.997903,
+            "plfu_hits": 3836458
+          }
+        ],
+        "distinct_keys": 8062,
+        "references": 3844520,
+        "stack_distance_percentiles": {
+          "p50": 0,
+          "p90": 80,
+          "p99": 4881
+        }
+      }
+    },
+    "duration_seconds": 4505.14047,
+    "expected_ftl_counters": {
+      "never_written_read_lpns_precondition_fill": 0,
+      "never_written_read_lpns_precondition_none": 3844520,
+      "read_lpns": 3844520,
+      "read_reqs": 999726,
+      "request_size_histogram_lpns": {
+        "1": 0,
+        "17-32": 0,
+        "2": 586444,
+        "3-4": 112509,
+        "33-64": 0,
+        "5-8": 301047,
+        "9-16": 0,
+        ">64": 0
+      },
+      "write_lpns": 552,
+      "write_reqs": 274
+    },
+    "footprint": {
+      "fits_logical_device": true,
+      "footprint_gib": 6.002,
+      "max_end_bytes": 16908443648,
+      "min_offset_bytes": 581632,
+      "unique_lpns": 1573398,
+      "unique_read_lpns": 1573394,
+      "unique_tp256": 15145,
+      "unique_tp512": 8063,
+      "unique_written_lpns": 8
+    },
+    "locality": {
+      "sequential_request_share": 0.08064,
+      "top10pct_lpn_access_share": 0.217795,
+      "top1pct_lpn_access_share": 0.026106,
+      "top20pct_lpn_access_share": 0.384105,
+      "working_set_gib_max": 0.3815,
+      "working_set_lpns_max": 99996,
+      "working_set_lpns_mean": 98581.5,
+      "working_set_window_refs": 100000
+    },
+    "mapping": {
+      "never_written_read_lpns_precondition_none": 3844520,
+      "overwrite_share_of_written_lpns": 0.985507,
+      "read_after_write_share_precondition_fill": 1.0,
+      "read_after_write_share_precondition_none": 0.0
+    },
+    "mix": {
+      "mean_request_kib": 15.38,
+      "read_percent_by_bytes": 99.986,
+      "read_percent_by_requests": 99.973,
+      "read_reqs": 999726,
+      "request_sizes": {
+        "R": {
+          "16KiB": 112507,
+          "24KiB": 93114,
+          "32KiB": 207933,
+          "8KiB": 586172
+        },
+        "W": {
+          "16KiB": 2,
+          "8KiB": 272
+        }
+      },
+      "write_reqs": 274
+    },
+    "operations": 1000000,
+    "page_aligned": true,
+    "provenance": {
+      "chunk_bytes": 2097152,
+      "file": "experiments/real-traces/websearch3.trace",
+      "generator": "experiments/scripts/normalize_trace.py",
+      "normalisation": "4 KiB alignment by widening; (ASU, chunk) pairs packed densely in (ASU, address) order; offsets within a chunk unchanged",
+      "requests_widened_to_4k": 0,
+      "sha256": "c3199a93e56ecd6e3b805fabc0acfc5bc919e78324069030b42ae0d0fb2fb031",
+      "sha256_matches_sidecar": true,
+      "size_bytes": 30487441,
+      "source": "WebSearch3.spc.bz2",
+      "source_sha256": "41d96460460ffb3b40388ec5ede43bbeb653e78e53ca26e8364a10c6b68e6d01",
+      "source_url": "https://skulddata.cs.umass.edu/traces/storage/WebSearch3.spc.bz2"
+    }
+  },
   "traces/mixed-50-seq-50-random": {
     "cache_bounds_read_stream": {
       "lpn": {

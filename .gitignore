@@ -138,3 +138,5 @@ build-femu/
 __pycache__/
 /experiments/tools/build/
 /experiments/matrix-traces/
+/experiments/real-traces/raw/
+/experiments/real-traces/*.trace

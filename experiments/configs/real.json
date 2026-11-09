@@ -1,0 +1,7 @@
+{
+  "description": "Real traces (UMass WebSearch1-3, Financial1-2; first 1M requests, normalised by normalize_trace.py), warm precondition, one run per configuration (TCG counters are deterministic). MSR Cambridge, FIU and Systor'17 need a SNIA IOTTA licence login and are not included.",
+  "ftls": ["leaftl", "learnedftl"],
+  "traces": ["experiments/real-traces/*.trace"],
+  "preconditions": ["warm"],
+  "seeds": [{"seed": 1, "repeat": 1}]
+}

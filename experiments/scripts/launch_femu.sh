@@ -12,6 +12,10 @@
 #   ACCEL      auto | tcg | kvm (default auto: kvm if /dev/kvm is usable, else tcg)
 #   SMP, MEM   guest vCPUs / RAM (default 4 / 4G)
 #   REQLOG     1 to write FEMU's per-request log to $RUN_DIR/reqlog.csv (default 1)
+#   MLOCK      1 to let FEMU mlock its whole DRAM backend (default 0). FEMU pins
+#              the full devsz_mb when it can, i.e. ~32 GB per VM even if little is
+#              written; with 0 the lock fails, FEMU continues without it, and memory
+#              is allocated as written. Counters are unaffected; use 1 for KVM latency runs.
 #
 # Latency/throughput must never be reported from ACCEL=tcg runs.
 set -euo pipefail
@@ -26,6 +30,7 @@ ACCEL="${ACCEL:-auto}"
 SMP="${SMP:-4}"
 MEM="${MEM:-4G}"
 REQLOG="${REQLOG:-1}"
+MLOCK="${MLOCK:-0}"
 # unix socket paths must stay under 108 bytes, so not inside RUN_DIR
 QMP_SOCK="${QMP_SOCK:-/tmp/femu-qmp-${USER}-${SSH_PORT}.sock}"
 
@@ -56,7 +61,12 @@ ACCEL=$ACCEL
 SMP=$SMP
 MEM=$MEM
 REQLOG=$REQLOG
+MLOCK=$MLOCK
 EOF
+
+if [[ "$MLOCK" != 1 ]]; then
+    ulimit -l 0
+fi
 
 export FEMU_GC_LOG_DIR="$RUN_DIR/gclog"
 export FEMU_STDOUT_LINEBUF=1

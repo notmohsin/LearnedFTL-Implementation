@@ -174,6 +174,7 @@ struct ftl_stats_common {
     uint64_t inv7_line_bad;         /* line lists disagree with their counters or exceed tt_lines */
     uint64_t inv7_block_mismatches; /* blocks whose vpc != valid pages or != mappings into them */
     uint64_t inv7_rmap_mismatches;  /* valid pages whose reverse map does not resolve back */
+    long double energy_read, energy_write, energy_erase; /* this interval, authors' units */
     struct ftl_read_acct acct;
 };
 
@@ -248,14 +249,16 @@ static inline void ftl_stats_print_common_prefix(const struct ftl_stats_common *
            ",\"read_path_tp_writes\":%" PRIu64 ",\"readcnt_mismatch\":%" PRIu64
            ",\"served_stale_page\":%" PRIu64 ",\"stale_map_entries\":%" PRIu64
            ",\"inv7_line_bad\":%" PRIu64 ",\"inv7_block_mismatches\":%" PRIu64
-           ",\"inv7_rmap_mismatches\":%" PRIu64,
+           ",\"inv7_rmap_mismatches\":%" PRIu64
+           ",\"energy_read\":%.3Lf,\"energy_write\":%.3Lf,\"energy_erase\":%.3Lf",
            c->buffer_hits, a->served_lpns, a->served_translation_free, a->served_cmt_hits,
            a->served_reads_hist[0], a->served_reads_hist[1], a->served_reads_hist[2],
            a->served_reads_hist[3], a->served_reads_hist[4],
            a->served_flash_reads, a->served_tp_reads, a->unmapped_flash_reads,
            a->read_path_flash_reads, a->read_path_tp_writes, a->readcnt_mismatch,
            a->served_stale_page, c->stale_map_entries, c->inv7_line_bad,
-           c->inv7_block_mismatches, c->inv7_rmap_mismatches);
+           c->inv7_block_mismatches, c->inv7_rmap_mismatches,
+           c->energy_read, c->energy_write, c->energy_erase);
     /* caller appends its own keys, then "}\n" */
 }
 

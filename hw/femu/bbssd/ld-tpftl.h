@@ -441,6 +441,7 @@ struct statistics {
     uint64_t inv7_line_bad;
     uint64_t inv7_block_mismatches;
     uint64_t inv7_rmap_mismatches;
+    long double prev_read_joule, prev_write_joule, prev_erase_joule; /* joules at the last print */
 };
 
 struct ssd {

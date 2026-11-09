@@ -255,8 +255,10 @@ def validate(run_dir: Path) -> dict:
     else:
         report.add("3", "model tried only on CMT miss: hits+misses <= read_lpns - cmt_hits", "HARD",
                    rec["model_hits"] + rec["model_misses"] <= rec["read_lpns"] - rec["cmt_hits"])
-        report.add("3", "LearnedFTL never needs a third flash read", "HARD",
-                   rec["served_reads_hist"][3] == 0 and rec["served_reads_hist"][4] == 0)
+        # a CMT miss can evict a dirty TP node whose write-back reads another
+        # translation page (read-modify-write), so 3 reads are possible
+        report.add("3", "LearnedFTL LPNs served with 3+ flash reads (dirty-eviction write-back)", "REPORT",
+                   None, three=rec["served_reads_hist"][3], four_plus=rec["served_reads_hist"][4])
 
     # ---- 4: read-cost attribution ---------------------------------------------
     report.add("4", "every read-path flash read attributed to one read LPN (in FEMU)", "HARD",
@@ -274,6 +276,12 @@ def validate(run_dir: Path) -> dict:
                nand_programs=h["nand_programs"], write_lpns=rec["write_lpns"])
 
     # ---- 6, 7, 12: in-FEMU structural checks ----------------------------------
+    for name, per_op, ops_count in (
+            ("energy_read", 3.5, rec["nand_reads_user"] + rec["nand_reads_translation"] + rec["nand_reads_gc"]),
+            ("energy_write", 16.7, rec["nand_writes_user"] + rec["nand_writes_translation"] + rec["nand_writes_gc"]),
+            ("energy_erase", 132.0, rec["nand_erases"])):
+        report.add("12", f"{name} == {per_op} x NAND ops (offline, +-0.5)", "HARD",
+                   abs(rec[name] - per_op * ops_count) <= 0.5, femu=rec[name], expected=per_op * ops_count)
     for inv, key in (("6", "inv6_violations"), ("12", "inv12_violations")):
         report.add(inv, f"in-FEMU {key} == 0 (baseline and workload)", "HARD",
                    rec[key] == 0 and base[key] == 0, workload=rec[key], baseline=base[key])
