@@ -6,7 +6,8 @@ Steps (BASELINE_PLAN.md Phase 4):
   2. boot the FTL's FEMU binary (launch_femu.sh: accel, GC-log shim, devsz, reqlog)
   3. wait for SSH, copy the guest-side scripts and the trace
   4. guest_prep.sh (no merging/readahead/scheduler, udev and multipathd stopped)
-  5. precondition: none | fill (sequential write of the whole device) |
+  5. precondition: none | warm (every LPN the trace touches written once, in
+     ascending order) | fill (sequential write of the whole device) |
      steady (fill, then random overwrites)
   6. stats print -> baseline record (also zeroes the resettable counters)
   7. workload: replay_trace.py (O_DIRECT, QD1, trace order, read verification)
@@ -127,7 +128,7 @@ def main() -> int:
     parser.add_argument("--ftl", required=True, choices=("leaftl", "learnedftl"))
     parser.add_argument("--trace", type=Path, required=True)
     parser.add_argument("--seed", type=int, required=True)
-    parser.add_argument("--precondition", choices=("none", "fill", "steady"), required=True)
+    parser.add_argument("--precondition", choices=("none", "warm", "fill", "steady"), required=True)
     parser.add_argument("--qemu", type=Path, help="default: build-ftl/<ftl>/build/qemu-system-x86_64")
     parser.add_argument("--results-dir", type=Path, default=REPO / "experiments" / "results")
     parser.add_argument("--run-id")
@@ -216,6 +217,9 @@ def main() -> int:
         manifest["guest_kernel"] = prep.get("guest_kernel")
 
         replay = "sudo python3 /tmp/femu/replay_trace.py"
+        if args.precondition == "warm":
+            timed("precondition_warm", lambda: json.loads(
+                guest.ssh(f"{replay} --mode warm --trace /tmp/femu/{trace.name} --block {1 << 20}")))
         if args.precondition in ("fill", "steady"):
             timed("precondition_fill", lambda: json.loads(
                 guest.ssh(f"{replay} --mode fill --block {1 << 20}")))

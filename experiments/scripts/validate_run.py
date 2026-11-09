@@ -74,6 +74,9 @@ def read_reqlog(run_dir: Path) -> list[list[tuple[str, int, int]]] | None:
 def reference_model(ops, precondition: str, device_bytes: int) -> dict:
     """Invariant 10: what an exact FTL must see for this trace."""
     written = None if precondition in ("fill", "steady") else set()  # None = everything written
+    if precondition == "warm":  # the trace's whole footprint was written first
+        written = {lpn for _, offset, length in ops
+                   for lpn in range(offset // PAGE, (offset + length) // PAGE)}
     expect = {"read_reqs": 0, "write_reqs": 0, "read_lpns": 0, "write_lpns": 0,
               "read_size_hist": [0] * SIZE_BUCKETS, "write_size_hist": [0] * SIZE_BUCKETS,
               "never_written_reads": 0}

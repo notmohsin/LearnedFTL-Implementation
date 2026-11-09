@@ -1,0 +1,9 @@
+{
+  "description": "Phase 6 matrix: 1M-op prefixes of the synthetic suite (zipf-80-20 is only 100k ops long and is covered by the validation stage), warm precondition. Counters are deterministic under TCG and the seed only changes the written data pattern, so one run per configuration; uniform-mixed and zipf-hot20-access80-a1.2 are repeated three times to show determinism at this length.",
+  "ftls": ["leaftl", "learnedftl"],
+  "traces": ["experiments/matrix-traces/*.trace"],
+  "preconditions": ["warm"],
+  "seeds": [{"seed": 1, "repeat": 1}],
+  "repeat_workloads": ["uniform-mixed", "zipf-hot20-access80-a1.2"],
+  "repeat_seeds": [{"seed": 1, "repeat": 1}, {"seed": 1, "repeat": 2}, {"seed": 1, "repeat": 3}]
+}

@@ -9,6 +9,8 @@ Modes:
   replay   replay --trace (lines: "timestamp op offset_bytes length_bytes")
   fill     sequential writes covering the whole device (--block bytes each)
   random   --bytes of random, block-aligned overwrites (--block bytes each, --seed)
+  warm     write every LPN the --trace touches once, in ascending LPN order, as
+           runs of consecutive LPNs split at --block bytes (the trace's footprint)
 
 Every written 4 KiB page carries a stamp (magic, lpn, version) so --verify can
 check that reads return the most recent write made by this process.
@@ -101,7 +103,7 @@ class Device:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__,
                                      formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--mode", choices=("replay", "fill", "random"), default="replay")
+    parser.add_argument("--mode", choices=("replay", "fill", "random", "warm"), default="replay")
     parser.add_argument("--trace", type=Path)
     parser.add_argument("--device", default="/dev/nvme0n1")
     parser.add_argument("--seed", type=int, default=0)
@@ -116,15 +118,28 @@ def main() -> int:
         raise ValueError("--block must be a multiple of 4 KiB")
     max_len = args.block
     ops = None
-    if args.mode == "replay":
+    if args.mode in ("replay", "warm"):
         if not args.trace:
-            parser.error("--trace is required for replay")
+            parser.error("--trace is required for replay and warm")
         ops = list(parse_trace(args.trace))
-        max_len = max(length for _, _, length in ops)
+        if args.mode == "replay":
+            max_len = max(length for _, _, length in ops)
+        else:
+            lpns = sorted({lpn for _, offset, length in ops
+                           for lpn in range(offset // PAGE, (offset + length) // PAGE)})
+            per_req = args.block // PAGE
+            ops = []
+            i = 0
+            while i < len(lpns):
+                j = i
+                while j + 1 < len(lpns) and lpns[j + 1] == lpns[j] + 1 and j + 1 - i < per_req:
+                    j += 1
+                ops.append(("W", lpns[i] * PAGE, (j - i + 1) * PAGE))
+                i = j + 1
 
     dev = Device(args.device, max_len, args.seed, args.verify)
     start = time.monotonic()
-    if args.mode == "replay":
+    if args.mode in ("replay", "warm"):
         for op, offset, length in ops:
             if op == "W":
                 dev.write(offset, length)

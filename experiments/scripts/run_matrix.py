@@ -48,7 +48,11 @@ def expand(config: dict, stage: str) -> list[dict]:
         traces += matches
     runs = []
     for ftl, trace, precondition in itertools.product(config["ftls"], traces, config["preconditions"]):
-        plan = config.get("seeds_by_precondition", {}).get(precondition, config["seeds"])
+        workload = trace.name.removesuffix(".trace")
+        plan = config.get("seeds_by_ftl_precondition", {}).get(ftl, {}).get(
+            precondition, config.get("seeds_by_precondition", {}).get(precondition, config["seeds"]))
+        if workload in config.get("repeat_workloads", []):
+            plan = config.get("repeat_seeds", plan)
         for item in plan:
             seed, repeat = item["seed"], item["repeat"]
             workload = trace.name.removesuffix(".trace")
@@ -73,6 +77,8 @@ def execute(run: dict, args, results: Path) -> tuple[dict, int]:
     cmd = [sys.executable, str(SCRIPTS / "run_femu.py"), "--ftl", run["ftl"], "--trace", str(run["trace"]),
            "--seed", str(run["seed"]), "--precondition", run["precondition"], "--repeat", str(run["repeat"]),
            "--run-id", run["run_id"], "--results-dir", str(results)]
+    if run["precondition"] == "steady" and args.steady_bytes is not None:
+        cmd += ["--steady-bytes", str(args.steady_bytes)]
     if args.qemu_dir:
         cmd += ["--qemu", str(Path(args.qemu_dir) / run["ftl"] / "qemu-system-x86_64")]
     log = results / "_logs"
@@ -97,6 +103,7 @@ def main() -> int:
     args = parser.parse_args()
 
     config = json.loads((CONFIGS / f"{args.stage}.json").read_text())
+    args.steady_bytes = config.get("steady_bytes")
     runs = expand(config, args.stage)
     runs = [r for r in runs if (not args.only_ftl or r["ftl"] in args.only_ftl)
             and (not args.only_workload or r["workload"] in args.only_workload)
