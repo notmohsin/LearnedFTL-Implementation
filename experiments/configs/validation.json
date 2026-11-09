@@ -1,0 +1,7 @@
+{
+  "description": "Phase 5 gates: 100k-op validation traces, both FTLs, every precondition mode, three repeats with the same seed (invariant 11: identical counters).",
+  "ftls": ["leaftl", "learnedftl"],
+  "traces": ["experiments/validation-traces/*.trace"],
+  "preconditions": ["none", "fill", "steady"],
+  "seeds": [{"seed": 1, "repeat": 1}, {"seed": 1, "repeat": 2}, {"seed": 1, "repeat": 3}]
+}

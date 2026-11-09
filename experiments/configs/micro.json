@@ -1,0 +1,7 @@
+{
+  "description": "Hand-checked micro-traces (experiments/traces/micro), empty device. Checked with check_micro.py.",
+  "ftls": ["leaftl", "learnedftl"],
+  "traces": ["experiments/traces/micro/*.trace"],
+  "preconditions": ["none"],
+  "seeds": [{"seed": 1, "repeat": 1}]
+}
