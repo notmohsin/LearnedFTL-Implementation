@@ -374,23 +374,59 @@ These gates apply the Phase 2b invariant catalogue, evaluated by `validate_run.p
    `baseline_summary.csv`, `baseline_runs.csv` and `baseline_summary_columns.csv` regenerate byte-identically from raw JSONL alone.
    Every column in the summary has a dictionary entry, and a test in `aggregate.py` fails if one is missing.
 
-## Status (updated 2026-11-09)
+## Status (updated 2026-11-09, evening)
 
 Living copy of this plan: `LearnedFTL/experiments/docs/BASELINE_PLAN.md`. Keep the two in sync, and update the status there.
 
-**Done (nothing committed yet):**
+### Implemented
 
-- [x] Phase 0: shebang of `prepare_validation_traces.py` fixed, failed run directory deleted, `.gitignore` extended
-- [x] Phase 0: GC-log path handled without root by the tested `LD_PRELOAD` shim `experiments/tools/gclog_redirect.c`
-- [ ] Phase 0: KVM access. Blocked on the administrators because the user has no sudo and `/dev/kvm` is `root:kvm` with only `gdm` in its ACL. Not needed for counter-based baselines. Email sent 2026-11-09 to the professor who manages `nano`, requesting `usermod -aG kvm mohsin` or `setfacl -m u:mohsin:rw /dev/kvm`; also explained the move from SimpleSSD (pure software simulator, no virtualization needed) to FEMU (boots a real guest VM, needs KVM for timing-accurate latency/throughput only). Awaiting reply.
-  - If it stays blocked: a 16 GB/sudo laptop (Omarchy/Arch) was evaluated as a fallback for the latency phase only — RAM is the binding constraint (device backend is a `devsz_mb`-sized allocation; `fill`/`steady` preconditioning writes the whole 30 GiB logical space, which won't fit in 16 GB, so that machine would be limited to the small validation traces or a scaled-down device size, with the comparability caveat that implies). Counter-based baselines stay on the server under TCG regardless.
-- [x] Phase 1: `experiments/docs/KNOWN_ISSUES.md` (20 issues) and `experiments/docs/METRICS.md`
-- [x] Phase 1b: `experiments/scripts/profile_traces.py`, `experiments/tools/cachesim.c` (LRU, Belady-OPT, in-cache LFU, perfect LFU), `experiments/tools/test_cachesim.py`, generated `experiments/traces/TRACES.md` and `profiles.json`
-- [x] Phase 2, items 1–6 (not yet committed — item 7, the commit, is pending a decision): request-flow counters, the exhaustive read-LPN partition with HARD invariant checks, the optional `FEMU_REQLOG` per-request log, and the shared JSON schema are implemented in `leaftl.c`/`leaftl.h`, `ld-tpftl.c`/`ld-tpftl.h`, and a new `hw/femu/bbssd/ftl_stats.h`. Both FTLs rebuild cleanly (LeaFTL verified in the main build; LearnedFTL verified by temporarily swapping the `bb.c`/`meson.build` FTL switch, building, then reverting it — confirmed clean via `git diff`). Not yet run against a real trace, so the invariants are structurally reviewed but not runtime-exercised; that's Phase 5.
-- [ ] Phase 2b onwards: not started
+| Phase | Deliverable | Where |
+|---|---|---|
+| 0 | GC-log shim (also makes FEMU's stdout line-buffered); KVM pending (request sent to the server's professor) | `experiments/tools/gclog_redirect.c` |
+| 1, 1b | KNOWN_ISSUES (KI-1..KI-27), METRICS, TRACES.md for 31 traces | `experiments/docs/`, `experiments/traces/` |
+| 2 | Request-flow counters, read partition, `FEMU_REQLOG`, shared JSON schema | `hw/femu/bbssd/{leaftl,ld-tpftl}.c`, `ftl_stats.h` |
+| 2b | Invariants 1-12 (in FEMU and offline), per-LPN flash-read accounting, micro-traces, validator self-test | `INVARIANTS.md`, `validate_run.py`, `test_validate_run.py`, `traces/micro/` |
+| 3 | One binary per FTL from a commit (git worktrees), KVM/TCG launcher, 30 GiB device (~7% OP) | `build_ftl.sh`, `launch_femu.sh` |
+| 4 | O_DIRECT QD1 replay with read verification, guest prep, one-command runs | `replay_trace.py`, `guest_prep.sh`, `run_femu.py` |
+| 5, 6 | Resumable parallel stages, mentor CSVs with data dictionary | `run_matrix.py`, `experiments/configs/*.json`, `aggregate.py` |
+| M4 | Real traces: UMass WebSearch1-3 and Financial1-2 (first 1M requests, normalised) | `normalize_trace.py`, `experiments/real-traces/*.json` |
 
-**Findings so far that shape the work:**
+### Deviations from the plan, with the measurement behind each
 
-- LearnedFTL checks model predictions against the true page map for free (KI-20), so its double-read advantage may be overstated. Results report flash reads both as-coded and with a charge per wrong prediction.
-- In the 100k-op validation traces, `seq-mixed` reads previously written data 0.00% of the time and `uniform-mixed` 2.21%. The old 0.03% LeaFTL hit rate was an artefact of reading unmapped space, so baselines need `fill` preconditioning.
-- **New (found while reviewing the Phase 2 instrumentation): LeaFTL has an uncounted read path.** In `ssd_read`'s CMT-hit branch (`leaftl.c:~2535`), when the cached segment disagrees with the live one and the correction's backing GTD entry is itself unmapped/invalid, the authors' code does a bare `continue`. That LPN is counted in `cmt_hit_cnt` but charged no flash read and no `invalid_read_cnt` — without a dedicated counter, the read-cost invariant (`single+double+triple == cmt_hits+cmt_misses-invalid`) would fail spuriously whenever this is hit. Added `cmt_hit_invalid_gtd` to track it and folded it into that invariant. Worth a `KNOWN_ISSUES.md` entry alongside the related "corrected lookups are never cached" issue already documented there.
+1. **Preconditioning.** `steady` (fill + random overwrite until WAF is stable) is dropped and a `warm` mode added.
+   After a full 30 GiB fill, LearnedFTL's GC runs and retrains its models on almost every write once fewer than 4
+   lines are free (its own "what's wrong?" message): 8 random 64 KiB writes/s, so a 30 GiB overwrite would take ~17 h
+   per run, and a 100k-op `fill` run takes ~1.7 h. The FTL thread is the bottleneck (100% of a core, guest idle), so
+   KVM would not help. Stages now use: `none` (empty device, shows the unmapped-read artefact), `warm` (the trace's
+   footprint written once, so every read targets written data; the main condition), and `fill` (whole device,
+   GC-stress) on the 100k validation traces only, with one run per trace for LearnedFTL.
+2. **Read cost is measured, not taken from the authors' `read_cnt`** (KI-26), and headline metrics are defined on
+   mapped read LPNs (METRICS.md section 4).
+3. **No shadow page map**: `maptbl` is already the ground truth both FTLs program from (INVARIANTS.md).
+4. **Repeats.** Under TCG every counter is deterministic and the seed only changes the written data pattern, so the
+   validation stage runs three identical repeats per configuration (invariant 11) and the 1M matrix runs once per
+   configuration, with three repeats for two workloads. Means have zero variance; CIs are reported as 0.
+5. **zipf-80-20** is only 100k requests long in `traces/`, so it is in the validation stage only.
+6. **Real traces.** MSR Cambridge, FIU and Systor'17 need a SNIA IOTTA licence login and are not included; the
+   UMass WebSearch traces used by the LearnedFTL paper are.
+7. **LeaFTL invariant 7** (blocks, reverse map, stale entries) is KNOWN, not HARD, because LeaFTL's GC breaks its own
+   mapping state (KI-21..KI-24); it stays HARD for LearnedFTL.
+8. **Memory.** FEMU pins its whole DRAM backend (~32 GB per VM) when allowed to; runs set `MLOCK=0` so memory is
+   allocated as written. Use `MLOCK=1` for KVM latency runs.
+
+### Findings so far
+
+- **LeaFTL (the LearnedFTL authors' FEMU port) has correctness bugs that dominate its numbers once GC runs**: GC
+  rewrites the translation pages of the host write buffer instead of the migrated LPNs (KI-21, WAF ~82 on
+  `uniform-mixed` after `fill`), never programs migrated data (KI-22), serves reads from invalidated pages in the
+  write-buffer window (KI-23), loses ~5% of reads of written data after GC (KI-24), and silently drops host writes
+  through its buffer duplicate check (KI-27; the first request touching LPN 0 is always lost).
+- LearnedFTL detects wrong model predictions for free (KI-20) and never charges translation-page writes (KI-25):
+  both flatter it relative to LeaFTL and are reported separately.
+- In the 100k-op validation traces, `seq-mixed` reads previously written data 0.00% of the time and `uniform-mixed`
+  2.21% under `none`; the old 0.03% LeaFTL hit rate was this artefact.
+
+### Pending
+
+- [ ] Latency and throughput (needs KVM; the launcher already selects it when `/dev/kvm` is usable).
+- [ ] A same-FTL 256-vs-512 entries-per-TP sweep (needs a constant change; out of scope by decision).
