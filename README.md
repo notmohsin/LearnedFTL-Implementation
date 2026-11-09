@@ -1,106 +1,269 @@
-# LearnedFTL
-The source code of paper: "LearnedFTL: A Learning-based Page-level FTL for Reducing Double Reads in Flash-based SSDs". Published on the 30th IEEE International Symposium on High-Performance Computer Architecture (HPCA '24), Edinburgh, Scotland.
+# LearnedFTL / LeaFTL baselines on FEMU
 
-## Installation
+This repository measures how learned address-mapping models change mapping-cache (CMT) behaviour in flash SSDs. It compares **LeaFTL** (ASPLOS '23) and **LearnedFTL** (HPCA '24) on the [FEMU](https://github.com/vtess/FEMU) SSD emulator. It is a fork of the LearnedFTL authors' artifact, [astlxmu/LearnedFTL](https://github.com/astlxmu/LearnedFTL), with these additions:
 
-1. Make sure you have installed necessary libraries for building QEMU. The dependencies can be installed by following instructions below:
+- **Measurement instrumentation** in both FTLs. It adds request-flow counters, an exhaustive per-LPN read partition with built-in invariant checks, one shared JSON stats schema, and an optional per-request log.
+- **An experiment toolkit**: deterministic synthetic traces, trace profiling with exact cache bounds (LRU, LFU, Belady-OPT), and replay and stats scripts.
+- **Written analysis** of the authors' code: exact metric definitions, and 20 documented behaviours that affect measurements.
+- **A run path for machines without root or KVM**: QEMU's software emulator (TCG), a cloud-init guest image, and a preload shim for a hard-coded log path.
+
+> **Ground rule:** the authors' FTL decision logic and constants are unchanged. Every change in `hw/femu/bbssd/` only counts or prints. Bugs in the authors' code are documented and measured, never fixed. See [KNOWN_ISSUES.md](experiments/docs/KNOWN_ISSUES.md).
+
+## Status (2026-11-09)
+
+| | |
+|---|---|
+| ✅ Done | Metric definitions and known-issues analysis. Trace suite plus generated profiles and cache bounds. Instrumentation in LeaFTL and LearnedFTL (committed in `8f16a9016`; both FTLs build). |
+| ⏳ Next | Running the invariant checks against real runs. Offline validator (`validate_run.py`). One build per FTL (`build_ftl.sh`). Deterministic `O_DIRECT` replay. `fill` / `steady` preconditioning. |
+| ⛔ Blocked | Latency and throughput. They need KVM, and this host has no KVM access. Counter-based results don't depend on time and are unaffected. |
+
+**There are no baseline numbers yet.** The rows in `experiments/results/runs.csv` come from early smoke tests and are known to be invalid (see below). The full roadmap and milestones are in [BASELINE_PLAN.md](experiments/docs/BASELINE_PLAN.md).
+
+## Three things to know before trusting any number
+
+1. **Raw CMT hit rates can't be compared across the two FTLs.** A LeaFTL CMT entry is a learned segment that covers up to 256 LPNs. A LearnedFTL entry is a single LPN→PPN mapping. Cross-FTL comparison uses the *translation-free read ratio* and the *double-read ratio* instead. See [METRICS.md](experiments/docs/METRICS.md).
+2. **Reads of unwritten space distort LeaFTL's hit rate.** LeaFTL counts those reads as CMT misses, but LearnedFTL excludes them. The old 0.03% LeaFTL hit rate on `seq-mixed` came from this: that trace never reads data it wrote. Baselines therefore need `fill` preconditioning (KI-3).
+3. **LearnedFTL checks model predictions against the true page map at no flash cost.** Its double-read advantage may therefore be overstated. Results report flash reads per LPN both as coded and with an extra read charged for each wrong prediction (KI-20).
+
+## Repository layout
+
+The FTLs live in `hw/femu/bbssd/`. Only one is compiled at a time.
+
+| FTL | Source | Built by default | In scope |
+|---|---|---|---|
+| LeaFTL (authors' FEMU port) | `leaftl.c` / `leaftl.h` | ✅ | ✅ |
+| LearnedFTL | `ld-tpftl.c` / `ld-tpftl.h` | | ✅ |
+| DFTL, TPFTL | `dftl.c`, `tpftl.c` | | Not reproduced |
+| Shared stats emitter (this fork) | `ftl_stats.h` | — | — |
+
+What this fork adds on top of upstream:
+
+```text
+experiments/
+  docs/
+    METRICS.md            what every counter means, per FTL, with file:line references
+    KNOWN_ISSUES.md       20 behaviours of the authors' code that affect measurements (KI-1..KI-20)
+    BASELINE_PLAN.md      validation plan, invariant catalogue, milestones, status
+  traces/                 9 synthetic workloads (Git LFS): 8 × 10M ops, plus zipf-80-20 at 100k
+    TRACES.md             generated profile of every trace (do not edit by hand)
+    profiles.json         the same data, machine-readable
+    manifest.json         generator parameters and seeds
+  validation-traces/      100k-op prefixes of each trace, for quick runs (plain git)
+  scripts/                trace generation, profiling, replay, stats trigger (see below)
+  tools/
+    cachesim.c            exact LRU / LFU / perfect-LFU / Belady-OPT hit rates
+    gclog_redirect.c      LD_PRELOAD shim for LeaFTL's hard-coded GC log path (KI-2)
+    test_*.{py,sh}        tests for both tools
+  results/runs.csv        early smoke-test rows (invalid; kept for history)
+femu-scripts/run-blackbox-tcg.sh   boots FEMU under TCG with a cloud-init guest; needs no root
+hw/femu/bbssd/ftl_stats.h          shared JSON schema and per-request log
+```
+
+## Quick start (TCG, no root)
+
+These steps work on a shared Linux server without sudo or `/dev/kvm`. TCG is much slower than KVM. Counters are still exact, but latency numbers from TCG are meaningless (KI-19).
+
+**Host requirements:** about 8 cores and 40 GB of RAM (the emulated SSD's backing store lives in RAM). You also need the usual QEMU build dependencies, `git-lfs`, `xorriso`, Python 3 with `numpy` and `pandas` (only for trace profiling), and a C compiler.
+
+### 1. Clone, including the LFS traces
 
 ```bash
-  git clone https://github.com/ucare-uchicago/femu.git
-  cd LearnedFTL
-  mkdir build-femu
-  # Switch to the FEMU building directory
-  cd build-femu
-  # Copy femu script
-  cp ../femu-scripts/femu-copy-scripts.sh .
-  ./femu-copy-scripts.sh .
-  # only Debian/Ubuntu based distributions supported
-  sudo ./pkgdep.sh
+git clone https://github.com/notmohsin/LearnedFTL-Implementation.git LearnedFTL
+cd LearnedFTL
+git lfs pull          # fetches experiments/traces/*.trace (~2 GB)
 ```
 
-2. Compile & Install FEMU:
+You can skip `git lfs pull` if you only need `experiments/validation-traces/`.
+
+### 2. Build FEMU
 
 ```bash
-  ./femu-compile.sh
-```
-  FEMU binary will appear as ``x86_64-softmmu/qemu-system-x86_64``
-
-3. Prepare the VM image (e.g. Ubuntu Server 20.04)
-
-  Build your own VM image by following instructions:
-  After the guest OS is installed, make following changes to redirect VM output
-  to the console, instead of using a separate GUI window. (**Desktop version guest OS is not tested**)
-
-> Note: Please ask for help from Google if any of the steps doesn't work. In general, it gives you a basic idea to build your own VM image and make it run in text console.
-
-```
-    # Download a Ubuntu server ISO file
-    $ mkdir -p ~/images/
-    $ cd ~/images
-    $ wget http://releases.ubuntu.com/20.04/ubuntu-20.04.3-live-server-amd64.iso
-    $ sudo apt-get install qemu-system-x86
-	# Create a QCOW2 disk image
-    $ qemu-img create -f qcow2 femu.qcow2 80G
-
-    # install guest OS to femu.qcow2 (You need a GUI environment to prepare the VM image)
-    $ qemu-system-x86_64 -cdrom ubuntu-20.04.3-live-server-amd64.iso -hda femu.qcow2 -boot d -net nic -net user -m 8192 -localtime -smp 8 -cpu host -enable-kvm
-
+mkdir -p build-femu && cd build-femu
+cp ../femu-scripts/femu-copy-scripts.sh . && ./femu-copy-scripts.sh .
+# sudo ./pkgdep.sh      # Debian/Ubuntu only; skip if the QEMU build deps are already installed
+./femu-compile.sh       # produces build-femu/qemu-system-x86_64
+cd ..
 ```
 
-  - After guest OS is installed, boot it with
+The default build is **LeaFTL**. To build LearnedFTL instead, see [Switching FTL](#switching-ftl).
 
+### 3. Prepare the guest image
+
+The run script expects these files in `~/images/`:
+
+| File | What it is |
+|---|---|
+| `u20s.qcow2` | Guest disk. Any Ubuntu cloud image works; we use 22.04 (`jammy-server-cloudimg-amd64.img`) behind a symlink with this name. |
+| `femu-seed.iso` | cloud-init seed. It creates user `ubuntu` with your SSH key and sends console output to the serial port. |
+| `femu_id_ed25519` | SSH key for the guest. |
+
+```bash
+mkdir -p ~/images/seed && cd ~/images
+wget https://cloud-images.ubuntu.com/jammy/current/jammy-server-cloudimg-amd64.img
+qemu-img resize jammy-server-cloudimg-amd64.img 20G   # optional; any qemu-img binary works
+ln -sf jammy-server-cloudimg-amd64.img u20s.qcow2
+ssh-keygen -t ed25519 -N '' -f femu_id_ed25519
+
+cat > seed/meta-data <<'EOF'
+instance-id: femu-vm
+local-hostname: femu-vm
+EOF
+
+cat > seed/network-config <<'EOF'
+version: 2
+ethernets:
+  all:
+    match: {name: "en*"}
+    dhcp4: true
+EOF
+
+cat > seed/user-data <<EOF
+#cloud-config
+hostname: femu-vm
+users:
+  - default
+  - name: ubuntu
+    groups: [adm, sudo]
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    shell: /bin/bash
+    ssh_authorized_keys:
+      - $(cat femu_id_ed25519.pub)
+ssh_pwauth: false
+write_files:
+  - path: /etc/default/grub.d/99-femu-serial.cfg
+    content: |
+      GRUB_CMDLINE_LINUX="console=ttyS0,115200 console=tty0"
+      GRUB_TERMINAL=serial
+      GRUB_SERIAL_COMMAND="serial --unit=0 --speed=115200 --word=8 --parity=no --stop=1"
+runcmd:
+  - update-grub
+EOF
+
+xorriso -as mkisofs -o femu-seed.iso -V cidata -J -r seed/
 ```
-    $ qemu-system-x86_64 -hda femu.qcow2 -net nic -net user -m 8192 -localtime -smp 8 -cpu host -enable-kvm
+
+After the first boot has finished, shut the guest down and save a pristine copy: `cp u20s.qcow2 femu-pristine.qcow2`. Before each run, `experiments/scripts/reset_femu_image.sh [target]` copies the pristine image to a fresh disk. Point `FEMU_OS_IMAGE` at that disk so every run starts from the same state.
+
+### 4. Boot FEMU
+
+```bash
+./femu-scripts/run-blackbox-tcg.sh          # console output is also written to build-femu/log
 ```
 
-If the OS is installed into ``femu.qcow2``, you should be able to enter the guest OS. Inside the VM, edit ``/etc/default/grub``, make sure the following
-options are set.
+The emulated SSD appears in the guest as `/dev/nvme0n1`. Its geometry is hard-coded in both FTLs: 8 channels × 8 LUNs, 32 GiB raw, 40 µs / 200 µs / 2 ms read / program / erase.
 
+To get past the first garbage-collection erase under LeaFTL, start QEMU with the GC-log shim. Without it, LeaFTL crashes there unless `/home/lzh/femu/log/` exists (KI-2):
 
-```
-GRUB_CMDLINE_LINUX="ip=dhcp console=ttyS0,115200 console=tty console=ttyS0"
-GRUB_TERMINAL=serial
-GRUB_SERIAL_COMMAND="serial --unit=0 --speed=115200 --word=8 --parity=no --stop=1"
-```
-
-Still in the VM, update the grub
-   
-```
-$ sudo update-grub
-$ sudo shutdown -h now
-```
-  
-Now you're ready to `Run FEMU`. If you stick to a Desktop version guest OS, please remove "-nographics" command option from the running script before running FEMU.
-
-## Run
-
-### Minimum Requirement
-
-- At least 8 cores and 40GB DRAM in the physical machine to enable seamless run of the following default FEMU scripts emulating a 32GB SSD in a VM with 4 vCPUs and 4GB DRAM.
-
-### Run FEMU
-
-Boot the VM using the following script:
-
-```Bash
-./run-blackbox.sh
+```bash
+cc -O2 -shared -fPIC -o experiments/tools/gclog_redirect.so experiments/tools/gclog_redirect.c -ldl
+FEMU_GC_LOG_DIR=$PWD/experiments/results/my-run \
+LD_PRELOAD=$PWD/experiments/tools/gclog_redirect.so \
+  ./femu-scripts/run-blackbox-tcg.sh
 ```
 
-After startup, you can see the /dev/nvme0n1 device throughs ```sudo nvme list``` command, and you can test it accordingly.
+Set `FEMU_REQLOG=/path/to/reqlog.csv` the same way to log every request the FTL receives as `seq,op,slba,nlb`.
 
-### Change FTL
+### 5. Replay a trace and collect stats
 
-If you want to try other ftl, modify `bbssd/**ftl.c` in `hw/femu/meson.build` to the required `ftl.c` file, and modify the referenced header file in the `hw/femu/bbssd/bb.c` accordingly.
+From the host, copy the scripts and a trace into the guest:
 
----
+```bash
+scp -P 8080 -i ~/images/femu_id_ed25519 \
+  experiments/scripts/{replay_trace.py,femu_stat.py} \
+  experiments/validation-traces/uniform-mixed.trace ubuntu@localhost:
+ssh -p 8080 -i ~/images/femu_id_ed25519 ubuntu@localhost
+```
 
-This project implements DFTL, TPFTL, LeaFTL, and LearnedFTL algorithms on [FEMU](https://github.com/vtess/FEMU) in black-box mode. If you use this implementation for research purposes, please cite the sources.
+Inside the guest:
 
-Bibtex
+```bash
+sudo python3 femu_stat.py 9     # baseline snapshot: print and zero the counters; discard this record
+sudo python3 replay_trace.py --trace uniform-mixed.trace
+sudo python3 femu_stat.py 9     # the record for this workload
+```
+
+On the host, each stats print shows up in `build-femu/log` as one JSON line:
+
+```bash
+grep '{"ftl"' build-femu/log
+```
+
+> The stats-reset command (`femu_stat.py 8`) is a no-op in the authors' code (KI-1). Use the print-twice snapshot pattern above. Counters that never reset (`write_cnt`, `gc_cnt`, `wa_cnt`) are only meaningful as before/after differences.
+
+`replay_trace.py` still issues buffered I/O, so the guest kernel can merge, split or read ahead on requests. Until the `O_DIRECT` replay lands, compare `read_lpns` / `write_lpns` in the JSON against the trace's expected counters in [TRACES.md](experiments/traces/TRACES.md).
+
+## Switching FTL
+
+Two lines select the FTL that gets built:
+
+1. **`hw/femu/meson.build`**: replace `'bbssd/leaftl.c'` with the FTL's source file, e.g. `'bbssd/ld-tpftl.c'`.
+2. **`hw/femu/bbssd/bb.c`**: change `#include "./leaftl.h"` to the matching header, e.g. `"./ld-tpftl.h"`.
+
+Then rebuild with `make -j"$(nproc)"` in `build-femu/` (or run `./femu-compile.sh` for a clean build). `main` stays on LeaFTL. Planned: `build_ftl.sh` will build each FTL in its own git worktree so the committed source never changes.
+
+## Traces and experiment tooling
+
+Every trace uses the format `timestamp operation offset_bytes length_bytes` (one request per line, `R` or `W`; lines starting with `#` are comments). The synthetic suite has one sequential mixed trace, three uniform-random traces (read, write, mixed), four Zipf hot/cold traces and a 50/50 sequential/random mix. All are generated with seed 42.
+
+| Script | Purpose |
+|---|---|
+| `scripts/generate_workloads.py` | Regenerate the synthetic suite and its manifest (`--operations`, `--seed`, `--workload`) |
+| `scripts/generate_8020_trace.py` | Generate the `zipf-80-20` hot/cold trace |
+| `scripts/prepare_validation_traces.py` | Cut fixed-length prefixes into `validation-traces/` (`--operations`, default 100k) |
+| `scripts/profile_traces.py` | Regenerate `TRACES.md` and `profiles.json` byte-identically (`--only <stem>` for one trace) |
+| `scripts/belady.py` | Belady-OPT CMT bound keyed by LeaFTL translation page (assumes every miss inserts) |
+| `scripts/replay_trace.py` | Replay a trace on a raw block device inside the guest |
+| `scripts/femu_stat.py` | Send FEMU's stats command from the guest (`9` = print) |
+| `scripts/reset_femu_image.sh` | Copy the pristine guest image to a fresh run image |
+| `scripts/update_csv.py`, `clone_run.py` | Legacy: hand-maintained `runs.csv`. To be replaced by generated summaries |
+
+Run the tool tests from the repository root:
+
+```bash
+python3 experiments/tools/test_cachesim.py
+bash experiments/tools/test_gclog_redirect.sh
+```
+
+## Running with KVM (upstream method)
+
+If you have root and `/dev/kvm`, the authors' `build-femu/run-blackbox.sh` boots FEMU under KVM with `-enable-kvm -cpu host`. KVM is the only way to get meaningful latency and throughput. You also need vCPUs pinned to cores no other process uses (`femu-scripts/pin.sh`). To build a guest image by hand, follow the [FEMU README](https://github.com/vtess/FEMU#installation): install Ubuntu Server into a qcow2 image and route GRUB output to `ttyS0`.
+
+## Documentation
+
+| Document | Read it for |
+|---|---|
+| [METRICS.md](experiments/docs/METRICS.md) | Exactly what each counter counts in each FTL, the headline cross-FTL metrics, and how this setup differs from the papers' |
+| [KNOWN_ISSUES.md](experiments/docs/KNOWN_ISSUES.md) | Behaviours of the authors' code that affect results, each with file:line and how the experiments handle it |
+| [BASELINE_PLAN.md](experiments/docs/BASELINE_PLAN.md) | Invariant catalogue, validation gates, the run pipeline and milestones |
+| [TRACES.md](experiments/traces/TRACES.md) | Per-trace mix, footprint, locality, read-after-write share and cache bounds |
+
+## Citation
+
+If you use this code, please cite the original papers:
+
 ```bibtex
-@article{LearnedFTL,
-Author = {Wang, Shengzhe and Lin, Zihang},
-Title = {LearnedFTL},
-Url = {https://github.com/astlxmu/LearnedFTL},
-Year = 2023}
-```# LearnedFTL-Implementation
+@inproceedings{wang2024learnedftl,
+  title     = {{LearnedFTL}: A Learning-based Page-level {FTL} for Reducing Double Reads in Flash-based {SSDs}},
+  author    = {Wang, Shengzhe and Lin, Zihang and Wu, Suzhen and Jiang, Hong and Zhang, Jie and Mao, Bo},
+  booktitle = {2024 IEEE International Symposium on High-Performance Computer Architecture (HPCA)},
+  year      = {2024}
+}
+
+@inproceedings{sun2023leaftl,
+  title     = {{LeaFTL}: A Learning-Based Flash Translation Layer for Solid-State Drives},
+  author    = {Sun, Jinghan and Li, Shaobo and Sun, Yunxin and Sun, Chao and Vucinic, Dejan and Huang, Jian},
+  booktitle = {Proceedings of the 28th ACM International Conference on Architectural Support for Programming Languages and Operating Systems (ASPLOS)},
+  year      = {2023}
+}
+
+@inproceedings{li2018femu,
+  title     = {The {CASE} of {FEMU}: Cheap, Accurate, Scalable and Extensible Flash Emulator},
+  author    = {Li, Huaicheng and Hao, Mingzhe and Tong, Michael Hao and Sundararaman, Swaminathan and Bj{\o}rling, Matias and Gunawi, Haryadi S.},
+  booktitle = {16th USENIX Conference on File and Storage Technologies (FAST)},
+  year      = {2018}
+}
+```
+
+## License
+
+FEMU is built on QEMU, and this repository inherits QEMU's licensing (mainly GPL-2.0). See [LICENSE](LICENSE) and [COPYING](COPYING). The FTL implementations are by the LearnedFTL authors (Xiamen University). The measurement instrumentation and `experiments/` were added in this fork.
