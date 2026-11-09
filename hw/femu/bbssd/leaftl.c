@@ -642,15 +642,31 @@ static void ssd_init_statistics(struct ssd *ssd)
     st->cmt_miss_cnt = 0;
     st->cmt_hit_ratio = 0;
     st->access_cnt = 0;
+    st->read_lpn_cnt = 0;
+    st->invalid_read_cnt = 0;
+    st->invariant_failures = 0;
     st->model_hit = 0;
     st->write_cnt = 0;
     st->wa_cnt = 0;
     st->gc_cnt = 0;
+    st->read_reqs = 0;
+    st->write_reqs = 0;
+    st->write_lpns = 0;
+    memset(st->read_size_hist, 0, sizeof(st->read_size_hist));
+    memset(st->write_size_hist, 0, sizeof(st->write_size_hist));
+    st->buffer_flushes = 0;
+    st->gc_runs = 0;
+    st->pre_first_write = 0;
+    st->buffer_hits = 0;
+    st->unmapped_tp = 0;
+    st->cmt_hit_invalid_gtd = 0;
     st->read_joule = 0;
     st->write_joule = 0;
     st->erase_joule = 0;
     st->joule = 0;
 }
+
+static struct ftl_reqlog g_leaftl_reqlog;
 
 void ssd_init(FemuCtrl *n)
 {
@@ -1400,6 +1416,7 @@ static int do_gc(struct ssd *ssd, bool force)
     /* update line status */
     mark_line_free(ssd, &ppa);
 
+    ssd->stat.gc_runs++;
     return 0;
 }
 
@@ -2070,6 +2087,7 @@ static void GC_flush(struct ssd *ssd, uint64_t* buffer_lpns, int pointer) {
 */
 static uint64_t buffer_flush(struct ssd *ssd, NvmeRequest *req) {
 
+    ssd->stat.buffer_flushes++;
     learned_mgmt* lm = ssd->lem;
     struct ssdparams* sp = &ssd->sp;
     const int buffer_size = ssd->sp.buffer_size;
@@ -2194,6 +2212,7 @@ static uint64_t buffer_flush(struct ssd *ssd, NvmeRequest *req) {
 }
 
 void count_segments(struct ssd* ssd) {
+    struct ssdparams *spp = &ssd->sp;
     learned_mgmt *lm = ssd->lem;
     int cnt = 0;
     int accu_cnt = 0;
@@ -2247,6 +2266,10 @@ void count_segments(struct ssd* ssd) {
     printf("crb unit cnt: %d; crb index cnt: %d\n", crb_cnt, crb_index_cnt);
 
     printf("access cnt: %lld\n", (long long)ssd->stat.access_cnt);
+    printf("read_lpn_cnt: %lld\n",
+           (long long)ssd->stat.read_lpn_cnt);
+    printf("invalid_read_cnt: %lld\n",
+           (long long)ssd->stat.invalid_read_cnt);
     printf("cmt_hit_cnt: %lld\n", (long long)ssd->stat.cmt_hit_cnt);
     printf("cmt_miss_cnt: %lld\n", (long long)ssd->stat.cmt_miss_cnt);
     uint64_t cmt_access_cnt =
@@ -2272,32 +2295,132 @@ void count_segments(struct ssd* ssd) {
            ssd->stat.model_queries
                ? (double)ssd->stat.model_hit / ssd->stat.model_queries
                : 0.0);
-    printf("{\"ftl\":\"leaftl\",\"access_cnt\":%lld,"
-           "\"cmt_hits\":%lld,\"cmt_misses\":%lld,\"cmt_accesses\":%lld,"
-           "\"cmt_hit_rate\":%.9f,\"model_queries\":%lld,"
-           "\"model_hits\":%lld,\"model_corrections\":%lld,"
-           "\"model_misses\":%lld,\"model_hit_rate\":%.9f,"
-           "\"single_reads\":%d,\"double_reads\":%d,\"triple_reads\":%d,"
-           "\"translation_reads\":%d,\"writes\":%lld,\"gc\":%d}\n",
-           (long long)ssd->stat.access_cnt,
-           (long long)ssd->stat.cmt_hit_cnt,
-           (long long)ssd->stat.cmt_miss_cnt,
-           (long long)cmt_access_cnt,
-           cmt_access_cnt
-               ? (double)ssd->stat.cmt_hit_cnt / cmt_access_cnt
-               : 0.0,
-           (long long)ssd->stat.model_queries,
-           (long long)ssd->stat.model_hit,
-           (long long)ssd->stat.model_correction,
-           (long long)ssd->stat.model_miss,
-           ssd->stat.model_queries
-               ? (double)ssd->stat.model_hit / ssd->stat.model_queries
-               : 0.0,
-           ssd->stat.single_read, ssd->stat.double_read,
-           ssd->stat.triple_read,
-           ssd->stat.single_read + ssd->stat.double_read +
-               ssd->stat.triple_read,
-           (long long)ssd->stat.write_cnt, ssd->stat.gc_cnt);
+    printf("pre_first_write: %lld, buffer_hits: %lld, unmapped_tp: %lld, "
+           "cmt_hit_invalid_gtd: %lld, "
+           "read_reqs: %lld, write_reqs: %lld, write_lpns: %lld, "
+           "buffer_flushes: %lld, gc_runs: %lld\n",
+           (long long)ssd->stat.pre_first_write,
+           (long long)ssd->stat.buffer_hits,
+           (long long)ssd->stat.unmapped_tp,
+           (long long)ssd->stat.cmt_hit_invalid_gtd,
+           (long long)ssd->stat.read_reqs,
+           (long long)ssd->stat.write_reqs,
+           (long long)ssd->stat.write_lpns,
+           (long long)ssd->stat.buffer_flushes,
+           (long long)ssd->stat.gc_runs);
+
+    /* Phase 2b (invariant catalogue, INVARIANTS.md, validate_run.py) is a
+     * separate phase; these five checks are the structural invariants
+     * that fall directly out of ssd_read's control flow and are cheap to
+     * evaluate right here. A failing check prints the mismatched values
+     * so a violation is diagnosable from the log alone. */
+    uint64_t model_partition =
+        ssd->stat.model_hit + ssd->stat.model_correction +
+        ssd->stat.model_miss;
+    uint64_t read_partition =
+        ssd->stat.pre_first_write + ssd->stat.buffer_hits +
+        ssd->stat.cmt_hit_cnt + ssd->stat.cmt_miss_cnt;
+    uint64_t cmt_miss_partition =
+        ssd->stat.unmapped_tp + ssd->stat.model_queries;
+    uint64_t translation_read_cnt =
+        (uint64_t)ssd->stat.single_read + ssd->stat.double_read +
+        ssd->stat.triple_read;
+    uint64_t expected_translation_reads =
+        cmt_access_cnt - ssd->stat.invalid_read_cnt -
+        ssd->stat.cmt_hit_invalid_gtd;
+    uint64_t invariant_failures = 0;
+
+    if (ssd->stat.access_cnt + ssd->stat.invalid_read_cnt !=
+        ssd->stat.read_lpn_cnt) {
+        printf("INVARIANT FAILED: access_cnt(%lld) + invalid_read_cnt(%lld) "
+               "!= read_lpn_cnt(%lld)\n",
+               (long long)ssd->stat.access_cnt,
+               (long long)ssd->stat.invalid_read_cnt,
+               (long long)ssd->stat.read_lpn_cnt);
+        invariant_failures++;
+    }
+    if (read_partition != ssd->stat.read_lpn_cnt) {
+        printf("INVARIANT FAILED: pre_first_write(%lld) + buffer_hits(%lld) "
+               "+ cmt_hit_cnt(%lld) + cmt_miss_cnt(%lld) = %lld "
+               "!= read_lpn_cnt(%lld)\n",
+               (long long)ssd->stat.pre_first_write,
+               (long long)ssd->stat.buffer_hits,
+               (long long)ssd->stat.cmt_hit_cnt,
+               (long long)ssd->stat.cmt_miss_cnt,
+               (long long)read_partition,
+               (long long)ssd->stat.read_lpn_cnt);
+        invariant_failures++;
+    }
+    if (cmt_miss_partition != ssd->stat.cmt_miss_cnt) {
+        printf("INVARIANT FAILED: unmapped_tp(%lld) + model_queries(%lld) "
+               "= %lld != cmt_miss_cnt(%lld)\n",
+               (long long)ssd->stat.unmapped_tp,
+               (long long)ssd->stat.model_queries,
+               (long long)cmt_miss_partition,
+               (long long)ssd->stat.cmt_miss_cnt);
+        invariant_failures++;
+    }
+    if (model_partition != ssd->stat.model_queries) {
+        printf("INVARIANT FAILED: model_hit(%lld) + model_correction(%lld) "
+               "+ model_miss(%lld) = %lld != model_queries(%lld)\n",
+               (long long)ssd->stat.model_hit,
+               (long long)ssd->stat.model_correction,
+               (long long)ssd->stat.model_miss,
+               (long long)model_partition,
+               (long long)ssd->stat.model_queries);
+        invariant_failures++;
+    }
+    if (translation_read_cnt != expected_translation_reads) {
+        printf("INVARIANT FAILED: single+double+triple(%lld) != "
+               "cmt_hit_cnt+cmt_miss_cnt-invalid_read_cnt-cmt_hit_invalid_gtd(%lld)\n",
+               (long long)translation_read_cnt,
+               (long long)expected_translation_reads);
+        invariant_failures++;
+    }
+    ssd->stat.invariant_failures = invariant_failures;
+    printf("invariant_failures: %lld\n",
+           (long long)ssd->stat.invariant_failures);
+
+    struct ftl_stats_common c = {
+        .ftl = "leaftl",
+        .ents_per_tp = spp->ents_per_pg,
+        .cmt_entries = spp->tt_cmt_size,
+        .nchs = spp->nchs,
+        .luns_per_ch = spp->luns_per_ch,
+        .blks_per_pl = spp->blks_per_pl,
+        .pgs_per_blk = spp->pgs_per_blk,
+        .tt_pgs = spp->tt_pgs,
+        .read_reqs = ssd->stat.read_reqs,
+        .write_reqs = ssd->stat.write_reqs,
+        .read_lpns = ssd->stat.read_lpn_cnt,
+        .write_lpns = ssd->stat.write_lpns,
+        .buffer_flushes = ssd->stat.buffer_flushes,
+        .gc_runs = ssd->stat.gc_runs,
+        .mapped_read_lpns = ssd->stat.access_cnt,
+        .unmapped_read_lpns = ssd->stat.invalid_read_cnt,
+        .cmt_hits = ssd->stat.cmt_hit_cnt,
+        .cmt_misses = ssd->stat.cmt_miss_cnt,
+        .model_queries = ssd->stat.model_queries,
+        .model_hits = ssd->stat.model_hit,
+        .model_misses = ssd->stat.model_miss,
+        .single_reads = (uint64_t)ssd->stat.single_read,
+        .double_reads = (uint64_t)ssd->stat.double_read,
+        .triple_reads = (uint64_t)ssd->stat.triple_read,
+        .nand_page_writes = (uint64_t)ssd->stat.wa_cnt,
+        .gc_cnt = ssd->stat.gc_cnt,
+        .invariant_failures = ssd->stat.invariant_failures,
+    };
+    memcpy(c.read_size_hist, ssd->stat.read_size_hist, sizeof(c.read_size_hist));
+    memcpy(c.write_size_hist, ssd->stat.write_size_hist, sizeof(c.write_size_hist));
+
+    ftl_stats_print_common_prefix(&c);
+    /* LeaFTL-specific keys, appended after the common prefix */
+    printf(",\"pre_first_write\":%" PRIu64 ",\"buffer_hits\":%" PRIu64
+           ",\"unmapped_tp\":%" PRIu64 ",\"model_corrections\":%" PRIu64
+           ",\"cmt_hit_invalid_gtd\":%" PRIu64 "}\n",
+           ssd->stat.pre_first_write, ssd->stat.buffer_hits,
+           ssd->stat.unmapped_tp, (uint64_t)ssd->stat.model_correction,
+           ssd->stat.cmt_hit_invalid_gtd);
 
     printf("read joule: %Lf\n", ssd->stat.read_joule);
     printf("write joule: %Lf\n", ssd->stat.write_joule);
@@ -2310,10 +2433,26 @@ void count_segments(struct ssd* ssd) {
     ssd->stat.cmt_hit_cnt = 0;
     ssd->stat.cmt_miss_cnt = 0;
     ssd->stat.access_cnt = 0;
+    ssd->stat.read_lpn_cnt = 0;
+    ssd->stat.invalid_read_cnt = 0;
+    ssd->stat.invariant_failures = 0;
     ssd->stat.model_queries = 0;
     ssd->stat.model_hit = 0;
     ssd->stat.model_correction = 0;
     ssd->stat.model_miss = 0;
+    ssd->stat.read_reqs = 0;
+    ssd->stat.write_reqs = 0;
+    ssd->stat.write_lpns = 0;
+    memset(ssd->stat.read_size_hist, 0, sizeof(ssd->stat.read_size_hist));
+    memset(ssd->stat.write_size_hist, 0, sizeof(ssd->stat.write_size_hist));
+    ssd->stat.buffer_flushes = 0;
+    ssd->stat.pre_first_write = 0;
+    ssd->stat.buffer_hits = 0;
+    ssd->stat.unmapped_tp = 0;
+    ssd->stat.cmt_hit_invalid_gtd = 0;
+    /* gc_runs is a since-boot delta counter like gc_cnt/wa_cnt (KI-17); not reset */
+
+    ftl_reqlog_flush(&g_leaftl_reqlog);
 
     ssd->stat.read_joule = 0;
     ssd->stat.write_joule = 0;
@@ -2349,12 +2488,18 @@ static uint64_t ssd_read(struct ssd *ssd, NvmeRequest *req)
         ftl_err("start_lpn=%"PRIu64",tt_pgs=%d\n", start_lpn, ssd->sp.tt_pgs);
     }
 
+    ssd->stat.read_reqs++;
+    ssd->stat.read_size_hist[ftl_stats_size_bucket(end_lpn - start_lpn + 1)]++;
+    ftl_reqlog_write(&g_leaftl_reqlog, 'R', req->slba, req->nlb);
+
     /* normal IO read path */
     for (lpn = start_lpn; lpn <= end_lpn; lpn++) {
         ssd->stat.access_cnt++;
+        ssd->stat.read_lpn_cnt++;
         bool find_in_flag = false;
         old_lun = NULL;
         if (!ssd->start_write) {
+            ssd->stat.pre_first_write++;
             continue;
         }
 
@@ -2368,6 +2513,7 @@ static uint64_t ssd_read(struct ssd *ssd, NvmeRequest *req)
 
         if (find_in_flag) {
             ssd->stat.single_read++;
+            ssd->stat.buffer_hits++;
             maxlat = (sublat > maxlat) ? sublat : maxlat;
             continue;
         }
@@ -2397,6 +2543,13 @@ static uint64_t ssd_read(struct ssd *ssd, NvmeRequest *req)
                     //printf("%s,lpn(%" PRId64 ") not mapped to valid ppa\n", ssd->ssdname, lpn);
                     //printf("Invalid ppa,ch:%d,lun:%d,blk:%d,pl:%d,pg:%d,sec:%d\n",
                     //ppa.g.ch, ppa.g.lun, ppa.g.blk, ppa.g.pl, ppa.g.pg, ppa.g.sec);
+                    /* CMT hit, but the cached segment disagreed with the
+                     * live one and the GTD entry backing the correction
+                     * is itself unmapped/invalid. This LPN is already
+                     * counted in cmt_hit_cnt but gets no flash read and
+                     * no invalid_read_cnt, so it must be tracked
+                     * separately or the read-cost invariant breaks. */
+                    ssd->stat.cmt_hit_invalid_gtd++;
                     continue;
                 }
                 //translation page read latency
@@ -2407,10 +2560,14 @@ static uint64_t ssd_read(struct ssd *ssd, NvmeRequest *req)
             ssd->stat.cmt_miss_cnt++;
             read_cnt++;
             old_lun = process_translation_page_read(ssd, req, lpn, &vppn);
+            if (!old_lun) {
+                ssd->stat.unmapped_tp++;
+            }
         }
 
         if (vppn == INVALID_VAL) {
             ssd->stat.access_cnt--;
+            ssd->stat.invalid_read_cnt++;
             maxlat = (sublat > maxlat) ? sublat : maxlat;
             continue;
         }
@@ -2487,6 +2644,10 @@ static uint64_t ssd_write(struct ssd *ssd, NvmeRequest *req)
         ftl_err("start_lpn=%"PRIu64",tt_pgs=%d\n", start_lpn, ssd->sp.tt_pgs);
     }
 
+    st->write_reqs++;
+    st->write_size_hist[ftl_stats_size_bucket(end_lpn - start_lpn + 1)]++;
+    ftl_reqlog_write(&g_leaftl_reqlog, 'W', req->slba, req->nlb);
+
     while (should_gc_high(ssd)) {
         /* perform GC here until !should_gc(ssd) */
         r = do_gc(ssd, true);
@@ -2496,6 +2657,7 @@ static uint64_t ssd_write(struct ssd *ssd, NvmeRequest *req)
 
     for (lpn = start_lpn; lpn <= end_lpn; lpn++) {
         st->write_cnt++;
+        st->write_lpns++;
 
         if (ssd->lem->bitmap[lpn]) {
             ppa = get_maptbl_ent(ssd, lpn);
@@ -2550,6 +2712,7 @@ static void *ftl_thread(void *arg)
     }
 
     gc_fp = fopen("/home/lzh/femu/log/gc_frequency.txt", "w");
+    ftl_reqlog_init(&g_leaftl_reqlog);
 
     ssd->to_ftl = n->to_ftl;
     ssd->to_poller = n->to_poller;

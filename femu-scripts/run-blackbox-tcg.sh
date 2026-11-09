@@ -3,7 +3,7 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 IMGDIR="${HOME}/images"
-OSIMGF="${IMGDIR}/u20s.qcow2"
+OSIMGF="${FEMU_OS_IMAGE:-${IMGDIR}/u20s.qcow2}"
 SEEDIMG="${IMGDIR}/femu-seed.iso"
 QEMU="${SCRIPT_DIR}/../build-femu/qemu-system-x86_64"
 LOG="${SCRIPT_DIR}/../build-femu/log"

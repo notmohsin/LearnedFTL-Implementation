@@ -1,4 +1,4 @@
-tail -90 /home/mohsin/Implementations/LearnedFTL/build-femu/log#!/usr/bin/env python3
+#!/usr/bin/env python3
 """Create fixed-size prefixes of generated traces for safe validation runs."""
 
 from __future__ import annotations

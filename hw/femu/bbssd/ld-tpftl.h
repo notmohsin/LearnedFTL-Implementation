@@ -2,6 +2,7 @@
 #ifndef _L_FEMU_FTL_H
 #define _L_FEMU_FTL_H
 #include "../nvme.h"
+#include "ftl_stats.h"
 
 
 #define INVALID_PPA     (~(0ULL))
@@ -381,6 +382,39 @@ struct statistics {
     long double write_joule;
     long double erase_joule;
     long double joule;
+
+    /* Phase 2: additive request-flow / read-partition instrumentation,
+     * mirroring leaftl.h's struct statistics. All resettable (zeroed in
+     * count_segments) except gc_runs, which is a since-boot delta like
+     * gc_cnt/write_num (KI-17). */
+    uint64_t read_reqs;
+    uint64_t write_reqs;
+    uint64_t read_lpns;   /* every read LPN seen, no exclusions (leaftl: read_lpn_cnt) */
+    uint64_t write_lpns;  /* every write LPN seen (leaftl: write_cnt) */
+    uint64_t read_size_hist[FTL_STATS_SIZE_BUCKETS];
+    uint64_t write_size_hist[FTL_STATS_SIZE_BUCKETS];
+    uint64_t gc_runs;
+
+    /* unmapped_read_lpns: all 3 sites in ssd_read where a read turns out
+     * to target unmapped space (CMT-hit-unmapped KI-15, CMT-miss-unmapped,
+     * and the final mapped_ppa safety check) feed into this one counter,
+     * so read_lpns == access_cnt + unmapped_read_lpns always. */
+    uint64_t unmapped_read_lpns;
+
+    /* single/double reads: added per KI-16 (no such counters exist in the
+     * authors' code). LearnedFTL never charges a triple read (KI-20), so
+     * triple_read stays 0 and is reported for schema symmetry only. */
+    uint64_t single_read;
+    uint64_t double_read;
+    uint64_t triple_read;
+
+    /* KI-14: the write path's CMT lookup (cmt_hit() in ssd_write) fills
+     * the CMT but was never counted. Counted separately from the read
+     * path so write traffic never contaminates the read hit rate. */
+    uint64_t cmt_write_hits;
+    uint64_t cmt_write_misses;
+
+    uint64_t invariant_failures;
 };
 
 struct ssd {

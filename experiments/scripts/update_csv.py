@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Update a results row from one LeaFTL JSONL statistics record."""
+"""Update a results row from one FTL JSONL statistics record."""
 
 from __future__ import annotations
 
@@ -36,8 +36,13 @@ def main() -> int:
 
     mapping = {
         "ftl": "ftl",
-        "access_cnt": "ftl_accesses",
-        "writes": "writes",
+        "internal_mapping_accesses": "internal_mapping_accesses",
+        "access_cnt": "internal_mapping_accesses",
+        "read_lpn_cnt": "read_lpn_count",
+        "invalid_read_cnt": "invalid_read_count",
+        "invariant_failures": "invariant_failures",
+        "nand_page_writes": "nand_page_writes",
+        "writes": "nand_page_writes",
         "cmt_accesses": "cmt_accesses",
         "cmt_hits": "cmt_hits",
         "cmt_misses": "cmt_misses",

@@ -2,6 +2,7 @@
 #define __FEMU_DFTL_H
 
 #include "../nvme.h"
+#include "ftl_stats.h"
 
 #define INVALID_PPA     (~(0ULL))
 #define INVALID_LPN     (~(0ULL))
@@ -271,6 +272,9 @@ struct statistics {
     uint64_t cmt_miss_cnt;
     double cmt_hit_ratio;
     uint64_t access_cnt;
+    uint64_t read_lpn_cnt;
+    uint64_t invalid_read_cnt;
+    uint64_t invariant_failures;
     uint64_t write_cnt;
     uint64_t model_queries;
     uint64_t model_hit;
@@ -282,6 +286,30 @@ struct statistics {
     int triple_read;
     int wa_cnt;
     int gc_cnt;
+
+    /* Phase 2: additive request-flow / read-partition instrumentation.
+     * All of these are resettable (zeroed in count_segments like the
+     * fields above), except gc_runs which mirrors wa_cnt/gc_cnt as a
+     * since-boot delta counter (see KI-17). */
+    uint64_t read_reqs;
+    uint64_t write_reqs;
+    uint64_t write_lpns;
+    uint64_t read_size_hist[FTL_STATS_SIZE_BUCKETS];
+    uint64_t write_size_hist[FTL_STATS_SIZE_BUCKETS];
+    uint64_t buffer_flushes;
+    uint64_t gc_runs;
+
+    /* exhaustive read-LPN partition: read_lpn_cnt ==
+     * pre_first_write + buffer_hits + cmt_hit_cnt + cmt_miss_cnt */
+    uint64_t pre_first_write;
+    uint64_t buffer_hits;
+    /* cmt_miss_cnt == unmapped_tp + model_queries */
+    uint64_t unmapped_tp;
+    /* CMT hit whose correction's GTD entry was itself unmapped/invalid
+     * (leaftl.c:~2535); counted in cmt_hit_cnt but charged no flash read
+     * and no invalid_read_cnt, so the read-cost invariant must subtract it. */
+    uint64_t cmt_hit_invalid_gtd;
+
     long double read_joule;
     long double write_joule;
     long double erase_joule;

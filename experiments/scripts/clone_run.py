@@ -11,7 +11,8 @@ from pathlib import Path
 
 
 FTL_FIELDS = (
-    "ftl_accesses", "writes", "cmt_accesses", "cmt_hits", "cmt_misses",
+    "internal_mapping_accesses", "nand_page_writes", "cmt_accesses",
+    "cmt_hits", "cmt_misses",
     "cmt_hit_rate", "model_queries", "model_hits", "model_corrections",
     "model_misses", "model_hit_rate", "single_reads", "double_reads",
     "triple_reads", "translation_reads", "double_read_rate",
