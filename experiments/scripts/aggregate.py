@@ -65,7 +65,7 @@ MAPPING_METRICS = [
     ("lost_data_read_share", "fraction",
      "Read LPNs whose data had been written but which the FTL did not return / read LPNs of written data (KNOWN, LeaFTL KI-5)."),
     ("gap_to_belady", "fraction",
-     "Belady-OPT hit rate at 8192 entries on the trace's read stream (FTL-native keying) minus cmt_hit_rate_mapped. Headroom for a better cache policy."),
+     "LeaFTL only: Belady-OPT hit rate at 8192 entries on the trace's read stream keyed per 256-LPN translation page, minus cmt_hit_rate_mapped. Headroom for a better replacement policy. Blank for LearnedFTL, whose CMT also fills on writes and prefetches, so demand-fill bounds do not bound it."),
 ]
 DEVICE_METRICS = [
     ("nand_reads_user", "pages", "User-data flash reads in the workload interval, incl. mispredicted reads."),
@@ -151,8 +151,10 @@ def run_row(run: dict, profiles: dict) -> dict:
         row[name] = metrics.get(name)
     row["lost_data_read_share"] = (metrics.get("read_lpns_with_lost_data") / written_reads) \
         if metrics and written_reads else None
+    # only LeaFTL's CMT is a demand-filled cache of one entry per translation page;
+    # LearnedFTL also fills on writes and prefetches, so no demand-fill bound applies
     row["gap_to_belady"] = (bel["belady_hit_rate"] - metrics["cmt_hit_rate_mapped"]) \
-        if bel and metrics.get("cmt_hit_rate_mapped") is not None else None
+        if ftl == "leaftl" and bel and metrics.get("cmt_hit_rate_mapped") is not None else None
     for name in ("nand_reads_user", "nand_reads_translation", "nand_reads_gc", "nand_programs", "waf", "nand_erases"):
         row[name] = metrics.get(name)
     row["gc_runs"] = rec["gc_runs"] - base["gc_runs"]
@@ -319,7 +321,7 @@ def dictionary() -> list[dict]:
     add("trace_sequential_request_share", "fraction", "Requests starting where the previous one ended.", "traces/profiles.json locality")
     add("trace_top20pct_lpn_access_share", "fraction", "Accesses to the hottest 20% of LPNs.", "traces/profiles.json locality")
     add("trace_read_after_write_share", "fraction", "Read LPNs whose address was written earlier (under this precondition).", "traces/profiles.json mapping")
-    add("bound_belady_hit_rate_8192", "fraction", "Belady-OPT hit rate at 8192 entries on the read stream, FTL-native keying (tp256 for LeaFTL, lpn for LearnedFTL), demand fill.", "experiments/tools/cachesim.c via profiles.json")
+    add("bound_belady_hit_rate_8192", "fraction", "Belady-OPT hit rate at 8192 entries on the read stream with demand fill, keyed like the FTL's CMT entries (tp256 for LeaFTL, lpn for LearnedFTL). A reference, not a bound, for LearnedFTL (write fill and prefetch).", "experiments/tools/cachesim.c via profiles.json")
     add("bound_lru_hit_rate_8192", "fraction", "LRU hit rate at 8192 entries, same keying.", "experiments/tools/cachesim.c via profiles.json")
     for name, unit, definition in MAPPING_METRICS:
         add(f"{name}_mean", unit, definition + " Mean over valid repeats.", "validation.json metrics (FEMU record)")

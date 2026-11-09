@@ -76,7 +76,7 @@ def mutations(manifest, records, reqlog):
     yield "since-boot counter decreased", "9", manifest, rec_edit(-2, gc_cnt=w["gc_cnt"] + 5), reqlog
     yield "size histogram off", "10", manifest, rec_edit(-1, read_size_hist=[w["read_size_hist"][0] + 1]
                                                          + w["read_size_hist"][1:]), reqlog
-    yield "in-FEMU inv12", "12", manifest, rec_edit(-1, inv12_violations=1), reqlog
+    yield "energy off by one write", "12", manifest, rec_edit(-1, energy_write=w["energy_write"] + 16.7), reqlog
 
 
 def main() -> int:

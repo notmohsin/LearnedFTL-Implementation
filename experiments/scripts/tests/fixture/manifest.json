@@ -8,32 +8,32 @@
   "precondition": "none",
   "repeat": 1,
   "devsz_mb": 30720,
-  "started": "2026-11-09T16:08:01.241724",
+  "started": "2026-11-09T16:37:23.413621",
   "host": "nano",
   "host_kernel": "6.14.0-24-generic",
   "image": "/home/mohsin/images/femu-pristine.qcow2",
   "image_sha256": "145aa7138321f7c5d26e39fbeb4bb8d1c2e4bfdb3a8ccb1e32f71eb41f0989de",
   "build": {
     "ftl": "leaftl",
-    "commit": "5d18ecf45902bd22c41626764c9516f656d98261",
+    "commit": "5f2e66cda0a6cc0cce958196f9c4e257ea51f1c1",
     "source_file": "hw/femu/bbssd/leaftl.c",
     "worktree": "/home/mohsin/Implementations/LearnedFTL/build-ftl/leaftl/src",
     "binary": "/home/mohsin/Implementations/LearnedFTL/build-ftl/leaftl/build/qemu-system-x86_64",
-    "binary_sha256": "df8321e36ecf1d12b7ab789214e6747bf3be72181f427439c20a0c3df16c7725",
+    "binary_sha256": "8a9985d458d30316183cc56a38aad31c9244732fdd55c7ec2e6f26a4f7fb870a",
     "switch_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "compiler": "cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
     "configure": "--enable-kvm --disable-werror --disable-docs --target-list=x86_64-softmmu",
-    "built": "2026-11-09T16:08:01"
+    "built": "2026-11-09T16:37:11"
   },
   "phases": {
     "boot": {
-      "seconds": 59.7,
+      "seconds": 60.6,
       "result": {
-        "ssh_ready_s": 59.7
+        "ssh_ready_s": 60.6
       }
     },
     "guest_prep": {
-      "seconds": 6.4,
+      "seconds": 8.0,
       "result": {
         "device": "nvme0n1",
         "bytes": 32212254720,
@@ -47,16 +47,16 @@
       }
     },
     "baseline_print": {
-      "seconds": 2.9,
+      "seconds": 4.9,
       "result": {
         "invariant_failures": 0
       }
     },
     "workload": {
-      "seconds": 4.0,
+      "seconds": 4.9,
       "result": {
         "device_bytes": 32212254720,
-        "elapsed_s": 0.052,
+        "elapsed_s": 0.085,
         "mode": "replay",
         "read_lpns": 16,
         "reads": 16,
@@ -69,7 +69,7 @@
       }
     },
     "final_print": {
-      "seconds": 3.3,
+      "seconds": 4.8,
       "result": {
         "invariant_failures": 0
       }
@@ -78,7 +78,7 @@
   "status": "completed",
   "accel": "tcg",
   "guest_kernel": "5.15.0-198-generic",
-  "finished": "2026-11-09T16:09:44.630092",
+  "finished": "2026-11-09T16:39:21.388589",
   "qemu_exit_code": 0,
   "records": 2,
   "validation_exit_code": 0

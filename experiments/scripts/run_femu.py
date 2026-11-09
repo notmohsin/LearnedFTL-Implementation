@@ -40,6 +40,10 @@ SCRIPTS = REPO / "experiments" / "scripts"
 IMAGES = Path.home() / "images"
 GUEST_FILES = ("replay_trace.py", "guest_prep.sh", "femu_stat.py")
 STEADY_BLOCK = 64 * 1024
+# Preconditioning requests must stay below the device's 127-segment limit: a
+# larger O_DIRECT write is split by the guest at points that depend on the
+# buffer's physical contiguity, which differs between boots (invariant 11).
+PRECOND_BLOCK = 256 * 1024
 
 
 def sha256(path: Path) -> str:
@@ -219,10 +223,10 @@ def main() -> int:
         replay = "sudo python3 /tmp/femu/replay_trace.py"
         if args.precondition == "warm":
             timed("precondition_warm", lambda: json.loads(
-                guest.ssh(f"{replay} --mode warm --trace /tmp/femu/{trace.name} --block {1 << 20}")))
+                guest.ssh(f"{replay} --mode warm --trace /tmp/femu/{trace.name} --block {PRECOND_BLOCK}")))
         if args.precondition in ("fill", "steady"):
             timed("precondition_fill", lambda: json.loads(
-                guest.ssh(f"{replay} --mode fill --block {1 << 20}")))
+                guest.ssh(f"{replay} --mode fill --block {PRECOND_BLOCK}")))
         if args.precondition == "steady":
             volume = args.steady_bytes if args.steady_bytes is not None else prep["bytes"]
             timed("precondition_random", lambda: json.loads(guest.ssh(

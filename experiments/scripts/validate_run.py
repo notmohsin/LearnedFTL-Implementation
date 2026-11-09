@@ -276,15 +276,22 @@ def validate(run_dir: Path) -> dict:
                nand_programs=h["nand_programs"], write_lpns=rec["write_lpns"])
 
     # ---- 6, 7, 12: in-FEMU structural checks ----------------------------------
-    for name, per_op, ops_count in (
-            ("energy_read", 3.5, rec["nand_reads_user"] + rec["nand_reads_translation"] + rec["nand_reads_gc"]),
-            ("energy_write", 16.7, rec["nand_writes_user"] + rec["nand_writes_translation"] + rec["nand_writes_gc"]),
-            ("energy_erase", 132.0, rec["nand_erases"])):
-        report.add("12", f"{name} == {per_op} x NAND ops (offline, +-0.5)", "HARD",
-                   abs(rec[name] - per_op * ops_count) <= 0.5, femu=rec[name], expected=per_op * ops_count)
-    for inv, key in (("6", "inv6_violations"), ("12", "inv12_violations")):
-        report.add(inv, f"in-FEMU {key} == 0 (baseline and workload)", "HARD",
-                   rec[key] == 0 and base[key] == 0, workload=rec[key], baseline=base[key])
+    # 3.5 and 132 are exact in binary floating point, so those sums never drift;
+    # summing 16.7 does (1.4 after 3e9 writes). A tolerance just under half the
+    # per-op value still detects a single miscounted operation.
+    for name, per_op, tol, ops_count in (
+            ("energy_read", 3.5, 0.5, rec["nand_reads_user"] + rec["nand_reads_translation"] + rec["nand_reads_gc"]),
+            ("energy_write", 16.7, 8.0, rec["nand_writes_user"] + rec["nand_writes_translation"] + rec["nand_writes_gc"]),
+            ("energy_erase", 132.0, 0.5, rec["nand_erases"])):
+        report.add("12", f"{name} == {per_op} x NAND ops (tolerance {tol})", "HARD",
+                   abs(rec[name] - per_op * ops_count) <= tol, femu=rec[name], expected=per_op * ops_count)
+    report.add("6", "in-FEMU inv6_violations == 0 (baseline and workload)", "HARD",
+               rec["inv6_violations"] == 0 and base["inv6_violations"] == 0,
+               workload=rec["inv6_violations"], baseline=base["inv6_violations"])
+    # the in-FEMU energy check uses a fixed 0.5 tolerance, too tight for the
+    # write sum after ~1e9 writes; the offline checks above are authoritative
+    report.add("12", "in-FEMU energy flag (fixed 0.5 tolerance)", "REPORT", None,
+               workload=rec["inv12_violations"], baseline=base["inv12_violations"])
     if ftl == "learnedftl":
         report.add("7", "in-FEMU inv7_violations == 0 (baseline and workload)", "HARD",
                    rec["inv7_violations"] == 0 and base["inv7_violations"] == 0,
