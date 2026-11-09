@@ -340,6 +340,11 @@ struct statistics {
     uint64_t inv7_block_mismatches;
     uint64_t inv7_rmap_mismatches;
     uint64_t true_unmapped;
+    /* write path: every write LPN is buffered, absorbed by a live buffer
+     * duplicate, or dropped (KI-27) */
+    uint64_t writes_buffered;
+    uint64_t writes_absorbed;
+    uint64_t writes_dropped;
     uint64_t invalid_but_mapped;
 
     long double read_joule;

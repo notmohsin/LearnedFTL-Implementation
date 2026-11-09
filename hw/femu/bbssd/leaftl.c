@@ -672,6 +672,9 @@ static void ssd_init_statistics(struct ssd *ssd)
     st->inv7_violations = 0;
     st->nand_erases = 0;
     st->inv12_violations = 0;
+    st->writes_buffered = 0;
+    st->writes_absorbed = 0;
+    st->writes_dropped = 0;
     memset(&st->acct, 0, sizeof(st->acct));
     st->true_unmapped = 0;
     st->invalid_but_mapped = 0;
@@ -2425,6 +2428,14 @@ void count_segments(struct ssd* ssd) {
                (long long)ssd->stat.read_lpn_cnt);
         invariant_failures++;
     }
+    if (ssd->stat.writes_buffered + ssd->stat.writes_absorbed + ssd->stat.writes_dropped !=
+        ssd->stat.write_lpns) {
+        printf("INVARIANT FAILED: writes_buffered(%lld) + writes_absorbed(%lld) + "
+               "writes_dropped(%lld) != write_lpns(%lld)\n",
+               (long long)ssd->stat.writes_buffered, (long long)ssd->stat.writes_absorbed,
+               (long long)ssd->stat.writes_dropped, (long long)ssd->stat.write_lpns);
+        invariant_failures++;
+    }
     ssd->stat.inv2_violations = invariant_failures;
 
     /* Invariant 4 (INVARIANTS.md): every flash read issued inside ssd_read
@@ -2730,11 +2741,14 @@ void count_segments(struct ssd* ssd) {
     printf(",\"pre_first_write\":%" PRIu64 ",\"invalid_read_cnt\":%" PRIu64
            ",\"true_unmapped\":%" PRIu64 ",\"invalid_but_mapped\":%" PRIu64
            ",\"unmapped_tp\":%" PRIu64 ",\"model_corrections\":%" PRIu64
-           ",\"cmt_hit_invalid_gtd\":%" PRIu64 ",\"access_cnt\":%" PRIu64 "}\n",
+           ",\"cmt_hit_invalid_gtd\":%" PRIu64 ",\"access_cnt\":%" PRIu64
+           ",\"writes_buffered\":%" PRIu64 ",\"writes_absorbed\":%" PRIu64
+           ",\"writes_dropped\":%" PRIu64 "}\n",
            ssd->stat.pre_first_write, ssd->stat.invalid_read_cnt,
            ssd->stat.true_unmapped, ssd->stat.invalid_but_mapped,
            ssd->stat.unmapped_tp, (uint64_t)ssd->stat.model_correction,
-           ssd->stat.cmt_hit_invalid_gtd, ssd->stat.access_cnt);
+           ssd->stat.cmt_hit_invalid_gtd, ssd->stat.access_cnt,
+           ssd->stat.writes_buffered, ssd->stat.writes_absorbed, ssd->stat.writes_dropped);
 
     printf("read joule: %Lf\n", ssd->stat.read_joule);
     printf("write joule: %Lf\n", ssd->stat.write_joule);
@@ -2776,6 +2790,9 @@ void count_segments(struct ssd* ssd) {
     ssd->stat.inv7_violations = 0;
     ssd->stat.nand_erases = 0;
     ssd->stat.inv12_violations = 0;
+    ssd->stat.writes_buffered = 0;
+    ssd->stat.writes_absorbed = 0;
+    ssd->stat.writes_dropped = 0;
     memset(&ssd->stat.acct, 0, sizeof(ssd->stat.acct));
     ssd->stat.true_unmapped = 0;
     ssd->stat.invalid_but_mapped = 0;
@@ -3041,6 +3058,27 @@ static uint64_t ssd_write(struct ssd *ssd, NvmeRequest *req)
                 update_in_buffer = true;
                 break;
             }
+        }
+
+        if (update_in_buffer) {
+            /* not added to the buffer: a real duplicate only if the LPN is
+             * among the live slots [0, buffer_pointer); otherwise the write
+             * is dropped (stale slot match, or the flag carried over from an
+             * earlier LPN of this request: KI-27) */
+            bool live = false;
+            for (int i = 0; i < ssd->buffer_pointer; i++) {
+                if (ssd->buffer_lpns[i] == lpn) {
+                    live = true;
+                    break;
+                }
+            }
+            if (live) {
+                st->writes_absorbed++;
+            } else {
+                st->writes_dropped++;
+            }
+        } else {
+            st->writes_buffered++;
         }
 
         if (!update_in_buffer) {
