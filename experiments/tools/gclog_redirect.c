@@ -55,6 +55,16 @@ static FILE *call_next(const char *name, const char *path, const char *mode)
     return next(path, mode);
 }
 
+/* FEMU's FTL prints its stats with printf; when stdout is a file it is fully
+ * buffered and lost if QEMU dies. FEMU_STDOUT_LINEBUF=1 makes it line-buffered. */
+__attribute__((constructor)) static void linebuf_stdout(void)
+{
+    const char *v = getenv("FEMU_STDOUT_LINEBUF");
+    if (v && *v == '1') {
+        setvbuf(stdout, NULL, _IOLBF, 0);
+    }
+}
+
 FILE *fopen(const char *path, const char *mode)
 {
     return call_next("fopen", path, mode);

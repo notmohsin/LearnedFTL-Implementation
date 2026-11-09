@@ -512,6 +512,9 @@ def render_one(name: str, p: dict) -> list[str]:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--only", action="append", help="profile only traces with this stem (repeatable)")
+    parser.add_argument("--group", action="append",
+                        help="profile only this trace directory: traces, validation-traces, "
+                             "matrix-traces (repeatable)")
     parser.add_argument("--output-dir", type=Path, default=EXPERIMENTS_DIR / "traces")
     args = parser.parse_args()
 
@@ -519,17 +522,19 @@ def main() -> int:
     manifest = load_manifest()
     oids = lfs_oids()
     profiles_path = args.output_dir / "profiles.json"
-    previous = json.loads(profiles_path.read_text()) if profiles_path.exists() and args.only else {}
+    previous = json.loads(profiles_path.read_text()) \
+        if profiles_path.exists() and (args.only or args.group) else {}
 
     sources = [("traces", p) for p in sorted((EXPERIMENTS_DIR / "traces").glob("*.trace"))]
     sources += [("validation-traces", p) for p in sorted((EXPERIMENTS_DIR / "validation-traces").glob("*.trace"))]
+    sources += [("matrix-traces", p) for p in sorted((EXPERIMENTS_DIR / "matrix-traces").glob("*.trace"))]
 
     profiles: dict[str, dict] = {}
     with tempfile.TemporaryDirectory(prefix="profile_traces.") as tmp:
         workdir = Path(tmp)
         for group, path in sources:
             key = f"{group}/{path.stem}"
-            if args.only and path.stem not in args.only:
+            if (args.only and path.stem not in args.only) or (args.group and group not in args.group):
                 if key in previous:
                     profiles[key] = previous[key]
                 continue

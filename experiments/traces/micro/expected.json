@@ -1,0 +1,162 @@
+{
+  "write-read-buffered": {
+    "both": {
+      "read_lpns": [
+        "==",
+        32
+      ],
+      "write_lpns": [
+        "==",
+        256
+      ]
+    },
+    "learnedftl": {
+      "mapped_read_lpns": [
+        "==",
+        32
+      ],
+      "served_cmt_hits": [
+        "==",
+        32
+      ],
+      "served_translation_free": [
+        "==",
+        32
+      ],
+      "served_flash_reads": [
+        "==",
+        32
+      ],
+      "unmapped_read_lpns": [
+        "==",
+        0
+      ]
+    },
+    "leaftl": {
+      "buffer_hits": [
+        "==",
+        1
+      ],
+      "served_lpns": [
+        "==",
+        0
+      ],
+      "mapped_read_lpns": [
+        "==",
+        1
+      ],
+      "buffer_flushes": [
+        "==",
+        0
+      ],
+      "unmapped_read_lpns": [
+        "==",
+        31
+      ]
+    }
+  },
+  "read-unwritten": {
+    "both": {
+      "read_lpns": [
+        "==",
+        32
+      ],
+      "mapped_read_lpns": [
+        "==",
+        0
+      ],
+      "unmapped_read_lpns": [
+        "==",
+        32
+      ],
+      "served_lpns": [
+        "==",
+        0
+      ]
+    },
+    "leaftl": {
+      "pre_first_write": [
+        "==",
+        8
+      ]
+    },
+    "learnedftl": {
+      "unmapped_flash_reads": [
+        "==",
+        0
+      ]
+    }
+  },
+  "overwrite-then-read": {
+    "both": {
+      "read_lpns": [
+        "==",
+        16
+      ],
+      "write_lpns": [
+        "==",
+        4112
+      ]
+    },
+    "leaftl": {
+      "buffer_flushes": [
+        "==",
+        2
+      ],
+      "stale_map_entries": [
+        "==",
+        16
+      ],
+      "served_stale_page": [
+        ">=",
+        15
+      ],
+      "mapped_read_lpns": [
+        "==",
+        16
+      ]
+    },
+    "learnedftl": {
+      "stale_map_entries": [
+        "==",
+        0
+      ],
+      "served_stale_page": [
+        "==",
+        0
+      ],
+      "mapped_read_lpns": [
+        "==",
+        16
+      ]
+    }
+  },
+  "size-buckets": {
+    "both": {
+      "read_size_hist": [
+        "==",
+        [
+          1,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2
+        ]
+      ],
+      "write_size_hist": [
+        "==",
+        [
+          1,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2
+        ]
+      ]
+    }
+  }
+}
