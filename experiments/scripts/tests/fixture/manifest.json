@@ -1,0 +1,85 @@
+{
+  "run_id": "micro-leaftl-overwrite-then-read-none-s1-r1",
+  "ftl": "leaftl",
+  "workload": "overwrite-then-read",
+  "trace": "/home/mohsin/Implementations/LearnedFTL/experiments/traces/micro/overwrite-then-read.trace",
+  "trace_sha256": "dd66dc465daf602e1e2c8ce96551a65b226d9fedc274b4fba464a3376c406b03",
+  "seed": 1,
+  "precondition": "none",
+  "repeat": 1,
+  "devsz_mb": 30720,
+  "started": "2026-11-09T16:08:01.241724",
+  "host": "nano",
+  "host_kernel": "6.14.0-24-generic",
+  "image": "/home/mohsin/images/femu-pristine.qcow2",
+  "image_sha256": "145aa7138321f7c5d26e39fbeb4bb8d1c2e4bfdb3a8ccb1e32f71eb41f0989de",
+  "build": {
+    "ftl": "leaftl",
+    "commit": "5d18ecf45902bd22c41626764c9516f656d98261",
+    "source_file": "hw/femu/bbssd/leaftl.c",
+    "worktree": "/home/mohsin/Implementations/LearnedFTL/build-ftl/leaftl/src",
+    "binary": "/home/mohsin/Implementations/LearnedFTL/build-ftl/leaftl/build/qemu-system-x86_64",
+    "binary_sha256": "df8321e36ecf1d12b7ab789214e6747bf3be72181f427439c20a0c3df16c7725",
+    "switch_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "compiler": "cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+    "configure": "--enable-kvm --disable-werror --disable-docs --target-list=x86_64-softmmu",
+    "built": "2026-11-09T16:08:01"
+  },
+  "phases": {
+    "boot": {
+      "seconds": 59.7,
+      "result": {
+        "ssh_ready_s": 59.7
+      }
+    },
+    "guest_prep": {
+      "seconds": 6.4,
+      "result": {
+        "device": "nvme0n1",
+        "bytes": 32212254720,
+        "nomerges": 2,
+        "read_ahead_kb": 0,
+        "scheduler": "none",
+        "max_sectors_kb": 4096,
+        "max_hw_sectors_kb": 4096,
+        "logical_block_size": 512,
+        "guest_kernel": "5.15.0-198-generic"
+      }
+    },
+    "baseline_print": {
+      "seconds": 2.9,
+      "result": {
+        "invariant_failures": 0
+      }
+    },
+    "workload": {
+      "seconds": 4.0,
+      "result": {
+        "device_bytes": 32212254720,
+        "elapsed_s": 0.052,
+        "mode": "replay",
+        "read_lpns": 16,
+        "reads": 16,
+        "seed": 1,
+        "trace": "/tmp/femu/overwrite-then-read.trace",
+        "verify_checked": 16,
+        "verify_errors": 0,
+        "write_lpns": 4112,
+        "writes": 80
+      }
+    },
+    "final_print": {
+      "seconds": 3.3,
+      "result": {
+        "invariant_failures": 0
+      }
+    }
+  },
+  "status": "completed",
+  "accel": "tcg",
+  "guest_kernel": "5.15.0-198-generic",
+  "finished": "2026-11-09T16:09:44.630092",
+  "qemu_exit_code": 0,
+  "records": 2,
+  "validation_exit_code": 0
+}
