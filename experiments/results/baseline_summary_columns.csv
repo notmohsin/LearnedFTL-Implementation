@@ -4,7 +4,7 @@ workload,,Trace name (experiments/traces/TRACES.md).,manifest.json
 workload_description,,"Generator pattern, read share and footprint of the trace.",traces/profiles.json
 trace_ops,requests,"Requests in the replayed trace (100k validation stage, 1M matrix stage).",traces/profiles.json
 precondition,,none: empty device; fill: whole 30 GiB written sequentially first; steady: fill + 30 GiB of random 64 KiB overwrites.,run_femu.py
-repeats,count,Runs aggregated in this row.,results/<run>/
+repeats,count,Runs aggregated in this row.,results/<stage>/<run>/
 seeds,,Seeds used (write pattern and steady-state overwrite order).,manifest.json
 ents_per_tp,LPNs,"Mappings per translation page (native constant, not changed).",FEMU record (leaftl.c:502 / ld-tpftl.c:801)
 cmt_entries,entries,"CMT capacity (native constant, not changed).",FEMU record (leaftl.c:505 / ld-tpftl.c:809)
@@ -103,7 +103,7 @@ host_kernel,,Host kernel release.,manifest.json
 guest_kernel,,Guest kernel release.,guest_prep.sh
 run_dates,,Dates the runs started.,manifest.json
 notes,,Plain-language caveats for the row.,aggregate.py
-run_id,,Run directory name in experiments/results/ (baseline_runs.csv only).,manifest/records
+run_id,,Run directory name in experiments/results/<stage>/ (baseline_runs.csv only).,manifest/records
 seed,,Seed of this run (baseline_runs.csv only).,manifest/records
 repeat,,Repeat index (baseline_runs.csv only).,manifest/records
 valid,,True if every HARD invariant passed (baseline_runs.csv only).,manifest/records

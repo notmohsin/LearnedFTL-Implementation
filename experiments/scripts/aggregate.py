@@ -3,7 +3,7 @@
 
     aggregate.py [--results-dir experiments/results]
 
-Reads every <results-dir>/<run_id>/ written by run_femu.py (manifest.json,
+Reads every <results-dir>/<stage>/<run_id>/ written by run_femu.py (manifest.json,
 records.jsonl, validation.json, optional determinism.json) and writes, in
 <results-dir>/:
 
@@ -11,6 +11,9 @@ records.jsonl, validation.json, optional determinism.json) and writes, in
   baseline_summary.csv          one row per (FTL x workload x trace length x precondition),
                                 mean / sd / 95% CI over repeats
   baseline_summary_columns.csv  data dictionary: column, unit, definition, source
+  request_costs.csv             one row per setup (workload interval; micro stage left out): requests,
+                                CMT hits, NAND reads/writes by purpose, per request and per page
+  request_costs_columns.csv     data dictionary for request_costs.csv
 
 Everything is regenerated from the raw run directories; nothing is hand-edited.
 Runs with failed HARD invariants are kept (with the failure shown) but flagged
@@ -83,6 +86,186 @@ DEVICE_METRICS = [
 ]
 
 
+# request_costs.csv: one row per setup, the workload interval (trace replay) only; the micro stage is left out.
+# "During read requests" = issued while ssd_read was running, measured per request in FEMU (read_path_flash_reads,
+# user + translation reads). Data-page reads happen only in ssd_read in both FTLs, so the translation reads issued
+# during reads are read_path_flash_reads - nand_reads_user.
+REQUEST_COST_COLUMNS = [
+    ("stage", "", "Run stage: micro, validation (100k requests), matrix (1M), real (1M, UMass)."),
+    ("ftl", "", "leaftl or learnedftl."),
+    ("workload", "", "Trace name (experiments/traces/TRACES.md)."),
+    ("trace_ops", "requests", "Requests in the replayed trace."),
+    ("precondition", "", "none / warm / fill (README)."),
+    ("repeats", "count", "Runs of this setup; values are the mean over valid runs (repeats are identical, invariant 11)."),
+    ("runs_valid", "", "Runs passing every HARD invariant / runs."),
+    ("read_requests", "requests", "Read requests the FTL received in this phase."),
+    ("write_requests", "requests", "Write requests the FTL received in this phase."),
+    ("read_pages", "pages", "4 KiB pages read (read LPNs)."),
+    ("write_pages", "pages", "4 KiB pages written (write LPNs)."),
+    ("write_pages_absorbed", "pages", "LeaFTL: written pages that replaced a page still in its 2,048-page write buffer, "
+                                      "so only the newer one reaches flash (blank for LearnedFTL, which has no such buffer)."),
+    ("write_pages_dropped", "pages", "LeaFTL: written pages silently discarded by the buffer duplicate check (KI-27, a bug)."),
+    ("cmt_hits", "lookups", "CMT hits on the read path (the FTL's own counter)."),
+    ("cmt_misses", "lookups", "CMT misses on the read path (the FTL's own counter)."),
+    ("cmt_hit_rate", "fraction", "cmt_hits / (cmt_hits + cmt_misses); blank when there were no lookups. The FTL's own definition, including lookups for "
+                                 "never-written pages; a LeaFTL entry covers a translation page, a LearnedFTL entry one "
+                                 "page, so it is not comparable across FTLs: compare tp_reads_per_read_page instead."),
+    ("cmt_hit_rate_mapped", "fraction", "CMT hits among served reads of written data / served reads (the same "
+                                        "column as in baseline_summary.csv); the hit rate gap_to_belady is measured from."),
+    ("bound_lru_hit_rate_8192", "fraction", "LRU hit rate of an 8,192-entry cache on the trace's read stream, computed "
+                                            "offline (experiments/tools/cachesim.c), keyed like the FTL's entries: per "
+                                            "256-page translation page for LeaFTL, per page for LearnedFTL. Counted per "
+                                            "page, so pages of one request that follow its first page mostly hit."),
+    ("bound_belady_hit_rate_8192", "fraction", "Belady-OPT (a cache that knows the future) on the same stream and keying: "
+                                               "the best any replacement policy can do with 8,192 entries filled on read "
+                                               "misses. A true upper bound for LeaFTL only: LearnedFTL also fills its "
+                                               "cache on writes and prefetches the rest of each request, so it can exceed it."),
+    ("gap_to_belady", "fraction", "LeaFTL only: bound_belady_hit_rate_8192 - cmt_hit_rate_mapped, the headroom for a "
+                                  "better replacement policy. Blank for LearnedFTL (no valid bound)."),
+    ("nand_reads_user", "pages", "Flash reads of user data (incl. reads of a mispredicted page)."),
+    ("nand_reads_translation", "pages", "Flash reads of translation pages, all causes."),
+    ("nand_reads_gc", "pages", "Flash reads of valid data copied by garbage collection."),
+    ("nand_reads_total", "pages", "All flash reads: user + translation + GC."),
+    ("nand_writes_user", "pages", "Flash programs of host data."),
+    ("nand_writes_translation", "pages", "Flash programs of translation pages (always 0 for LearnedFTL: not charged, KI-25)."),
+    ("nand_writes_gc", "pages", "Flash programs of GC-migrated data (always 0 for LeaFTL: not programmed, KI-22)."),
+    ("nand_writes_total", "pages", "All flash programs: user + translation + GC."),
+    ("nand_erases", "blocks", "Block erases."),
+    ("nand_reads_during_reads", "pages", "Flash reads (user + translation) issued while the FTL was serving a read request."),
+    ("nand_reads_outside_reads", "pages", "All other flash reads: write requests, buffer flushes and GC (a GC started "
+                                          "inside a read, possible for LearnedFTL, is counted here)."),
+    ("tp_reads_during_reads", "pages", "Translation-page reads issued while serving read requests (the reads the CMT "
+                                       "exists to avoid): nand_reads_during_reads - nand_reads_user."),
+    ("tp_reads_outside_reads", "pages", "Translation-page reads outside read requests (map updates on writes and flushes, GC)."),
+    ("nand_reads_per_read_request", "flash reads / request", "nand_reads_during_reads / read_requests. All read "
+                                                             "columns are blank for traces with no reads."),
+    ("nand_reads_per_read_page", "flash reads / page", "nand_reads_during_reads / read_pages. Over all read pages, "
+                                                        "incl. pages the FTL failed to resolve (see lost_data_read_share)."),
+    ("tp_reads_per_read_request", "flash reads / request", "tp_reads_during_reads / read_requests."),
+    ("tp_reads_per_read_page", "flash reads / page", "tp_reads_during_reads / read_pages. Comparable across FTLs; 0 is ideal."),
+    ("nand_reads_per_write_request", "flash reads / request", "nand_reads_outside_reads / write_requests. All write "
+                                                              "columns are blank for traces with no writes."),
+    ("nand_reads_per_write_page", "flash reads / page", "nand_reads_outside_reads / write_pages."),
+    ("tp_reads_per_write_request", "flash reads / request", "tp_reads_outside_reads / write_requests."),
+    ("tp_reads_per_write_page", "flash reads / page", "tp_reads_outside_reads / write_pages."),
+    ("nand_writes_per_write_request", "flash programs / request", "nand_writes_total / write_requests."),
+    ("nand_writes_per_write_page", "flash programs / page", "nand_writes_total / write_pages (= WAF). Below 1 for "
+                                                             "LeaFTL when its buffer absorbs rewrites, drops writes "
+                                                             "(KI-27), or never fills (pages still buffered at the end "
+                                                             "are not programmed)."),
+    ("lost_data_read_share", "fraction", "Reads of written data the FTL did not return / reads of written "
+                                         "data (LeaFTL KI-27/KI-28); blank when no read targeted written data. Quote with LeaFTL's per-read costs: a lost read "
+                                         "costs a translation read but no data read, which lowers those averages."),
+    ("notes", "", "Caveats for this row, including why any field in it is blank."),
+]
+
+
+def per(num, den):
+    return num / den if den else None
+
+
+def phase_costs(rec: dict) -> dict:
+    reads_total = rec["nand_reads_user"] + rec["nand_reads_translation"] + rec["nand_reads_gc"]
+    writes_total = rec["nand_writes_user"] + rec["nand_writes_translation"] + rec["nand_writes_gc"]
+    during = rec["read_path_flash_reads"]
+    tp_during = during - rec["nand_reads_user"]
+    tp_outside = rec["nand_reads_translation"] - tp_during
+    outside = reads_total - during
+    lookups = rec["cmt_hits"] + rec["cmt_misses"]
+    return {
+        "read_requests": rec["read_reqs"], "write_requests": rec["write_reqs"],
+        "read_pages": rec["read_lpns"], "write_pages": rec["write_lpns"],
+        "write_pages_absorbed": rec.get("writes_absorbed"), "write_pages_dropped": rec.get("writes_dropped"),
+        "cmt_hits": rec["cmt_hits"], "cmt_misses": rec["cmt_misses"], "cmt_hit_rate": per(rec["cmt_hits"], lookups),
+        "nand_reads_user": rec["nand_reads_user"], "nand_reads_translation": rec["nand_reads_translation"],
+        "nand_reads_gc": rec["nand_reads_gc"], "nand_reads_total": reads_total,
+        "nand_writes_user": rec["nand_writes_user"], "nand_writes_translation": rec["nand_writes_translation"],
+        "nand_writes_gc": rec["nand_writes_gc"], "nand_writes_total": writes_total, "nand_erases": rec["nand_erases"],
+        "nand_reads_during_reads": during, "nand_reads_outside_reads": outside,
+        "tp_reads_during_reads": tp_during, "tp_reads_outside_reads": tp_outside,
+        "nand_reads_per_read_request": per(during, rec["read_reqs"]),
+        "nand_reads_per_read_page": per(during, rec["read_lpns"]),
+        "tp_reads_per_read_request": per(tp_during, rec["read_reqs"]),
+        "tp_reads_per_read_page": per(tp_during, rec["read_lpns"]),
+        "nand_reads_per_write_request": per(outside, rec["write_reqs"]),
+        "nand_reads_per_write_page": per(outside, rec["write_lpns"]),
+        "tp_reads_per_write_request": per(tp_outside, rec["write_reqs"]),
+        "tp_reads_per_write_page": per(tp_outside, rec["write_lpns"]),
+        "nand_writes_per_write_request": per(writes_total, rec["write_reqs"]),
+        "nand_writes_per_write_page": per(writes_total, rec["write_lpns"]),
+    }
+
+
+def request_costs(runs: list[dict], rows: list[dict]) -> list[dict]:
+    groups = defaultdict(list)
+    for run, row in zip(runs, rows):
+        groups[(row["ftl"], row["workload"], row["trace_ops"], row["precondition"])].append((run, row))
+    out = []
+    for (ftl, workload, ops, precondition), members in sorted(groups.items(), key=lambda kv: (
+            kv[0][1], kv[0][2] or 0, kv[0][3], kv[0][0])):
+        valid = [(run, row) for run, row in members if row["valid"]] or members
+        stage = members[0][1]["run_id"].split("-", 1)[0]
+        if stage == "micro":
+            continue
+        costs = [phase_costs(run["records"][-1]) for run, _ in valid]
+        r = {"stage": stage, "ftl": ftl, "workload": workload, "trace_ops": ops, "precondition": precondition,
+             "repeats": len(members), "runs_valid": f"{sum(1 for _, row in members if row['valid'])}/{len(members)}"}
+        for name in costs[0]:
+            values = [c[name] for c in costs if c[name] is not None]
+            r[name] = statistics.fmean(values) if values else None
+        for name, pick in (("cmt_hit_rate_mapped", lambda row: row["cmt_hit_rate_mapped"]),
+                           ("bound_lru_hit_rate_8192", lambda row: row["_belady"]["lru_hit_rate"] if row["_belady"] else None),
+                           ("bound_belady_hit_rate_8192",
+                            lambda row: row["_belady"]["belady_hit_rate"] if row["_belady"] else None),
+                           ("gap_to_belady", lambda row: row["gap_to_belady"])):
+            values = [pick(row) for _, row in valid if pick(row) is not None]
+            r[name] = statistics.fmean(values) if values else None
+        lost = [row["lost_data_read_share"] for _, row in valid if row["lost_data_read_share"] is not None]
+        r["lost_data_read_share"] = statistics.fmean(lost) if lost else None
+        r["notes"] = cost_notes(r)
+        out.append(r)
+    return out
+
+
+def cost_notes(r: dict) -> str:
+    out = []
+    if r["precondition"] == "fill":
+        out.append("full device: GC stress, not a cache comparison (KI-21/KI-29)")
+    if r["ftl"] == "leaftl":
+        if r["lost_data_read_share"]:
+            out.append(f"LeaFTL did not return {100 * r['lost_data_read_share']:.1f}% of reads of written data "
+                       "(KI-27/KI-28); lost reads lower its per-read averages")
+        if r["nand_reads_gc"]:
+            out.append("GC-migrated data not programmed (KI-22)")
+        if r["write_pages"] and r["write_pages_dropped"] is not None:
+            out.append(f"of {r['write_pages']:,.0f} written pages {100 * r['write_pages_absorbed'] / r['write_pages']:.0f}% "
+                       f"were absorbed by the write buffer and {100 * r['write_pages_dropped'] / r['write_pages']:.0f}% "
+                       "dropped (KI-27); the rest reached flash or were still buffered at the end")
+    else:
+        out.append("translation-page writes not charged (KI-25); wrong model guesses cost no flash read (KI-20)")
+        out.append("blank write_pages_absorbed/dropped: LearnedFTL has no such write buffer")
+        out.append("LRU/Belady values are references, not bounds (cache filled on writes and by request prefetch); "
+                   "blank gap_to_belady by design")
+    # why fields are blank: each would be 0 / 0, or does not apply
+    if not r["read_pages"]:
+        out.append("blank read columns, hit rates, bounds, gap_to_belady and lost_data_read_share: the trace has no reads")
+    else:
+        if r["cmt_hits"] + r["cmt_misses"] == 0:
+            out.append("blank cmt_hit_rate: no CMT lookups, because every read was of a never-written page, which "
+                       + ("LeaFTL answers before the cache when nothing has been written yet (KI-11)"
+                          if r["ftl"] == "leaftl" else "LearnedFTL answers without the cache"))
+        if r["lost_data_read_share"] is None:
+            out.append("blank lost_data_read_share: no read targeted written data (empty device), so the share is 0/0")
+        if r["cmt_hit_rate_mapped"] is None:
+            out.append("blank cmt_hit_rate_mapped" + (" and gap_to_belady" if r["ftl"] == "leaftl" else "")
+                       + ": no served reads of written data")
+        elif r["ftl"] == "leaftl" and r["gap_to_belady"] is None:
+            out.append("blank gap_to_belady: no Belady value for this trace's read stream")
+    if not r["write_pages"]:
+        out.append("blank write columns: the trace has no writes")
+    return "; ".join(out)
+
+
 def ci95(values: list[float]) -> float | None:
     n = len(values)
     if n < 2:
@@ -101,9 +284,16 @@ def fmt(value):
     return str(value)
 
 
+def run_dirs(results_dir: Path) -> list[Path]:
+    """Run directories under <results-dir>/<stage>/; folders starting with '_' (logs, archives) are skipped."""
+    stages = [p for p in results_dir.iterdir() if p.is_dir() and not p.name.startswith("_")]
+    return sorted((r for s in stages for r in s.iterdir() if r.is_dir() and not r.name.startswith("_")),
+                  key=lambda p: p.name)
+
+
 def load_runs(results_dir: Path) -> list[dict]:
     runs = []
-    for run_dir in sorted(p for p in results_dir.iterdir() if p.is_dir() and not p.name.startswith("_")):
+    for run_dir in run_dirs(results_dir):
         if not (run_dir / "validation.json").exists():
             continue
         manifest = json.loads((run_dir / "manifest.json").read_text())
@@ -312,7 +502,7 @@ def dictionary() -> list[dict]:
     add("workload_description", "", "Generator pattern, read share and footprint of the trace.", "traces/profiles.json")
     add("trace_ops", "requests", "Requests in the replayed trace (100k validation stage, 1M matrix stage).", "traces/profiles.json")
     add("precondition", "", "none: empty device; fill: whole 30 GiB written sequentially first; steady: fill + 30 GiB of random 64 KiB overwrites.", "run_femu.py")
-    add("repeats", "count", "Runs aggregated in this row.", "results/<run>/")
+    add("repeats", "count", "Runs aggregated in this row.", "results/<stage>/<run>/")
     add("seeds", "", "Seeds used (write pattern and steady-state overwrite order).", "manifest.json")
     add("ents_per_tp", "LPNs", "Mappings per translation page (native constant, not changed).", "FEMU record (leaftl.c:502 / ld-tpftl.c:801)")
     add("cmt_entries", "entries", "CMT capacity (native constant, not changed).", "FEMU record (leaftl.c:505 / ld-tpftl.c:809)")
@@ -395,7 +585,7 @@ def main() -> int:
         writer.writeheader()
         writer.writerows(columns)
         for extra, unit, definition in (
-                ("run_id", "", "Run directory name in experiments/results/ (baseline_runs.csv only)."),
+                ("run_id", "", "Run directory name in experiments/results/<stage>/ (baseline_runs.csv only)."),
                 ("seed", "", "Seed of this run (baseline_runs.csv only)."),
                 ("repeat", "", "Repeat index (baseline_runs.csv only)."),
                 ("valid", "", "True if every HARD invariant passed (baseline_runs.csv only)."),
@@ -421,7 +611,22 @@ def main() -> int:
         writer.writeheader()
         for row in rows:
             writer.writerow({k: fmt(row.get(k)) for k in run_cols})
-    print(f"{len(rows)} runs -> {len(summary)} summary rows in {args.results_dir}")
+    costs = request_costs(runs, rows)
+    cost_names = [c for c, _, _ in REQUEST_COST_COLUMNS]
+    if set(costs[0]) != set(cost_names):  # every request_costs column documented, and vice versa
+        sys.exit(f"request_costs dictionary out of sync: {sorted(set(costs[0]) ^ set(cost_names))}")
+    with (args.results_dir / "request_costs.csv").open("w", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=cost_names)
+        writer.writeheader()
+        for r in costs:
+            writer.writerow({k: fmt(r.get(k)) for k in cost_names})
+    with (args.results_dir / "request_costs_columns.csv").open("w", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=["column", "unit", "definition", "source"])
+        writer.writeheader()
+        for name, unit, definition in REQUEST_COST_COLUMNS:
+            writer.writerow({"column": name, "unit": unit, "definition": definition,
+                             "source": "records.jsonl (both stats records), validation.json"})
+    print(f"{len(rows)} runs -> {len(summary)} summary rows, {len(costs)} request-cost rows in {args.results_dir}")
     return 0
 
 

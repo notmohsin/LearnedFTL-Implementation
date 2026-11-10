@@ -43,7 +43,7 @@ Severity:
   FEMU flip command `cdw10=8` (`bb.c` `bb_flip`), which `experiments/scripts/femu_stat.py` can send.
 - **Effect:** counters accumulate from VM boot. Guest boot, partition probing and udev reads land in the
   first printed record. This is the most likely cause of the constant `cmt_hits=131` / `model_queries=4`
-  seen in every sequential run in the old `runs.csv`.
+  seen in every sequential run in the old hand-edited `runs.csv` (removed; in git history).
 - **Note:** the stats *print* (`cdw10=9`, `count_segments()`) zeroes most counters after printing
   (`leaftl.c` end of `count_segments`, `ld-tpftl.c:2546-2551`).
 - **Handling:** the run script prints once immediately before the workload and discards that record as a
@@ -86,6 +86,8 @@ Severity:
 - **Effect:** undefined behaviour in C. In practice the stale value usually differs from `INVALID_VAL`, so the
   read falls through to the true-map check (`get_maptbl_ent`), finds the LPN unmapped, charges 0 latency and
   counts a **single read** (`read_cnt` is 1 from the miss). This inflates `single_reads` for unmapped reads.
+- **In practice:** FEMU's counters are reproduced exactly (`leaftl_replica.py`) only when `vppn` is modelled as
+  keeping the value the previous `ssd_read` call left in the same stack slot, across requests.
 - **Handling:** precondition `fill`. Invariant 4 (read-cost accounting) cross-checks single/double/triple
   against NAND reads actually issued, which exposes reads counted as "single" with no flash read.
 
@@ -127,9 +129,11 @@ Severity:
 
 - **Where:** learning loop at the end of `buffer_flush` (`leaftl.c` around 2165-2190):
   when `i == buffer_size-1` the segment length is `i - last_pointer`, which excludes element `i`.
-- **Effect:** one LPN per 2048-LPN flush has no learned segment and cannot be predicted (the true map still
-  serves it).
-- **Handling:** documented.
+- **Effect:** one LPN per 2048-LPN flush has no learned segment. Unless an older segment covers it, the lookup is a
+  model miss, `vppn` becomes `INVALID_VAL` and the read returns no data (an earlier version of this entry said the
+  true map still serves it; it does not). Measured with `experiments/tools/leaftl_replica.py --fix last`: it moves
+  the lost-data share by less than 0.001.
+- **Handling:** documented; part of the lost data reported under KI-28.
 
 ### KI-10: LPN 0 used as a sentinel (LeaFTL)
 
@@ -303,18 +307,34 @@ are stable). None is fixed; each is measured and reported.
 
 ### KI-28: The learned lookup fails for many written LPNs (LeaFTL)
 
-- **Where:** `ssd_read` after a CMT miss: `process_translation_page_read` reads the translation page and queries the
-  learned segments; when no segment yields the LPN (`model_miss`), `vppn` stays `INVALID_VAL` and the read is skipped
-  without returning data (`leaftl.c`, the `vppn == INVALID_VAL` branch).
-- **Effect:** measured on the 100k validation traces under `warm` (every read LPN written first, no GC):
-  `model_misses == invalid_read_cnt` exactly, and `invalid_but_mapped` (page map has the LPN, the FTL does not find
-  it) is ~43% of reads on `mixed-50-seq-50-random` and ~40% on `seq-mixed`; ~5% after a sequential `fill`. The share
-  grows as the written LPNs become less contiguous. The segment builder in `buffer_flush` covers every LPN of a flush
-  except the last (KI-9), so the losses come from inside the segment structures (`flush_lpn_ppn_mappings` and the
-  approximate-segment / CRB search). The exact line has not been isolated.
+- **Where:** two bugs in the segment store; the read then takes the `vppn == INVALID_VAL` branch of `ssd_read` and
+  returns no data.
+  1. `segment_insert_simple_segment` (`leaftl.c:1584-1634`): when the group's top level holds exactly one segment,
+     `q = sg->segment_head->next` is NULL, the `while (q)` loop (`:1606`) never runs, and the function returns
+     without linking the new segment (unless it lies entirely below the head, `:1596`). A level holds exactly one
+     segment after a group's first insert and after every overlap (`level_seg_mgmt_insert`, `:1749-1757`), so this
+     is the common case: 82% of all segments built in the 80 replayed runs were dropped.
+  2. `compact` (`:1859`), called every 1,000,000 written LPNs of an interval (`ssd_write`, `:3053`), deletes lower
+     levels that `get_valid_lpns` (`:1650`) reports as fully shadowed. `get_valid_lpns` marks the LPNs of a
+     conflict-resolution buffer (CRB) as 0 instead of 1 (`:1672`) and skips the last LPN of an accurate segment
+     (`:1658`), so levels that hold the only mapping for some LPNs are freed.
+
+  A dropped segment's CRB has already been pushed onto the group's CRB list by `regression` (`:1494-1509`), and the
+  CRB search scans every CRB of the group (`:1556-1571`), so scattered (inaccurate) writes stay partly findable as
+  model corrections; contiguous (accurate) segments have no CRB and are lost outright.
+- **Evidence:** `experiments/tools/leaftl_replica.py` re-implements the write buffer, `buffer_flush`, `regression`,
+  segment insertion, `all_seg_get_ppn`, the CMT and `compact`, driven by each run's FEMU request log. On all 80
+  LeaFTL runs without GC it reproduces FEMU's read-partition, model, CMT and write counters exactly (3,040
+  counters, 0 mismatches; `experiments/tools/ki28_attribution.py`). Replayed with bug 1 switched off, the
+  lost-data share is at most 0.0002 on every 100k-request and real-trace run, and 0.003-0.117 on the 1M-request runs
+  that reach `compact`; with bugs 1 and 2 off it is at most 0.0002 everywhere, and 0 with KI-9, KI-27 and KI-30 also
+  off. Fixed alone, KI-9, KI-27 and KI-30 never remove the loss: they only change which segments bug 1 drops (KI-30
+  alone moves the share by up to +0.21). Per-run values: `experiments/results/ki28_attribution.csv`.
+- **Effect:** under `warm`, 8-63% of reads of written data are not returned (`invalid_but_mapped`,
+  `model_misses == invalid_read_cnt`).
 - **Handling:** measured as `invalid_but_mapped` and `lost_data_read_share` (KNOWN, invariant 10). LeaFTL's
   translation-free ratio and flash reads per read are computed over the reads it did serve, so they must always be
-  read together with its lost-data share.
+  read together with its lost-data share. Not fixed (authors' code unchanged).
 
 ### KI-29: GC thrashes on a full device (LearnedFTL)
 
@@ -330,3 +350,15 @@ are stable). None is fixed; each is measured and reported.
   cache comparisons. The `warm` condition (footprint ≤ 15.3 GiB of 30 GiB) keeps LearnedFTL out of this regime;
   even there, 1M-op write-heavy traces start GC late (`uniform-mixed` 1M: WAF 1.82, 144 GC runs).
 
+### KI-30: `buffer_flush` sorts one slot past the write buffer (LeaFTL)
+
+- **Where:** `quick_sort(ssd->buffer_lpns, 0, sp->buffer_size)` (`leaftl.c:2143`; also `GC_flush`, `:2011`), but
+  `quick_sort` (`util.c:53`) takes an inclusive upper index, so it sorts 2049 elements of a 2048-element array.
+  `g_malloc0(2048 * 8)` returns a glibc chunk with 16,392 usable bytes, so element 2048 is the next chunk's
+  `prev_size` field, which malloc never uses while this chunk is in use: no crash, but a hidden 2049th slot that
+  starts at 0 and keeps whatever the sort leaves there.
+- **Effect:** each flush keeps the 2048 smallest of 2049 values (the 2048 new LPNs and the hidden slot). The largest goes
+  to the hidden slot and is neither mapped nor segmented in that flush; the previous flush's leftover (LPN 0 on the
+  first flush) is mapped again instead. `leaftl_replica.py` models the slot this way and reproduces FEMU's counters
+  exactly, which confirms it.
+- **Handling:** documented; its effect on lost reads is measured under KI-28 (`--fix sort`).
