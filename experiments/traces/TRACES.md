@@ -44,44 +44,44 @@ Keyings used for cache bounds:
 
 | Trace | Ops | Read % (req) | Mean KiB | Footprint GiB | Seq. share | Top-20% share | RAW share (none) | LRU tp256 @8192 | LFU tp256 @8192 | Belady tp256 @8192 | LRU lpn @8192 | LFU lpn @8192 | Belady lpn @8192 | SHA OK |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---|
-| [traces/mixed-50-seq-50-random](#tracesmixed-50-seq-50-random) | 10,000,000 | 50.0 | 23.0 | 24.993 | 6.26% | 33.23% | 77.66% | 93.20% | 91.23% | 96.80% | 0.09% | 0.13% | 4.24% | yes |
-| [traces/seq-mixed](#tracesseq-mixed) | 10,000,000 | 50.0 | 23.0 | 24.984 | 25.00% | 42.26% | 77.83% | 97.83% | 98.48% | 98.51% | 0.00% | 0.00% | 0.68% | yes |
-| [traces/uniform-mixed](#tracesuniform-mixed) | 10,000,000 | 50.0 | 23.0 | 24.996 | 0.00% | 29.83% | 77.48% | 87.94% | 87.93% | 94.35% | 0.12% | 0.13% | 4.88% | yes |
-| [traces/uniform-read](#tracesuniform-read) | 10,000,000 | 100.0 | 23.0 | 24.996 | 0.00% | 29.80% | 0.00% | 87.96% | 87.96% | 94.37% | 0.12% | 0.13% | 4.89% | yes |
-| [traces/uniform-write](#tracesuniform-write) | 10,000,000 | 0.0 | 23.0 | 24.996 | 0.00% | 29.79% | n/a | n/a | n/a | n/a | n/a | n/a | n/a | yes |
-| [traces/zipf-80-20](#traceszipf-80-20) | 100,000 | 50.1 | 4.0 | 0.106 | 1.81% | 77.84% | 69.81% | 97.96% | 97.96% | 97.96% | 69.20% | 69.33% | 69.90% | yes |
-| [traces/zipf-hot10-access90-a1.2](#traceszipf-hot10-access90-a12) | 10,000,000 | 50.0 | 23.0 | 16.194 | 1.15% | 92.18% | 90.51% | 98.58% | 98.62% | 99.31% | 76.81% | 81.03% | 82.97% | yes |
-| [traces/zipf-hot20-access80-a0.8](#traceszipf-hot20-access80-a08) | 10,000,000 | 50.0 | 23.0 | 22.757 | 0.01% | 79.04% | 83.34% | 96.13% | 96.73% | 98.21% | 14.72% | 23.56% | 31.26% | yes |
-| [traces/zipf-hot20-access80-a1.2](#traceszipf-hot20-access80-a12) | 10,000,000 | 50.0 | 23.0 | 20.988 | 0.89% | 85.30% | 85.72% | 97.28% | 97.33% | 98.72% | 66.40% | 71.27% | 73.20% | yes |
-| [validation-traces/mixed-50-seq-50-random](#validation-tracesmixed-50-seq-50-random) | 100,000 | 50.1 | 23.1 | 2.126 | 6.27% | 22.65% | 1.71% | 92.72% | 92.54% | 94.02% | 0.08% | 0.08% | 1.69% | yes |
-| [validation-traces/seq-mixed](#validation-tracesseq-mixed) | 100,000 | 50.3 | 23.1 | 2.207 | 25.26% | 20.00% | 0.00% | 97.87% | 97.87% | 97.87% | 0.00% | 0.00% | 0.00% | yes |
-| [validation-traces/uniform-mixed](#validation-tracesuniform-mixed) | 100,000 | 50.2 | 23.0 | 2.102 | 0.00% | 23.45% | 2.21% | 87.51% | 87.50% | 91.69% | 0.10% | 0.10% | 2.28% | yes |
-| [validation-traces/uniform-read](#validation-tracesuniform-read) | 100,000 | 100.0 | 23.1 | 2.109 | 0.00% | 23.47% | 0.00% | 87.74% | 87.76% | 93.07% | 0.13% | 0.13% | 3.60% | yes |
-| [validation-traces/uniform-write](#validation-tracesuniform-write) | 100,000 | 0.0 | 23.1 | 2.104 | 0.00% | 23.45% | n/a | n/a | n/a | n/a | n/a | n/a | n/a | yes |
-| [validation-traces/zipf-80-20](#validation-traceszipf-80-20) | 100,000 | 50.1 | 4.0 | 0.106 | 1.81% | 77.84% | 69.81% | 97.96% | 97.96% | 97.96% | 69.20% | 69.33% | 69.90% | yes |
-| [validation-traces/zipf-hot10-access90-a1.2](#validation-traceszipf-hot10-access90-a12) | 100,000 | 49.9 | 23.0 | 0.405 | 1.14% | 85.27% | 79.74% | 97.90% | 97.90% | 97.90% | 75.75% | 77.17% | 79.68% | yes |
-| [validation-traces/zipf-hot20-access80-a0.8](#validation-traceszipf-hot20-access80-a08) | 100,000 | 50.1 | 23.0 | 1.354 | 0.02% | 50.53% | 31.25% | 95.15% | 95.19% | 95.57% | 14.22% | 18.42% | 28.31% | yes |
-| [validation-traces/zipf-hot20-access80-a1.2](#validation-traceszipf-hot20-access80-a12) | 100,000 | 50.1 | 23.0 | 0.615 | 0.87% | 77.54% | 70.45% | 96.60% | 96.60% | 96.62% | 65.91% | 67.74% | 70.42% | yes |
-| [matrix-traces/mixed-50-seq-50-random](#matrix-tracesmixed-50-seq-50-random) | 1,000,000 | 49.9 | 23.0 | 15.319 | 6.24% | 34.13% | 16.73% | 93.13% | 91.21% | 96.54% | 0.10% | 0.10% | 3.98% | yes |
-| [matrix-traces/seq-mixed](#matrix-tracesseq-mixed) | 1,000,000 | 50.1 | 23.0 | 14.922 | 24.95% | 33.09% | 17.34% | 97.83% | 98.16% | 98.40% | 0.00% | 0.00% | 0.57% | yes |
-| [matrix-traces/uniform-mixed](#matrix-tracesuniform-mixed) | 1,000,000 | 50.0 | 23.0 | 14.604 | 0.00% | 35.09% | 18.97% | 87.91% | 87.91% | 94.11% | 0.11% | 0.11% | 4.65% | yes |
-| [matrix-traces/uniform-read](#matrix-tracesuniform-read) | 1,000,000 | 100.0 | 23.0 | 14.602 | 0.00% | 35.11% | 0.00% | 87.93% | 87.94% | 94.24% | 0.12% | 0.13% | 4.78% | yes |
-| [matrix-traces/uniform-write](#matrix-tracesuniform-write) | 1,000,000 | 0.0 | 23.0 | 14.600 | 0.00% | 35.07% | n/a | n/a | n/a | n/a | n/a | n/a | n/a | yes |
-| [matrix-traces/zipf-hot10-access90-a1.2](#matrix-traceszipf-hot10-access90-a12) | 1,000,000 | 50.0 | 23.0 | 2.904 | 1.15% | 89.41% | 85.41% | 98.51% | 98.52% | 99.05% | 76.78% | 80.27% | 82.71% | yes |
-| [matrix-traces/zipf-hot20-access80-a0.8](#matrix-traceszipf-hot20-access80-a08) | 1,000,000 | 49.9 | 23.0 | 7.678 | 0.01% | 66.47% | 56.25% | 96.05% | 96.52% | 97.96% | 14.83% | 22.75% | 31.10% | yes |
-| [matrix-traces/zipf-hot20-access80-a1.2](#matrix-traceszipf-hot20-access80-a12) | 1,000,000 | 50.1 | 23.0 | 4.858 | 0.89% | 82.25% | 75.77% | 97.20% | 97.23% | 98.46% | 66.13% | 70.01% | 72.77% | yes |
-| [real-traces/financial1](#real-tracesfinancial1) | 1,000,000 | 21.3 | 7.6 | 1.747 | 0.26% | 64.18% | 43.87% | 99.72% | 99.72% | 99.72% | 59.55% | 29.77% | 67.63% | yes |
-| [real-traces/financial2](#real-tracesfinancial2) | 1,000,000 | 81.8 | 5.7 | 0.408 | 0.43% | 82.05% | 26.29% | 99.70% | 99.70% | 99.70% | 81.35% | 65.18% | 88.95% | yes |
-| [real-traces/websearch1](#real-traceswebsearch1) | 1,000,000 | 100.0 | 15.2 | 5.982 | 6.46% | 38.29% | 0.00% | 98.11% | 95.06% | 99.14% | 0.01% | 0.01% | 2.06% | yes |
-| [real-traces/websearch2](#real-traceswebsearch2) | 1,000,000 | 100.0 | 15.0 | 5.932 | 6.35% | 38.40% | 0.00% | 98.05% | 95.00% | 99.12% | 0.00% | 0.00% | 2.11% | yes |
-| [real-traces/websearch3](#real-traceswebsearch3) | 1,000,000 | 100.0 | 15.4 | 6.002 | 8.06% | 38.41% | 0.00% | 98.17% | 95.60% | 99.17% | 0.00% | 0.00% | 2.08% | yes |
+| [traces/full/mixed-50-seq-50-random](#tracesfullmixed-50-seq-50-random) | 10,000,000 | 50.0 | 23.0 | 24.993 | 6.26% | 33.23% | 77.66% | 93.20% | 91.23% | 96.80% | 0.09% | 0.13% | 4.24% | yes |
+| [traces/full/seq-mixed](#tracesfullseq-mixed) | 10,000,000 | 50.0 | 23.0 | 24.984 | 25.00% | 42.26% | 77.83% | 97.83% | 98.48% | 98.51% | 0.00% | 0.00% | 0.68% | yes |
+| [traces/full/uniform-mixed](#tracesfulluniform-mixed) | 10,000,000 | 50.0 | 23.0 | 24.996 | 0.00% | 29.83% | 77.48% | 87.94% | 87.93% | 94.35% | 0.12% | 0.13% | 4.88% | yes |
+| [traces/full/uniform-read](#tracesfulluniform-read) | 10,000,000 | 100.0 | 23.0 | 24.996 | 0.00% | 29.80% | 0.00% | 87.96% | 87.96% | 94.37% | 0.12% | 0.13% | 4.89% | yes |
+| [traces/full/uniform-write](#tracesfulluniform-write) | 10,000,000 | 0.0 | 23.0 | 24.996 | 0.00% | 29.79% | n/a | n/a | n/a | n/a | n/a | n/a | n/a | yes |
+| [traces/full/zipf-80-20](#tracesfullzipf-80-20) | 100,000 | 50.1 | 4.0 | 0.106 | 1.81% | 77.84% | 69.81% | 97.96% | 97.96% | 97.96% | 69.20% | 69.33% | 69.90% | yes |
+| [traces/full/zipf-hot10-access90-a1.2](#tracesfullzipf-hot10-access90-a12) | 10,000,000 | 50.0 | 23.0 | 16.194 | 1.15% | 92.18% | 90.51% | 98.58% | 98.62% | 99.31% | 76.81% | 81.03% | 82.97% | yes |
+| [traces/full/zipf-hot20-access80-a0.8](#tracesfullzipf-hot20-access80-a08) | 10,000,000 | 50.0 | 23.0 | 22.757 | 0.01% | 79.04% | 83.34% | 96.13% | 96.73% | 98.21% | 14.72% | 23.56% | 31.26% | yes |
+| [traces/full/zipf-hot20-access80-a1.2](#tracesfullzipf-hot20-access80-a12) | 10,000,000 | 50.0 | 23.0 | 20.988 | 0.89% | 85.30% | 85.72% | 97.28% | 97.33% | 98.72% | 66.40% | 71.27% | 73.20% | yes |
+| [traces/validation/mixed-50-seq-50-random](#tracesvalidationmixed-50-seq-50-random) | 100,000 | 50.1 | 23.1 | 2.126 | 6.27% | 22.65% | 1.71% | 92.72% | 92.54% | 94.02% | 0.08% | 0.08% | 1.69% | yes |
+| [traces/validation/seq-mixed](#tracesvalidationseq-mixed) | 100,000 | 50.3 | 23.1 | 2.207 | 25.26% | 20.00% | 0.00% | 97.87% | 97.87% | 97.87% | 0.00% | 0.00% | 0.00% | yes |
+| [traces/validation/uniform-mixed](#tracesvalidationuniform-mixed) | 100,000 | 50.2 | 23.0 | 2.102 | 0.00% | 23.45% | 2.21% | 87.51% | 87.50% | 91.69% | 0.10% | 0.10% | 2.28% | yes |
+| [traces/validation/uniform-read](#tracesvalidationuniform-read) | 100,000 | 100.0 | 23.1 | 2.109 | 0.00% | 23.47% | 0.00% | 87.74% | 87.76% | 93.07% | 0.13% | 0.13% | 3.60% | yes |
+| [traces/validation/uniform-write](#tracesvalidationuniform-write) | 100,000 | 0.0 | 23.1 | 2.104 | 0.00% | 23.45% | n/a | n/a | n/a | n/a | n/a | n/a | n/a | yes |
+| [traces/validation/zipf-80-20](#tracesvalidationzipf-80-20) | 100,000 | 50.1 | 4.0 | 0.106 | 1.81% | 77.84% | 69.81% | 97.96% | 97.96% | 97.96% | 69.20% | 69.33% | 69.90% | yes |
+| [traces/validation/zipf-hot10-access90-a1.2](#tracesvalidationzipf-hot10-access90-a12) | 100,000 | 49.9 | 23.0 | 0.405 | 1.14% | 85.27% | 79.74% | 97.90% | 97.90% | 97.90% | 75.75% | 77.17% | 79.68% | yes |
+| [traces/validation/zipf-hot20-access80-a0.8](#tracesvalidationzipf-hot20-access80-a08) | 100,000 | 50.1 | 23.0 | 1.354 | 0.02% | 50.53% | 31.25% | 95.15% | 95.19% | 95.57% | 14.22% | 18.42% | 28.31% | yes |
+| [traces/validation/zipf-hot20-access80-a1.2](#tracesvalidationzipf-hot20-access80-a12) | 100,000 | 50.1 | 23.0 | 0.615 | 0.87% | 77.54% | 70.45% | 96.60% | 96.60% | 96.62% | 65.91% | 67.74% | 70.42% | yes |
+| [traces/matrix/mixed-50-seq-50-random](#tracesmatrixmixed-50-seq-50-random) | 1,000,000 | 49.9 | 23.0 | 15.319 | 6.24% | 34.13% | 16.73% | 93.13% | 91.21% | 96.54% | 0.10% | 0.10% | 3.98% | yes |
+| [traces/matrix/seq-mixed](#tracesmatrixseq-mixed) | 1,000,000 | 50.1 | 23.0 | 14.922 | 24.95% | 33.09% | 17.34% | 97.83% | 98.16% | 98.40% | 0.00% | 0.00% | 0.57% | yes |
+| [traces/matrix/uniform-mixed](#tracesmatrixuniform-mixed) | 1,000,000 | 50.0 | 23.0 | 14.604 | 0.00% | 35.09% | 18.97% | 87.91% | 87.91% | 94.11% | 0.11% | 0.11% | 4.65% | yes |
+| [traces/matrix/uniform-read](#tracesmatrixuniform-read) | 1,000,000 | 100.0 | 23.0 | 14.602 | 0.00% | 35.11% | 0.00% | 87.93% | 87.94% | 94.24% | 0.12% | 0.13% | 4.78% | yes |
+| [traces/matrix/uniform-write](#tracesmatrixuniform-write) | 1,000,000 | 0.0 | 23.0 | 14.600 | 0.00% | 35.07% | n/a | n/a | n/a | n/a | n/a | n/a | n/a | yes |
+| [traces/matrix/zipf-hot10-access90-a1.2](#tracesmatrixzipf-hot10-access90-a12) | 1,000,000 | 50.0 | 23.0 | 2.904 | 1.15% | 89.41% | 85.41% | 98.51% | 98.52% | 99.05% | 76.78% | 80.27% | 82.71% | yes |
+| [traces/matrix/zipf-hot20-access80-a0.8](#tracesmatrixzipf-hot20-access80-a08) | 1,000,000 | 49.9 | 23.0 | 7.678 | 0.01% | 66.47% | 56.25% | 96.05% | 96.52% | 97.96% | 14.83% | 22.75% | 31.10% | yes |
+| [traces/matrix/zipf-hot20-access80-a1.2](#tracesmatrixzipf-hot20-access80-a12) | 1,000,000 | 50.1 | 23.0 | 4.858 | 0.89% | 82.25% | 75.77% | 97.20% | 97.23% | 98.46% | 66.13% | 70.01% | 72.77% | yes |
+| [traces/real/financial1](#tracesrealfinancial1) | 1,000,000 | 21.3 | 7.6 | 1.747 | 0.26% | 64.18% | 43.87% | 99.72% | 99.72% | 99.72% | 59.55% | 29.77% | 67.63% | yes |
+| [traces/real/financial2](#tracesrealfinancial2) | 1,000,000 | 81.8 | 5.7 | 0.408 | 0.43% | 82.05% | 26.29% | 99.70% | 99.70% | 99.70% | 81.35% | 65.18% | 88.95% | yes |
+| [traces/real/websearch1](#tracesrealwebsearch1) | 1,000,000 | 100.0 | 15.2 | 5.982 | 6.46% | 38.29% | 0.00% | 98.11% | 95.06% | 99.14% | 0.01% | 0.01% | 2.06% | yes |
+| [traces/real/websearch2](#tracesrealwebsearch2) | 1,000,000 | 100.0 | 15.0 | 5.932 | 6.35% | 38.40% | 0.00% | 98.05% | 95.00% | 99.12% | 0.00% | 0.00% | 2.11% | yes |
+| [traces/real/websearch3](#tracesrealwebsearch3) | 1,000,000 | 100.0 | 15.4 | 6.002 | 8.06% | 38.41% | 0.00% | 98.17% | 95.60% | 99.17% | 0.00% | 0.00% | 2.08% | yes |
 
-## traces/mixed-50-seq-50-random
+## traces/full/mixed-50-seq-50-random
 
 **Provenance**
 
 - address_range_gib: `25.0`
-- file: `experiments/traces/mixed-50-seq-50-random.trace`
+- file: `experiments/traces/full/mixed-50-seq-50-random.trace`
 - generator: `experiments/scripts/generate_workloads.py`
 - hot_access_percent: n/a
 - hot_region_percent: n/a
@@ -185,12 +185,12 @@ Keyings used for cache bounds:
 | `tp256` | 28,752,508 | 25,600 | 0.09% | 0 / 5 / 23,040 |
 | `tp512` | 28,752,508 | 12,800 | 0.04% | 0 / 3 / 11,416 |
 
-## traces/seq-mixed
+## traces/full/seq-mixed
 
 **Provenance**
 
 - address_range_gib: `25.0`
-- file: `experiments/traces/seq-mixed.trace`
+- file: `experiments/traces/full/seq-mixed.trace`
 - generator: `experiments/scripts/generate_workloads.py`
 - hot_access_percent: n/a
 - hot_region_percent: n/a
@@ -294,12 +294,12 @@ Keyings used for cache bounds:
 | `tp256` | 28,772,437 | 25,600 | 0.09% | 0 / 0 / 25,599 |
 | `tp512` | 28,772,437 | 12,800 | 0.04% | 0 / 0 / 12,799 |
 
-## traces/uniform-mixed
+## traces/full/uniform-mixed
 
 **Provenance**
 
 - address_range_gib: `25.0`
-- file: `experiments/traces/uniform-mixed.trace`
+- file: `experiments/traces/full/uniform-mixed.trace`
 - generator: `experiments/scripts/generate_workloads.py`
 - hot_access_percent: n/a
 - hot_region_percent: n/a
@@ -403,12 +403,12 @@ Keyings used for cache bounds:
 | `tp256` | 28,712,867 | 25,600 | 0.09% | 0 / 11,051 / 24,128 |
 | `tp512` | 28,712,867 | 12,800 | 0.04% | 0 / 5,490 / 12,065 |
 
-## traces/uniform-read
+## traces/full/uniform-read
 
 **Provenance**
 
 - address_range_gib: `25.0`
-- file: `experiments/traces/uniform-read.trace`
+- file: `experiments/traces/full/uniform-read.trace`
 - generator: `experiments/scripts/generate_workloads.py`
 - hot_access_percent: n/a
 - hot_region_percent: n/a
@@ -512,12 +512,12 @@ Keyings used for cache bounds:
 | `tp256` | 57,512,374 | 25,600 | 0.04% | 0 / 11,090 / 24,139 |
 | `tp512` | 57,512,374 | 12,800 | 0.02% | 0 / 5,494 / 12,067 |
 
-## traces/uniform-write
+## traces/full/uniform-write
 
 **Provenance**
 
 - address_range_gib: `25.0`
-- file: `experiments/traces/uniform-write.trace`
+- file: `experiments/traces/full/uniform-write.trace`
 - generator: `experiments/scripts/generate_workloads.py`
 - hot_access_percent: n/a
 - hot_region_percent: n/a
@@ -579,12 +579,12 @@ Keyings used for cache bounds:
 
 No reads in this trace, so there are no cache bounds.
 
-## traces/zipf-80-20
+## traces/full/zipf-80-20
 
 **Provenance**
 
 - address_range_gib: `1.0`
-- file: `experiments/traces/zipf-80-20.trace`
+- file: `experiments/traces/full/zipf-80-20.trace`
 - generator: `experiments/scripts/generate_8020_trace.py`
 - hot_access_percent: `80.0`
 - hot_region_percent: `20.0`
@@ -686,12 +686,12 @@ No reads in this trace, so there are no cache bounds.
 | `tp256` | 50,078 | 1,024 | 2.04% | 1 / 530 / 954 |
 | `tp512` | 50,078 | 512 | 1.02% | 1 / 276 / 481 |
 
-## traces/zipf-hot10-access90-a1.2
+## traces/full/zipf-hot10-access90-a1.2
 
 **Provenance**
 
 - address_range_gib: `25.0`
-- file: `experiments/traces/zipf-hot10-access90-a1.2.trace`
+- file: `experiments/traces/full/zipf-hot10-access90-a1.2.trace`
 - generator: `experiments/scripts/generate_workloads.py`
 - hot_access_percent: `90.0`
 - hot_region_percent: `10.0`
@@ -795,12 +795,12 @@ No reads in this trace, so there are no cache bounds.
 | `tp256` | 28,744,869 | 25,600 | 0.09% | 0 / 0 / 12,084 |
 | `tp512` | 28,744,869 | 12,800 | 0.04% | 0 / 0 / 6,199 |
 
-## traces/zipf-hot20-access80-a0.8
+## traces/full/zipf-hot20-access80-a0.8
 
 **Provenance**
 
 - address_range_gib: `25.0`
-- file: `experiments/traces/zipf-hot20-access80-a0.8.trace`
+- file: `experiments/traces/full/zipf-hot20-access80-a0.8.trace`
 - generator: `experiments/scripts/generate_workloads.py`
 - hot_access_percent: `80.0`
 - hot_region_percent: `20.0`
@@ -904,12 +904,12 @@ No reads in this trace, so there are no cache bounds.
 | `tp256` | 28,718,340 | 25,600 | 0.09% | 0 / 978 / 19,597 |
 | `tp512` | 28,718,340 | 12,800 | 0.04% | 0 / 478 / 9,847 |
 
-## traces/zipf-hot20-access80-a1.2
+## traces/full/zipf-hot20-access80-a1.2
 
 **Provenance**
 
 - address_range_gib: `25.0`
-- file: `experiments/traces/zipf-hot20-access80-a1.2.trace`
+- file: `experiments/traces/full/zipf-hot20-access80-a1.2.trace`
 - generator: `experiments/scripts/generate_workloads.py`
 - hot_access_percent: `80.0`
 - hot_region_percent: `20.0`
@@ -1013,11 +1013,11 @@ No reads in this trace, so there are no cache bounds.
 | `tp256` | 28,763,441 | 25,600 | 0.09% | 0 / 1 / 17,993 |
 | `tp512` | 28,763,441 | 12,800 | 0.04% | 0 / 1 / 9,059 |
 
-## validation-traces/mixed-50-seq-50-random
+## traces/validation/mixed-50-seq-50-random
 
 **Provenance**
 
-- file: `experiments/validation-traces/mixed-50-seq-50-random.trace`
+- file: `experiments/traces/validation/mixed-50-seq-50-random.trace`
 - generator: `experiments/scripts/prepare_validation_traces.py`
 - is_exact_prefix: `True`
 - parent: `experiments/traces/mixed-50-seq-50-random.trace`
@@ -1113,11 +1113,11 @@ No reads in this trace, so there are no cache bounds.
 | `tp256` | 288,440 | 17,253 | 5.98% | 0 / 0 / 9,673 |
 | `tp512` | 288,440 | 11,249 | 3.90% | 0 / 0 / 7,450 |
 
-## validation-traces/seq-mixed
+## traces/validation/seq-mixed
 
 **Provenance**
 
-- file: `experiments/validation-traces/seq-mixed.trace`
+- file: `experiments/traces/validation/seq-mixed.trace`
 - generator: `experiments/scripts/prepare_validation_traces.py`
 - is_exact_prefix: `True`
 - parent: `experiments/traces/seq-mixed.trace`
@@ -1213,11 +1213,11 @@ No reads in this trace, so there are no cache bounds.
 | `tp256` | 293,074 | 6,250 | 2.13% | 0 / 0 / 0 |
 | `tp512` | 293,074 | 3,125 | 1.07% | 0 / 0 / 0 |
 
-## validation-traces/uniform-mixed
+## traces/validation/uniform-mixed
 
 **Provenance**
 
-- file: `experiments/validation-traces/uniform-mixed.trace`
+- file: `experiments/traces/validation/uniform-mixed.trace`
 - generator: `experiments/scripts/prepare_validation_traces.py`
 - is_exact_prefix: `True`
 - parent: `experiments/traces/uniform-mixed.trace`
@@ -1313,11 +1313,11 @@ No reads in this trace, so there are no cache bounds.
 | `tp256` | 289,869 | 22,060 | 7.61% | 0 / 1,139 / 17,007 |
 | `tp512` | 289,869 | 12,553 | 4.33% | 0 / 2,688 / 10,671 |
 
-## validation-traces/uniform-read
+## traces/validation/uniform-read
 
 **Provenance**
 
-- file: `experiments/validation-traces/uniform-read.trace`
+- file: `experiments/traces/validation/uniform-read.trace`
 - generator: `experiments/scripts/prepare_validation_traces.py`
 - is_exact_prefix: `True`
 - parent: `experiments/traces/uniform-read.trace`
@@ -1413,11 +1413,11 @@ No reads in this trace, so there are no cache bounds.
 | `tp256` | 577,985 | 25,098 | 4.34% | 0 / 5,629 / 21,376 |
 | `tp512` | 577,985 | 12,794 | 2.21% | 0 / 4,111 / 11,550 |
 
-## validation-traces/uniform-write
+## traces/validation/uniform-write
 
 **Provenance**
 
-- file: `experiments/validation-traces/uniform-write.trace`
+- file: `experiments/traces/validation/uniform-write.trace`
 - generator: `experiments/scripts/prepare_validation_traces.py`
 - is_exact_prefix: `True`
 - parent: `experiments/traces/uniform-write.trace`
@@ -1471,11 +1471,11 @@ No reads in this trace, so there are no cache bounds.
 
 No reads in this trace, so there are no cache bounds.
 
-## validation-traces/zipf-80-20
+## traces/validation/zipf-80-20
 
 **Provenance**
 
-- file: `experiments/validation-traces/zipf-80-20.trace`
+- file: `experiments/traces/validation/zipf-80-20.trace`
 - generator: `experiments/scripts/prepare_validation_traces.py`
 - is_exact_prefix: `True`
 - parent: `experiments/traces/zipf-80-20.trace`
@@ -1571,11 +1571,11 @@ No reads in this trace, so there are no cache bounds.
 | `tp256` | 50,078 | 1,024 | 2.04% | 1 / 530 / 954 |
 | `tp512` | 50,078 | 512 | 1.02% | 1 / 276 / 481 |
 
-## validation-traces/zipf-hot10-access90-a1.2
+## traces/validation/zipf-hot10-access90-a1.2
 
 **Provenance**
 
-- file: `experiments/validation-traces/zipf-hot10-access90-a1.2.trace`
+- file: `experiments/traces/validation/zipf-hot10-access90-a1.2.trace`
 - generator: `experiments/scripts/prepare_validation_traces.py`
 - is_exact_prefix: `True`
 - parent: `experiments/traces/zipf-hot10-access90-a1.2.trace`
@@ -1671,11 +1671,11 @@ No reads in this trace, so there are no cache bounds.
 | `tp256` | 287,929 | 6,035 | 2.10% | 0 / 0 / 248 |
 | `tp512` | 287,929 | 5,083 | 1.77% | 0 / 0 / 251 |
 
-## validation-traces/zipf-hot20-access80-a0.8
+## traces/validation/zipf-hot20-access80-a0.8
 
 **Provenance**
 
-- file: `experiments/validation-traces/zipf-hot20-access80-a0.8.trace`
+- file: `experiments/traces/validation/zipf-hot20-access80-a0.8.trace`
 - generator: `experiments/scripts/prepare_validation_traces.py`
 - is_exact_prefix: `True`
 - parent: `experiments/traces/zipf-hot20-access80-a0.8.trace`
@@ -1771,11 +1771,11 @@ No reads in this trace, so there are no cache bounds.
 | `tp256` | 287,942 | 12,755 | 4.43% | 0 / 95 / 6,275 |
 | `tp512` | 287,942 | 8,946 | 3.11% | 0 / 105 / 4,474 |
 
-## validation-traces/zipf-hot20-access80-a1.2
+## traces/validation/zipf-hot20-access80-a1.2
 
 **Provenance**
 
-- file: `experiments/validation-traces/zipf-hot20-access80-a1.2.trace`
+- file: `experiments/traces/validation/zipf-hot20-access80-a1.2.trace`
 - generator: `experiments/scripts/prepare_validation_traces.py`
 - is_exact_prefix: `True`
 - parent: `experiments/traces/zipf-hot20-access80-a1.2.trace`
@@ -1871,11 +1871,11 @@ No reads in this trace, so there are no cache bounds.
 | `tp256` | 287,141 | 9,692 | 3.38% | 0 / 0 / 1,168 |
 | `tp512` | 287,141 | 7,671 | 2.67% | 0 / 0 / 1,933 |
 
-## matrix-traces/mixed-50-seq-50-random
+## traces/matrix/mixed-50-seq-50-random
 
 **Provenance**
 
-- file: `experiments/matrix-traces/mixed-50-seq-50-random.trace`
+- file: `experiments/traces/matrix/mixed-50-seq-50-random.trace`
 - generator: `experiments/scripts/prepare_validation_traces.py`
 - is_exact_prefix: `True`
 - parent: `experiments/traces/mixed-50-seq-50-random.trace`
@@ -1971,11 +1971,11 @@ No reads in this trace, so there are no cache bounds.
 | `tp256` | 2,864,563 | 25,600 | 0.89% | 0 / 3 / 22,244 |
 | `tp512` | 2,864,563 | 12,800 | 0.45% | 0 / 2 / 11,212 |
 
-## matrix-traces/seq-mixed
+## traces/matrix/seq-mixed
 
 **Provenance**
 
-- file: `experiments/matrix-traces/seq-mixed.trace`
+- file: `experiments/traces/matrix/seq-mixed.trace`
 - generator: `experiments/scripts/prepare_validation_traces.py`
 - is_exact_prefix: `True`
 - parent: `experiments/traces/seq-mixed.trace`
@@ -2071,11 +2071,11 @@ No reads in this trace, so there are no cache bounds.
 | `tp256` | 2,880,712 | 25,600 | 0.89% | 0 / 0 / 25,599 |
 | `tp512` | 2,880,712 | 12,800 | 0.44% | 0 / 0 / 0 |
 
-## matrix-traces/uniform-mixed
+## traces/matrix/uniform-mixed
 
 **Provenance**
 
-- file: `experiments/matrix-traces/uniform-mixed.trace`
+- file: `experiments/traces/matrix/uniform-mixed.trace`
 - generator: `experiments/scripts/prepare_validation_traces.py`
 - is_exact_prefix: `True`
 - parent: `experiments/traces/uniform-mixed.trace`
@@ -2171,11 +2171,11 @@ No reads in this trace, so there are no cache bounds.
 | `tp256` | 2,874,931 | 25,600 | 0.89% | 0 / 10,105 / 23,824 |
 | `tp512` | 2,874,931 | 12,800 | 0.45% | 0 / 5,239 / 12,002 |
 
-## matrix-traces/uniform-read
+## traces/matrix/uniform-read
 
 **Provenance**
 
-- file: `experiments/matrix-traces/uniform-read.trace`
+- file: `experiments/traces/matrix/uniform-read.trace`
 - generator: `experiments/scripts/prepare_validation_traces.py`
 - is_exact_prefix: `True`
 - parent: `experiments/traces/uniform-read.trace`
@@ -2271,11 +2271,11 @@ No reads in this trace, so there are no cache bounds.
 | `tp256` | 5,756,558 | 25,600 | 0.44% | 0 / 10,625 / 24,011 |
 | `tp512` | 5,756,558 | 12,800 | 0.22% | 0 / 5,377 / 12,034 |
 
-## matrix-traces/uniform-write
+## traces/matrix/uniform-write
 
 **Provenance**
 
-- file: `experiments/matrix-traces/uniform-write.trace`
+- file: `experiments/traces/matrix/uniform-write.trace`
 - generator: `experiments/scripts/prepare_validation_traces.py`
 - is_exact_prefix: `True`
 - parent: `experiments/traces/uniform-write.trace`
@@ -2329,11 +2329,11 @@ No reads in this trace, so there are no cache bounds.
 
 No reads in this trace, so there are no cache bounds.
 
-## matrix-traces/zipf-hot10-access90-a1.2
+## traces/matrix/zipf-hot10-access90-a1.2
 
 **Provenance**
 
-- file: `experiments/matrix-traces/zipf-hot10-access90-a1.2.trace`
+- file: `experiments/traces/matrix/zipf-hot10-access90-a1.2.trace`
 - generator: `experiments/scripts/prepare_validation_traces.py`
 - is_exact_prefix: `True`
 - parent: `experiments/traces/zipf-hot10-access90-a1.2.trace`
@@ -2429,11 +2429,11 @@ No reads in this trace, so there are no cache bounds.
 | `tp256` | 2,874,824 | 23,051 | 0.80% | 0 / 0 / 4,750 |
 | `tp512` | 2,874,824 | 12,644 | 0.44% | 0 / 0 / 4,106 |
 
-## matrix-traces/zipf-hot20-access80-a0.8
+## traces/matrix/zipf-hot20-access80-a0.8
 
 **Provenance**
 
-- file: `experiments/matrix-traces/zipf-hot20-access80-a0.8.trace`
+- file: `experiments/traces/matrix/zipf-hot20-access80-a0.8.trace`
 - generator: `experiments/scripts/prepare_validation_traces.py`
 - is_exact_prefix: `True`
 - parent: `experiments/traces/zipf-hot20-access80-a0.8.trace`
@@ -2529,11 +2529,11 @@ No reads in this trace, so there are no cache bounds.
 | `tp256` | 2,870,476 | 25,447 | 0.89% | 0 / 697 / 16,795 |
 | `tp512` | 2,870,476 | 12,799 | 0.45% | 0 / 401 / 9,180 |
 
-## matrix-traces/zipf-hot20-access80-a1.2
+## traces/matrix/zipf-hot20-access80-a1.2
 
 **Provenance**
 
-- file: `experiments/matrix-traces/zipf-hot20-access80-a1.2.trace`
+- file: `experiments/traces/matrix/zipf-hot20-access80-a1.2.trace`
 - generator: `experiments/scripts/prepare_validation_traces.py`
 - is_exact_prefix: `True`
 - parent: `experiments/traces/zipf-hot20-access80-a1.2.trace`
@@ -2629,12 +2629,12 @@ No reads in this trace, so there are no cache bounds.
 | `tp256` | 2,874,025 | 24,688 | 0.86% | 0 / 1 / 14,481 |
 | `tp512` | 2,874,025 | 12,687 | 0.44% | 0 / 1 / 8,241 |
 
-## real-traces/financial1
+## traces/real/financial1
 
 **Provenance**
 
 - chunk_bytes: `2097152`
-- file: `experiments/real-traces/financial1.trace`
+- file: `experiments/traces/real/financial1.trace`
 - generator: `experiments/scripts/normalize_trace.py`
 - normalisation: `4 KiB alignment by widening; (ASU, chunk) pairs packed densely in (ASU, address) order; offsets within a chunk unchanged`
 - requests_widened_to_4k: `988391`
@@ -2652,8 +2652,8 @@ No reads in this trace, so there are no cache bounds.
 | Operations | 1,000,000 (212,681 R / 787,319 W) |
 | Read % by requests / bytes | 21.27% / 18.24% |
 | Mean request size | 7.58 KiB |
-| Request sizes (R) | 4KiB: 116,889, 8KiB: 67,977, 12KiB: 25,809, 16KiB: 324, 20KiB: 150, 24KiB: 136, 28KiB: 25, 32KiB: 244, 36KiB: 1,116, 56KiB: 3, 64KiB: 2, 68KiB: 6 |
-| Request sizes (W) | 4KiB: 401,785, 8KiB: 308,883, 12KiB: 30,828, 16KiB: 7,299, 20KiB: 8,431, 24KiB: 7,701, 28KiB: 1,011, 32KiB: 794, 36KiB: 2,159, 40KiB: 26, 44KiB: 33, 48KiB: 227, 52KiB: 6,280, 56KiB: 19, 60KiB: 21, 64KiB: 3,607, 68KiB: 8,205, 92KiB: 1, 104KiB: 1, 180KiB: 1, 512KiB: 1, 612KiB: 1, 1508KiB: 1, 1564KiB: 1, 1988KiB: 1, 2924KiB: 1, 3152KiB: 1 |
+| Request sizes (R) | 12KiB: 25,809, 16KiB: 324, 20KiB: 150, 24KiB: 136, 28KiB: 25, 32KiB: 244, 36KiB: 1,116, 4KiB: 116,889, 56KiB: 3, 64KiB: 2, 68KiB: 6, 8KiB: 67,977 |
+| Request sizes (W) | 104KiB: 1, 12KiB: 30,828, 1508KiB: 1, 1564KiB: 1, 16KiB: 7,299, 180KiB: 1, 1988KiB: 1, 20KiB: 8,431, 24KiB: 7,701, 28KiB: 1,011, 2924KiB: 1, 3152KiB: 1, 32KiB: 794, 36KiB: 2,159, 40KiB: 26, 44KiB: 33, 48KiB: 227, 4KiB: 401,785, 512KiB: 1, 52KiB: 6,280, 56KiB: 19, 60KiB: 21, 612KiB: 1, 64KiB: 3,607, 68KiB: 8,205, 8KiB: 308,883, 92KiB: 1 |
 | Page aligned | yes |
 | Address range | 0 – 2,711,457,792 bytes |
 | Footprint | 1.747 GiB (457,930 LPNs: 108,295 read, 416,831 written) |
@@ -2686,9 +2686,21 @@ No reads in this trace, so there are no cache bounds.
 | `write_lpns` | 1,548,376 |
 | `never_written_read_lpns_precondition_none` | 193,922 |
 | `never_written_read_lpns_precondition_fill` | 0 |
-| `request_size_histogram_lpns` | 1: 518,674, 2: 376,860, 3-4: 64,260, 5-8: 18,492, 9-16: 13,493, 17-32: 8,213, 33-64: 1, >64: 7 |
+| `request_size_histogram_lpns` | 1: 518,674, 17-32: 8,213, 2: 376,860, 3-4: 64,260, 33-64: 1, 5-8: 18,492, 9-16: 13,493, >64: 7 |
 
 **Cache bounds on the read stream** (hit rates; every miss inserts)
+
+`lpn` - logical page (LearnedFTL CMT entry granularity)
+
+| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
+|---:|---:|---:|---:|---:|
+| 1,024 | 54.58% | 13.98% | 27.05% | 61.11% |
+| 2,048 | 56.15% | 16.24% | 33.98% | 62.93% |
+| 4,096 | 57.73% | 23.09% | 38.49% | 65.22% |
+| 8,192 (CMT) | 59.55% | 29.77% | 43.25% | 67.63% |
+| 16,384 | 63.33% | 36.60% | 48.26% | 68.65% |
+| 32,768 | 67.59% | 47.73% | 56.02% | 68.65% |
+| 65,536 | 68.62% | 64.29% | 65.58% | 68.65% |
 
 `tp256` - translation page, 256 LPNs/page (LeaFTL CMT key)
 
@@ -2714,30 +2726,18 @@ No reads in this trace, so there are no cache bounds.
 | 32,768 | 99.82% | 99.82% | 99.82% | 99.82% |
 | 65,536 | 99.82% | 99.82% | 99.82% | 99.82% |
 
-`lpn` - logical page (LearnedFTL CMT entry granularity)
-
-| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
-|---:|---:|---:|---:|---:|
-| 1,024 | 54.58% | 13.98% | 27.05% | 61.11% |
-| 2,048 | 56.15% | 16.24% | 33.98% | 62.93% |
-| 4,096 | 57.73% | 23.09% | 38.49% | 65.22% |
-| 8,192 (CMT) | 59.55% | 29.77% | 43.25% | 67.63% |
-| 16,384 | 63.33% | 36.60% | 48.26% | 68.65% |
-| 32,768 | 67.59% | 47.73% | 56.02% | 68.65% |
-| 65,536 | 68.62% | 64.29% | 65.58% | 68.65% |
-
 | Keying | References | Distinct keys | Compulsory miss rate | Stack distance p50 / p90 / p99 |
 |---|---:|---:|---:|---:|
+| `lpn` | 345,479 | 108,295 | 31.35% | 36 / 14,102 / 40,347 |
 | `tp256` | 345,479 | 979 | 0.28% | 1 / 14 / 152 |
 | `tp512` | 345,479 | 609 | 0.18% | 1 / 13 / 98 |
-| `lpn` | 345,479 | 108,295 | 31.35% | 36 / 14,102 / 40,347 |
 
-## real-traces/financial2
+## traces/real/financial2
 
 **Provenance**
 
 - chunk_bytes: `2097152`
-- file: `experiments/real-traces/financial2.trace`
+- file: `experiments/traces/real/financial2.trace`
 - generator: `experiments/scripts/normalize_trace.py`
 - normalisation: `4 KiB alignment by widening; (ASU, chunk) pairs packed densely in (ASU, address) order; offsets within a chunk unchanged`
 - requests_widened_to_4k: `991905`
@@ -2755,8 +2755,8 @@ No reads in this trace, so there are no cache bounds.
 | Operations | 1,000,000 (818,059 R / 181,941 W) |
 | Read % by requests / bytes | 81.81% / 79.93% |
 | Mean request size | 5.74 KiB |
-| Request sizes (R) | 4KiB: 584,281, 8KiB: 202,098, 12KiB: 13,359, 16KiB: 3,425, 20KiB: 5,217, 24KiB: 979, 28KiB: 802, 32KiB: 3,214, 36KiB: 4,636, 40KiB: 11, 44KiB: 23, 48KiB: 5, 52KiB: 1, 56KiB: 6, 60KiB: 1, 68KiB: 1 |
-| Request sizes (W) | 4KiB: 137,655, 8KiB: 26,225, 12KiB: 8,440, 16KiB: 6,023, 20KiB: 420, 24KiB: 37, 28KiB: 18, 32KiB: 342, 36KiB: 2,307, 40KiB: 7, 48KiB: 2, 52KiB: 78, 56KiB: 60, 60KiB: 2, 64KiB: 2, 68KiB: 5, 260KiB: 318 |
+| Request sizes (R) | 12KiB: 13,359, 16KiB: 3,425, 20KiB: 5,217, 24KiB: 979, 28KiB: 802, 32KiB: 3,214, 36KiB: 4,636, 40KiB: 11, 44KiB: 23, 48KiB: 5, 4KiB: 584,281, 52KiB: 1, 56KiB: 6, 60KiB: 1, 68KiB: 1, 8KiB: 202,098 |
+| Request sizes (W) | 12KiB: 8,440, 16KiB: 6,023, 20KiB: 420, 24KiB: 37, 260KiB: 318, 28KiB: 18, 32KiB: 342, 36KiB: 2,307, 40KiB: 7, 48KiB: 2, 4KiB: 137,655, 52KiB: 78, 56KiB: 60, 60KiB: 2, 64KiB: 2, 68KiB: 5, 8KiB: 26,225 |
 | Page aligned | yes |
 | Address range | 0 – 4,557,484,032 bytes |
 | Footprint | 0.408 GiB (106,948 LPNs: 76,714 read, 61,079 written) |
@@ -2789,9 +2789,21 @@ No reads in this trace, so there are no cache bounds.
 | `write_lpns` | 288,229 |
 | `never_written_read_lpns_precondition_none` | 846,017 |
 | `never_written_read_lpns_precondition_fill` | 0 |
-| `request_size_histogram_lpns` | 1: 721,936, 2: 228,323, 3-4: 31,247, 5-8: 11,029, 9-16: 7,141, 17-32: 6, >64: 318 |
+| `request_size_histogram_lpns` | 1: 721,936, 17-32: 6, 2: 228,323, 3-4: 31,247, 5-8: 11,029, 9-16: 7,141, >64: 318 |
 
 **Cache bounds on the read stream** (hit rates; every miss inserts)
+
+`lpn` - logical page (LearnedFTL CMT entry granularity)
+
+| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
+|---:|---:|---:|---:|---:|
+| 1,024 | 54.96% | 31.32% | 42.07% | 71.54% |
+| 2,048 | 64.15% | 41.01% | 52.28% | 78.43% |
+| 4,096 | 73.51% | 53.72% | 64.94% | 84.34% |
+| 8,192 (CMT) | 81.35% | 65.18% | 75.86% | 88.95% |
+| 16,384 | 86.95% | 76.78% | 84.45% | 91.85% |
+| 32,768 | 90.90% | 87.70% | 90.35% | 93.32% |
+| 65,536 | 93.26% | 93.25% | 93.25% | 93.32% |
 
 `tp256` - translation page, 256 LPNs/page (LeaFTL CMT key)
 
@@ -2817,30 +2829,18 @@ No reads in this trace, so there are no cache bounds.
 | 32,768 | 99.82% | 99.82% | 99.82% | 99.82% |
 | 65,536 | 99.82% | 99.82% | 99.82% | 99.82% |
 
-`lpn` - logical page (LearnedFTL CMT entry granularity)
-
-| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
-|---:|---:|---:|---:|---:|
-| 1,024 | 54.96% | 31.32% | 42.07% | 71.54% |
-| 2,048 | 64.15% | 41.01% | 52.28% | 78.43% |
-| 4,096 | 73.51% | 53.72% | 64.94% | 84.34% |
-| 8,192 (CMT) | 81.35% | 65.18% | 75.86% | 88.95% |
-| 16,384 | 86.95% | 76.78% | 84.45% | 91.85% |
-| 32,768 | 90.90% | 87.70% | 90.35% | 93.32% |
-| 65,536 | 93.26% | 93.25% | 93.25% | 93.32% |
-
 | Keying | References | Distinct keys | Compulsory miss rate | Stack distance p50 / p90 / p99 |
 |---|---:|---:|---:|---:|
+| `lpn` | 1,147,815 | 76,714 | 6.68% | 477 / 10,948 / 44,760 |
 | `tp256` | 1,147,815 | 3,494 | 0.30% | 4 / 183 / 1,574 |
 | `tp512` | 1,147,815 | 2,115 | 0.18% | 3 / 126 / 956 |
-| `lpn` | 1,147,815 | 76,714 | 6.68% | 477 / 10,948 / 44,760 |
 
-## real-traces/websearch1
+## traces/real/websearch1
 
 **Provenance**
 
 - chunk_bytes: `2097152`
-- file: `experiments/real-traces/websearch1.trace`
+- file: `experiments/traces/real/websearch1.trace`
 - generator: `experiments/scripts/normalize_trace.py`
 - normalisation: `4 KiB alignment by widening; (ASU, chunk) pairs packed densely in (ASU, address) order; offsets within a chunk unchanged`
 - requests_widened_to_4k: `26`
@@ -2858,8 +2858,8 @@ No reads in this trace, so there are no cache bounds.
 | Operations | 1,000,000 (999,800 R / 200 W) |
 | Read % by requests / bytes | 99.98% / 99.99% |
 | Mean request size | 15.16 KiB |
-| Request sizes (R) | 4KiB: 24, 8KiB: 598,840, 16KiB: 108,806, 24KiB: 89,976, 32KiB: 202,152, 1112KiB: 2 |
-| Request sizes (W) | 8KiB: 196, 16KiB: 2, 64KiB: 2 |
+| Request sizes (R) | 1112KiB: 2, 16KiB: 108,806, 24KiB: 89,976, 32KiB: 202,152, 4KiB: 24, 8KiB: 598,840 |
+| Request sizes (W) | 16KiB: 2, 64KiB: 2, 8KiB: 196 |
 | Page aligned | yes |
 | Address range | 155,648 – 17,379,344,384 bytes |
 | Footprint | 5.982 GiB (1,568,247 LPNs: 1,568,227 read, 42 written) |
@@ -2896,6 +2896,18 @@ No reads in this trace, so there are no cache bounds.
 
 **Cache bounds on the read stream** (hit rates; every miss inserts)
 
+`lpn` - logical page (LearnedFTL CMT entry granularity)
+
+| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
+|---:|---:|---:|---:|---:|
+| 1,024 | 0.01% | 0.01% | 0.01% | 0.36% |
+| 2,048 | 0.01% | 0.01% | 0.01% | 0.67% |
+| 4,096 | 0.01% | 0.01% | 0.01% | 1.19% |
+| 8,192 (CMT) | 0.01% | 0.01% | 0.02% | 2.06% |
+| 16,384 | 0.01% | 0.01% | 0.07% | 3.78% |
+| 32,768 | 0.01% | 0.01% | 0.24% | 6.86% |
+| 65,536 | 0.01% | 0.01% | 0.62% | 12.21% |
+
 `tp256` - translation page, 256 LPNs/page (LeaFTL CMT key)
 
 | Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
@@ -2920,30 +2932,18 @@ No reads in this trace, so there are no cache bounds.
 | 32,768 | 99.78% | 99.78% | 99.78% | 99.78% |
 | 65,536 | 99.78% | 99.78% | 99.78% | 99.78% |
 
-`lpn` - logical page (LearnedFTL CMT entry granularity)
-
-| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
-|---:|---:|---:|---:|---:|
-| 1,024 | 0.01% | 0.01% | 0.01% | 0.36% |
-| 2,048 | 0.01% | 0.01% | 0.01% | 0.67% |
-| 4,096 | 0.01% | 0.01% | 0.01% | 1.19% |
-| 8,192 (CMT) | 0.01% | 0.01% | 0.02% | 2.06% |
-| 16,384 | 0.01% | 0.01% | 0.07% | 3.78% |
-| 32,768 | 0.01% | 0.01% | 0.24% | 6.86% |
-| 65,536 | 0.01% | 0.01% | 0.62% | 12.21% |
-
 | Keying | References | Distinct keys | Compulsory miss rate | Stack distance p50 / p90 / p99 |
 |---|---:|---:|---:|---:|
+| `lpn` | 3,790,556 | 1,568,227 | 41.37% | 750,219 / 1,167,747 / 1,424,791 |
 | `tp256` | 3,790,556 | 15,347 | 0.40% | 0 / 229 / 9,828 |
 | `tp512` | 3,790,556 | 8,287 | 0.22% | 0 / 135 / 4,959 |
-| `lpn` | 3,790,556 | 1,568,227 | 41.37% | 750,219 / 1,167,747 / 1,424,791 |
 
-## real-traces/websearch2
+## traces/real/websearch2
 
 **Provenance**
 
 - chunk_bytes: `2097152`
-- file: `experiments/real-traces/websearch2.trace`
+- file: `experiments/traces/real/websearch2.trace`
 - generator: `experiments/scripts/normalize_trace.py`
 - normalisation: `4 KiB alignment by widening; (ASU, chunk) pairs packed densely in (ASU, address) order; offsets within a chunk unchanged`
 - requests_widened_to_4k: `0`
@@ -2961,8 +2961,8 @@ No reads in this trace, so there are no cache bounds.
 | Operations | 1,000,000 (999,800 R / 200 W) |
 | Read % by requests / bytes | 99.98% / 99.99% |
 | Mean request size | 14.98 KiB |
-| Request sizes (R) | 8KiB: 607,662, 16KiB: 107,858, 24KiB: 87,635, 32KiB: 196,645 |
-| Request sizes (W) | 8KiB: 197, 16KiB: 3 |
+| Request sizes (R) | 16KiB: 107,858, 24KiB: 87,635, 32KiB: 196,645, 8KiB: 607,662 |
+| Request sizes (W) | 16KiB: 3, 8KiB: 197 |
 | Page aligned | yes |
 | Address range | 2,023,424 – 17,206,681,600 bytes |
 | Footprint | 5.932 GiB (1,554,972 LPNs: 1,554,966 read, 12 written) |
@@ -2999,6 +2999,18 @@ No reads in this trace, so there are no cache bounds.
 
 **Cache bounds on the read stream** (hit rates; every miss inserts)
 
+`lpn` - logical page (LearnedFTL CMT entry granularity)
+
+| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
+|---:|---:|---:|---:|---:|
+| 1,024 | 0.00% | 0.00% | 0.00% | 0.37% |
+| 2,048 | 0.00% | 0.00% | 0.00% | 0.66% |
+| 4,096 | 0.00% | 0.00% | 0.01% | 1.17% |
+| 8,192 (CMT) | 0.00% | 0.00% | 0.02% | 2.11% |
+| 16,384 | 0.00% | 0.00% | 0.07% | 3.85% |
+| 32,768 | 0.00% | 0.00% | 0.31% | 7.05% |
+| 65,536 | 0.00% | 0.00% | 0.85% | 12.39% |
+
 `tp256` - translation page, 256 LPNs/page (LeaFTL CMT key)
 
 | Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
@@ -3023,30 +3035,18 @@ No reads in this trace, so there are no cache bounds.
 | 32,768 | 99.78% | 99.78% | 99.78% | 99.78% |
 | 65,536 | 99.78% | 99.78% | 99.78% | 99.78% |
 
-`lpn` - logical page (LearnedFTL CMT entry granularity)
-
-| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
-|---:|---:|---:|---:|---:|
-| 1,024 | 0.00% | 0.00% | 0.00% | 0.37% |
-| 2,048 | 0.00% | 0.00% | 0.00% | 0.66% |
-| 4,096 | 0.00% | 0.00% | 0.01% | 1.17% |
-| 8,192 (CMT) | 0.00% | 0.00% | 0.02% | 2.11% |
-| 16,384 | 0.00% | 0.00% | 0.07% | 3.85% |
-| 32,768 | 0.00% | 0.00% | 0.31% | 7.05% |
-| 65,536 | 0.00% | 0.00% | 0.85% | 12.39% |
-
 | Keying | References | Distinct keys | Compulsory miss rate | Stack distance p50 / p90 / p99 |
 |---|---:|---:|---:|---:|
+| `lpn` | 3,745,726 | 1,554,966 | 41.51% | 743,483 / 1,159,655 / 1,420,423 |
 | `tp256` | 3,745,726 | 15,249 | 0.41% | 0 / 311 / 9,942 |
 | `tp512` | 3,745,726 | 8,203 | 0.22% | 0 / 157 / 5,040 |
-| `lpn` | 3,745,726 | 1,554,966 | 41.51% | 743,483 / 1,159,655 / 1,420,423 |
 
-## real-traces/websearch3
+## traces/real/websearch3
 
 **Provenance**
 
 - chunk_bytes: `2097152`
-- file: `experiments/real-traces/websearch3.trace`
+- file: `experiments/traces/real/websearch3.trace`
 - generator: `experiments/scripts/normalize_trace.py`
 - normalisation: `4 KiB alignment by widening; (ASU, chunk) pairs packed densely in (ASU, address) order; offsets within a chunk unchanged`
 - requests_widened_to_4k: `0`
@@ -3064,8 +3064,8 @@ No reads in this trace, so there are no cache bounds.
 | Operations | 1,000,000 (999,726 R / 274 W) |
 | Read % by requests / bytes | 99.97% / 99.99% |
 | Mean request size | 15.38 KiB |
-| Request sizes (R) | 8KiB: 586,172, 16KiB: 112,507, 24KiB: 93,114, 32KiB: 207,933 |
-| Request sizes (W) | 8KiB: 272, 16KiB: 2 |
+| Request sizes (R) | 16KiB: 112,507, 24KiB: 93,114, 32KiB: 207,933, 8KiB: 586,172 |
+| Request sizes (W) | 16KiB: 2, 8KiB: 272 |
 | Page aligned | yes |
 | Address range | 581,632 – 16,908,443,648 bytes |
 | Footprint | 6.002 GiB (1,573,398 LPNs: 1,573,394 read, 8 written) |
@@ -3102,6 +3102,18 @@ No reads in this trace, so there are no cache bounds.
 
 **Cache bounds on the read stream** (hit rates; every miss inserts)
 
+`lpn` - logical page (LearnedFTL CMT entry granularity)
+
+| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
+|---:|---:|---:|---:|---:|
+| 1,024 | 0.00% | 0.00% | 0.00% | 0.36% |
+| 2,048 | 0.00% | 0.00% | 0.00% | 0.66% |
+| 4,096 | 0.00% | 0.00% | 0.01% | 1.18% |
+| 8,192 (CMT) | 0.00% | 0.00% | 0.02% | 2.08% |
+| 16,384 | 0.00% | 0.00% | 0.05% | 3.79% |
+| 32,768 | 0.00% | 0.00% | 0.20% | 6.88% |
+| 65,536 | 0.00% | 0.00% | 0.58% | 12.12% |
+
 `tp256` - translation page, 256 LPNs/page (LeaFTL CMT key)
 
 | Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
@@ -3126,20 +3138,8 @@ No reads in this trace, so there are no cache bounds.
 | 32,768 | 99.79% | 99.79% | 99.79% | 99.79% |
 | 65,536 | 99.79% | 99.79% | 99.79% | 99.79% |
 
-`lpn` - logical page (LearnedFTL CMT entry granularity)
-
-| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
-|---:|---:|---:|---:|---:|
-| 1,024 | 0.00% | 0.00% | 0.00% | 0.36% |
-| 2,048 | 0.00% | 0.00% | 0.00% | 0.66% |
-| 4,096 | 0.00% | 0.00% | 0.01% | 1.18% |
-| 8,192 (CMT) | 0.00% | 0.00% | 0.02% | 2.08% |
-| 16,384 | 0.00% | 0.00% | 0.05% | 3.79% |
-| 32,768 | 0.00% | 0.00% | 0.20% | 6.88% |
-| 65,536 | 0.00% | 0.00% | 0.58% | 12.12% |
-
 | Keying | References | Distinct keys | Compulsory miss rate | Stack distance p50 / p90 / p99 |
 |---|---:|---:|---:|---:|
+| `lpn` | 3,844,520 | 1,573,394 | 40.93% | 743,987 / 1,161,679 / 1,429,795 |
 | `tp256` | 3,844,520 | 15,144 | 0.39% | 0 / 148 / 9,668 |
 | `tp512` | 3,844,520 | 8,062 | 0.21% | 0 / 80 / 4,881 |
-| `lpn` | 3,844,520 | 1,573,394 | 40.93% | 743,987 / 1,161,679 / 1,429,795 |

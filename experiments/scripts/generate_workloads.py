@@ -182,7 +182,7 @@ def main() -> int:
     parser.add_argument("--range-gib", type=float, default=25.0)
     parser.add_argument("--budget-gib", type=float, default=3.0)
     parser.add_argument("--seed", type=int, default=42)
-    parser.add_argument("--output-dir", type=Path, default=Path(__file__).parents[1] / "traces")
+    parser.add_argument("--output-dir", type=Path, default=Path(__file__).parents[1] / "traces" / "full")
     parser.add_argument("--manifest", type=Path)
     parser.add_argument("--workload", action="append", dest="workloads")
     args = parser.parse_args()

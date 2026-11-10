@@ -513,8 +513,8 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--only", action="append", help="profile only traces with this stem (repeatable)")
     parser.add_argument("--group", action="append",
-                        help="profile only this trace directory: traces, validation-traces, "
-                             "matrix-traces, real-traces (repeatable)")
+                        help="profile only this trace directory: traces/full, traces/validation, "
+                             "traces/matrix, traces/real (repeatable)")
     parser.add_argument("--output-dir", type=Path, default=EXPERIMENTS_DIR / "traces")
     args = parser.parse_args()
 
@@ -525,10 +525,8 @@ def main() -> int:
     previous = json.loads(profiles_path.read_text()) \
         if profiles_path.exists() and (args.only or args.group) else {}
 
-    sources = [("traces", p) for p in sorted((EXPERIMENTS_DIR / "traces").glob("*.trace"))]
-    sources += [("validation-traces", p) for p in sorted((EXPERIMENTS_DIR / "validation-traces").glob("*.trace"))]
-    sources += [("matrix-traces", p) for p in sorted((EXPERIMENTS_DIR / "matrix-traces").glob("*.trace"))]
-    sources += [("real-traces", p) for p in sorted((EXPERIMENTS_DIR / "real-traces").glob("*.trace"))]
+    sources = [(f"traces/{kind}", p) for kind in ("full", "validation", "matrix", "real")
+               for p in sorted((EXPERIMENTS_DIR / "traces" / kind).glob("*.trace"))]
 
     profiles: dict[str, dict] = {}
     with tempfile.TemporaryDirectory(prefix="profile_traces.") as tmp:
@@ -543,7 +541,7 @@ def main() -> int:
             rel = str(path.relative_to(REPO_DIR))
             digest = sha256_file(path)
             prov: dict = {"file": rel, "size_bytes": path.stat().st_size, "sha256": digest}
-            if group == "traces":
+            if group == "traces/full":
                 row = manifest.get(path.stem)
                 if row:
                     prov["generator"] = "experiments/scripts/generate_workloads.py"
@@ -556,7 +554,7 @@ def main() -> int:
                     prov.update(EXTRA_PROVENANCE.get(path.stem, {"source": "unknown - add provenance"}))
                 if rel in oids:
                     prov["sha256_matches_git_lfs_oid"] = oids[rel] == digest
-            elif group == "real-traces":
+            elif group == "traces/real":
                 sidecar = path.with_suffix(".json")
                 if sidecar.exists():
                     meta = json.loads(sidecar.read_text())
@@ -564,7 +562,7 @@ def main() -> int:
                                                       "chunk_bytes", "requests_widened_to_4k", "generator")})
                     prov["sha256_matches_sidecar"] = meta.get("output_sha256") == digest
             else:
-                parent = EXPERIMENTS_DIR / "traces" / path.name
+                parent = EXPERIMENTS_DIR / "traces" / "full" / path.name
                 prov["generator"] = "experiments/scripts/prepare_validation_traces.py"
                 if parent.exists():
                     check = validation_prefix_check(path, parent)
@@ -583,7 +581,7 @@ def main() -> int:
     # Cross-check against the Belady values recorded by generate_workloads.py.
     failures = 0
     for key, p in profiles.items():
-        row = manifest.get(key.split("/", 1)[1]) if key.startswith("traces/") else None
+        row = manifest.get(key.rsplit("/", 1)[1]) if key.startswith("traces/full/") else None
         bounds = p["cache_bounds_read_stream"].get("tp256")
         if row and bounds and row.get("belady_hits"):
             ours = next(c["belady_hits"] for c in bounds["curve"] if c["capacity"] == int(row["belady_capacity"]))

@@ -5,9 +5,10 @@
 
 A stage config lists FTLs, traces, precondition modes and (seed, repeat)
 pairs. Every combination becomes one run_femu.py invocation with a stable
-run ID (<stage>-<ftl>-<workload>-<precondition>-s<seed>-r<repeat>), so an
-interrupted stage resumes: completed runs are skipped and failed ones moved
-to <results-dir>/_failed/ and retried once. Runs execute in parallel up to
+run ID (<stage>-<ftl>-<workload>-<precondition>-s<seed>-r<repeat>) and its own
+directory <results-dir>/<stage>/<run_id>/, so an interrupted stage resumes:
+completed runs are skipped and failed ones moved to <results-dir>/_failed/
+and retried once. Per-run console logs go to <results-dir>/_logs/. Runs execute in parallel up to
 --jobs, and a new VM only starts while the host has enough free memory
 (a preconditioned 30 GiB FEMU device keeps about 35 GB resident).
 After all runs, repeats with identical configuration and seed are compared
@@ -81,8 +82,8 @@ def execute(run: dict, args, results: Path) -> tuple[dict, int]:
         cmd += ["--steady-bytes", str(args.steady_bytes)]
     if args.qemu_dir:
         cmd += ["--qemu", str(Path(args.qemu_dir) / run["ftl"] / "qemu-system-x86_64")]
-    log = results / "_logs"
-    log.mkdir(exist_ok=True)
+    log = args.results_dir / "_logs"
+    log.mkdir(parents=True, exist_ok=True)
     with (log / f"{run['run_id']}.log").open("w") as out:
         code = subprocess.run(cmd, stdout=out, stderr=subprocess.STDOUT).returncode
     return run, code
@@ -108,13 +109,13 @@ def main() -> int:
     runs = [r for r in runs if (not args.only_ftl or r["ftl"] in args.only_ftl)
             and (not args.only_workload or r["workload"] in args.only_workload)
             and (not args.only_precondition or r["precondition"] in args.only_precondition)]
-    results = args.results_dir
+    results = args.results_dir / args.stage
     results.mkdir(parents=True, exist_ok=True)
     todo = []
     for run in runs:
         state = status(results, run)
         if state == "failed":
-            failed = results / "_failed"
+            failed = args.results_dir / "_failed"
             failed.mkdir(exist_ok=True)
             target = failed / f"{run['run_id']}-{int(time.time())}"
             if not args.dry_run:

@@ -383,13 +383,14 @@ Living copy of this plan: `LearnedFTL/experiments/docs/BASELINE_PLAN.md`. Keep t
 | Phase | Deliverable | Where |
 |---|---|---|
 | 0 | GC-log shim (also makes FEMU's stdout line-buffered); KVM pending (request sent to the server's professor) | `experiments/tools/gclog_redirect.c` |
-| 1, 1b | KNOWN_ISSUES (KI-1..KI-27), METRICS, TRACES.md for 31 traces | `experiments/docs/`, `experiments/traces/` |
+| 1, 1b | KNOWN_ISSUES (KI-1..KI-30), METRICS, TRACES.md for 31 traces | `experiments/docs/`, `experiments/traces/` |
 | 2 | Request-flow counters, read partition, `FEMU_REQLOG`, shared JSON schema | `hw/femu/bbssd/{leaftl,ld-tpftl}.c`, `ftl_stats.h` |
 | 2b | Invariants 1-12 (in FEMU and offline), per-LPN flash-read accounting, micro-traces, validator self-test | `INVARIANTS.md`, `validate_run.py`, `test_validate_run.py`, `traces/micro/` |
 | 3 | One binary per FTL from a commit (git worktrees), KVM/TCG launcher, 30 GiB device (~7% OP) | `build_ftl.sh`, `launch_femu.sh` |
 | 4 | O_DIRECT QD1 replay with read verification, guest prep, one-command runs | `replay_trace.py`, `guest_prep.sh`, `run_femu.py` |
 | 5, 6 | Resumable parallel stages, mentor CSVs with data dictionary | `run_matrix.py`, `experiments/configs/*.json`, `aggregate.py` |
-| M4 | Real traces: UMass WebSearch1-3 and Financial1-2 (first 1M requests, normalised) | `normalize_trace.py`, `experiments/real-traces/*.json` |
+| M4 | Real traces: UMass WebSearch1-3 and Financial1-2 (first 1M requests, normalised) | `normalize_trace.py`, `experiments/traces/real/*.json` |
+| - | KI-28 root cause: exact offline replica of LeaFTL's mapping logic | `experiments/tools/leaftl_replica.py`, `ki28_attribution.py` |
 
 ### Deviations from the plan, with the measurement behind each
 
@@ -413,6 +414,10 @@ Living copy of this plan: `LearnedFTL/experiments/docs/BASELINE_PLAN.md`. Keep t
    mapping state (KI-21..KI-24); it stays HARD for LearnedFTL.
 8. **Memory.** FEMU pins its whole DRAM backend (~32 GB per VM) when allowed to; runs set `MLOCK=0` so memory is
    allocated as written. Use `MLOCK=1` for KVM latency runs.
+9. **Folder layout (2026-11-10).** Traces moved into `experiments/traces/{full,validation,matrix,real,micro}/` and run
+   folders into `experiments/results/{micro,validation,matrix,real}/`; retired `clone_run.py`, `update_csv.py`,
+   `reset_femu_image.sh` and the hand-edited `results/runs.csv` were removed. Saved manifests record the old trace
+   path under `moved`; the CSVs regenerate byte-identically after the move.
 
 ### Results (2026-11-10)
 
@@ -449,6 +454,10 @@ How to read it:
   flash reads per read are 1.06-1.38 against LeaFTL's 1.74-2.76.
 - LeaFTL's numbers cover only the reads it served: it fails to return 8-63% of reads of written data (KI-27, KI-28).
   Any comparison must quote this alongside.
+  Root cause (KI-28), proven with an exact offline replica of LeaFTL's mapping logic (`experiments/tools/leaftl_replica.py`,
+  0 mismatches on 3,040 counters over 80 runs): new segments are silently dropped when a group's top level holds
+  exactly one segment, and `compact()` deletes levels that still hold the only mapping. With both switched off in the
+  replica the lost-data share is at most 0.0002 in every run (`experiments/results/ki28_attribution.csv`).
 - LeaFTL's gap to Belady-OPT is 0.6 on uniform traces, ~0.25 on WebSearch, and ~0.03 on the skewed zipf traces:
   this is the headroom a better replacement policy could target for a TP-keyed cache.
 - `fill` rows are GC stress only: LeaFTL's translation writes explode (WAF 20-91, KI-21) and LearnedFTL thrashes

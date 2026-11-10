@@ -1,5 +1,2950 @@
 {
-  "matrix-traces/mixed-50-seq-50-random": {
+  "traces/full/mixed-50-seq-50-random": {
+    "cache_bounds_read_stream": {
+      "lpn": {
+        "compulsory_miss_rate": 0.22406,
+        "curve": [
+          {
+            "belady_hit_rate": 0.014713,
+            "belady_hits": 423028,
+            "capacity": 1024,
+            "lfu_hit_rate": 0.000153,
+            "lfu_hits": 4392,
+            "lru_hit_rate": 0.000116,
+            "lru_hits": 3345,
+            "plfu_hit_rate": 0.000152,
+            "plfu_hits": 4380
+          },
+          {
+            "belady_hit_rate": 0.021067,
+            "belady_hits": 605740,
+            "capacity": 2048,
+            "lfu_hit_rate": 0.00032,
+            "lfu_hits": 9192,
+            "lru_hit_rate": 0.000238,
+            "lru_hits": 6845,
+            "plfu_hit_rate": 0.000313,
+            "plfu_hits": 9010
+          },
+          {
+            "belady_hit_rate": 0.029923,
+            "belady_hits": 860371,
+            "capacity": 4096,
+            "lfu_hit_rate": 0.000635,
+            "lfu_hits": 18263,
+            "lru_hit_rate": 0.000467,
+            "lru_hits": 13435,
+            "plfu_hit_rate": 0.000629,
+            "plfu_hits": 18096
+          },
+          {
+            "belady_hit_rate": 0.042353,
+            "belady_hits": 1217749,
+            "capacity": 8192,
+            "lfu_hit_rate": 0.001269,
+            "lfu_hits": 36480,
+            "lru_hit_rate": 0.000941,
+            "lru_hits": 27058,
+            "plfu_hit_rate": 0.001272,
+            "plfu_hits": 36583
+          },
+          {
+            "belady_hit_rate": 0.059702,
+            "belady_hits": 1716571,
+            "capacity": 16384,
+            "lfu_hit_rate": 0.002503,
+            "lfu_hits": 71974,
+            "lru_hit_rate": 0.001882,
+            "lru_hits": 54105,
+            "plfu_hit_rate": 0.002589,
+            "plfu_hits": 74436
+          },
+          {
+            "belady_hit_rate": 0.083971,
+            "belady_hits": 2414366,
+            "capacity": 32768,
+            "lfu_hit_rate": 0.004982,
+            "lfu_hits": 143252,
+            "lru_hit_rate": 0.003752,
+            "lru_hits": 107877,
+            "plfu_hit_rate": 0.00531,
+            "plfu_hits": 152676
+          },
+          {
+            "belady_hit_rate": 0.117445,
+            "belady_hits": 3376844,
+            "capacity": 65536,
+            "lfu_hit_rate": 0.009946,
+            "lfu_hits": 285959,
+            "lru_hit_rate": 0.007519,
+            "lru_hits": 216188,
+            "plfu_hit_rate": 0.01075,
+            "plfu_hits": 309086
+          }
+        ],
+        "distinct_keys": 6442286,
+        "references": 28752508,
+        "stack_distance_percentiles": {
+          "p50": 2687993,
+          "p90": 5204298,
+          "p99": 6148741
+        }
+      },
+      "tp256": {
+        "compulsory_miss_rate": 0.00089,
+        "curve": [
+          {
+            "belady_hit_rate": 0.926888,
+            "belady_hits": 26650364,
+            "capacity": 1024,
+            "lfu_hit_rate": 0.870167,
+            "lfu_hits": 25019474,
+            "lru_hit_rate": 0.904519,
+            "lru_hits": 26007176,
+            "plfu_hit_rate": 0.869958,
+            "plfu_hits": 25013477
+          },
+          {
+            "belady_hit_rate": 0.937122,
+            "belady_hits": 26944614,
+            "capacity": 2048,
+            "lfu_hit_rate": 0.876363,
+            "lfu_hits": 25197629,
+            "lru_hit_rate": 0.908442,
+            "lru_hits": 26120000,
+            "plfu_hit_rate": 0.876002,
+            "plfu_hits": 25187253
+          },
+          {
+            "belady_hit_rate": 0.950697,
+            "belady_hits": 27334931,
+            "capacity": 4096,
+            "lfu_hit_rate": 0.888528,
+            "lfu_hits": 25547410,
+            "lru_hit_rate": 0.916293,
+            "lru_hits": 26345727,
+            "plfu_hit_rate": 0.887988,
+            "plfu_hits": 25531886
+          },
+          {
+            "belady_hit_rate": 0.967978,
+            "belady_hits": 27831792,
+            "capacity": 8192,
+            "lfu_hit_rate": 0.912266,
+            "lfu_hits": 26229941,
+            "lru_hit_rate": 0.932016,
+            "lru_hits": 26797806,
+            "plfu_hit_rate": 0.911472,
+            "plfu_hits": 26207114
+          },
+          {
+            "belady_hit_rate": 0.987957,
+            "belady_hits": 28406238,
+            "capacity": 16384,
+            "lfu_hit_rate": 0.956856,
+            "lfu_hits": 27512001,
+            "lru_hit_rate": 0.963518,
+            "lru_hits": 27703548,
+            "plfu_hit_rate": 0.955885,
+            "plfu_hits": 27484086
+          },
+          {
+            "belady_hit_rate": 0.99911,
+            "belady_hits": 28726908,
+            "capacity": 32768,
+            "lfu_hit_rate": 0.99911,
+            "lfu_hits": 28726908,
+            "lru_hit_rate": 0.99911,
+            "lru_hits": 28726908,
+            "plfu_hit_rate": 0.99911,
+            "plfu_hits": 28726908
+          },
+          {
+            "belady_hit_rate": 0.99911,
+            "belady_hits": 28726908,
+            "capacity": 65536,
+            "lfu_hit_rate": 0.99911,
+            "lfu_hits": 28726908,
+            "lru_hit_rate": 0.99911,
+            "lru_hits": 28726908,
+            "plfu_hit_rate": 0.99911,
+            "plfu_hits": 28726908
+          }
+        ],
+        "distinct_keys": 25600,
+        "references": 28752508,
+        "stack_distance_percentiles": {
+          "p50": 0,
+          "p90": 5,
+          "p99": 23040
+        }
+      },
+      "tp512": {
+        "compulsory_miss_rate": 0.000445,
+        "curve": [
+          {
+            "belady_hit_rate": 0.941088,
+            "belady_hits": 27058652,
+            "capacity": 1024,
+            "lfu_hit_rate": 0.879108,
+            "lfu_hits": 25276568,
+            "lru_hit_rate": 0.914232,
+            "lru_hits": 26286476,
+            "plfu_hit_rate": 0.878911,
+            "plfu_hits": 25270884
+          },
+          {
+            "belady_hit_rate": 0.953882,
+            "belady_hits": 27426501,
+            "capacity": 2048,
+            "lfu_hit_rate": 0.891232,
+            "lfu_hits": 25625153,
+            "lru_hit_rate": 0.921662,
+            "lru_hits": 26500097,
+            "plfu_hit_rate": 0.89086,
+            "plfu_hits": 25614450
+          },
+          {
+            "belady_hit_rate": 0.970176,
+            "belady_hits": 27895007,
+            "capacity": 4096,
+            "lfu_hit_rate": 0.914757,
+            "lfu_hits": 26301549,
+            "lru_hit_rate": 0.936503,
+            "lru_hits": 26926818,
+            "plfu_hit_rate": 0.91424,
+            "plfu_hits": 26286680
+          },
+          {
+            "belady_hit_rate": 0.989045,
+            "belady_hits": 28437522,
+            "capacity": 8192,
+            "lfu_hit_rate": 0.958649,
+            "lfu_hits": 27563555,
+            "lru_hit_rate": 0.966185,
+            "lru_hits": 27780236,
+            "plfu_hit_rate": 0.958025,
+            "plfu_hits": 27545614
+          },
+          {
+            "belady_hit_rate": 0.999555,
+            "belady_hits": 28739708,
+            "capacity": 16384,
+            "lfu_hit_rate": 0.999555,
+            "lfu_hits": 28739708,
+            "lru_hit_rate": 0.999555,
+            "lru_hits": 28739708,
+            "plfu_hit_rate": 0.999555,
+            "plfu_hits": 28739708
+          },
+          {
+            "belady_hit_rate": 0.999555,
+            "belady_hits": 28739708,
+            "capacity": 32768,
+            "lfu_hit_rate": 0.999555,
+            "lfu_hits": 28739708,
+            "lru_hit_rate": 0.999555,
+            "lru_hits": 28739708,
+            "plfu_hit_rate": 0.999555,
+            "plfu_hits": 28739708
+          },
+          {
+            "belady_hit_rate": 0.999555,
+            "belady_hits": 28739708,
+            "capacity": 65536,
+            "lfu_hit_rate": 0.999555,
+            "lfu_hits": 28739708,
+            "lru_hit_rate": 0.999555,
+            "lru_hits": 28739708,
+            "plfu_hit_rate": 0.999555,
+            "plfu_hits": 28739708
+          }
+        ],
+        "distinct_keys": 12800,
+        "references": 28752508,
+        "stack_distance_percentiles": {
+          "p50": 0,
+          "p90": 3,
+          "p99": 11416
+        }
+      }
+    },
+    "duration_seconds": 9.999999,
+    "expected_ftl_counters": {
+      "never_written_read_lpns_precondition_fill": 0,
+      "never_written_read_lpns_precondition_none": 6422051,
+      "read_lpns": 28752508,
+      "read_reqs": 4999884,
+      "request_size_histogram_lpns": {
+        "1": 2499654,
+        "17-32": 0,
+        "2": 2499156,
+        "3-4": 2500707,
+        "33-64": 0,
+        "5-8": 0,
+        "9-16": 2500483,
+        ">64": 0
+      },
+      "write_lpns": 28756014,
+      "write_reqs": 5000116
+    },
+    "footprint": {
+      "fits_logical_device": true,
+      "footprint_gib": 24.9926,
+      "max_end_bytes": 26843545600,
+      "min_offset_bytes": 0,
+      "unique_lpns": 6551658,
+      "unique_read_lpns": 6442286,
+      "unique_tp256": 25600,
+      "unique_tp512": 12800,
+      "unique_written_lpns": 6443898
+    },
+    "locality": {
+      "sequential_request_share": 0.062605,
+      "top10pct_lpn_access_share": 0.187263,
+      "top1pct_lpn_access_share": 0.023038,
+      "top20pct_lpn_access_share": 0.332318,
+      "working_set_gib_max": 0.38,
+      "working_set_lpns_max": 99619,
+      "working_set_lpns_mean": 99272.2,
+      "working_set_window_refs": 100000
+    },
+    "mapping": {
+      "never_written_read_lpns_precondition_none": 6422051,
+      "overwrite_share_of_written_lpns": 0.775911,
+      "read_after_write_share_precondition_fill": 1.0,
+      "read_after_write_share_precondition_none": 0.776644
+    },
+    "mix": {
+      "mean_request_kib": 23.003,
+      "read_percent_by_bytes": 49.997,
+      "read_percent_by_requests": 49.999,
+      "read_reqs": 4999884,
+      "request_sizes": {
+        "R": {
+          "16KiB": 1250680,
+          "4KiB": 1249446,
+          "64KiB": 1250059,
+          "8KiB": 1249699
+        },
+        "W": {
+          "16KiB": 1250027,
+          "4KiB": 1250208,
+          "64KiB": 1250424,
+          "8KiB": 1249457
+        }
+      },
+      "write_reqs": 5000116
+    },
+    "operations": 10000000,
+    "page_aligned": true,
+    "provenance": {
+      "address_range_gib": "25.0",
+      "file": "experiments/traces/full/mixed-50-seq-50-random.trace",
+      "generator": "experiments/scripts/generate_workloads.py",
+      "hot_access_percent": "",
+      "hot_region_percent": "",
+      "operations": "10000000",
+      "pattern": "mixed",
+      "read_percent": "50.0",
+      "request_sizes": "4096,8192,16384,65536",
+      "seed": "49",
+      "sequential_percent": "50.0",
+      "sha256": "2edc64994cdea3c6d04d30f1a1c0a836402148ff4d6b4846c2bb3830e2636760",
+      "sha256_matches_git_lfs_oid": true,
+      "sha256_matches_manifest": true,
+      "size_bytes": 280795603,
+      "write_percent": "50.0",
+      "zipf_alpha": ""
+    }
+  },
+  "traces/full/seq-mixed": {
+    "cache_bounds_read_stream": {
+      "lpn": {
+        "compulsory_miss_rate": 0.22119,
+        "curve": [
+          {
+            "belady_hit_rate": 0.000853,
+            "belady_hits": 24552,
+            "capacity": 1024,
+            "lfu_hit_rate": 0.0,
+            "lfu_hits": 0,
+            "lru_hit_rate": 0.0,
+            "lru_hits": 0,
+            "plfu_hit_rate": 6.9e-05,
+            "plfu_hits": 1977
+          },
+          {
+            "belady_hit_rate": 0.001707,
+            "belady_hits": 49128,
+            "capacity": 2048,
+            "lfu_hit_rate": 0.0,
+            "lfu_hits": 0,
+            "lru_hit_rate": 0.0,
+            "lru_hits": 0,
+            "plfu_hit_rate": 0.000163,
+            "plfu_hits": 4694
+          },
+          {
+            "belady_hit_rate": 0.003416,
+            "belady_hits": 98280,
+            "capacity": 4096,
+            "lfu_hit_rate": 0.0,
+            "lfu_hits": 0,
+            "lru_hit_rate": 0.0,
+            "lru_hits": 0,
+            "plfu_hit_rate": 0.000374,
+            "plfu_hits": 10750
+          },
+          {
+            "belady_hit_rate": 0.006832,
+            "belady_hits": 196584,
+            "capacity": 8192,
+            "lfu_hit_rate": 0.0,
+            "lfu_hits": 0,
+            "lru_hit_rate": 0.0,
+            "lru_hits": 0,
+            "plfu_hit_rate": 0.000883,
+            "plfu_hits": 25410
+          },
+          {
+            "belady_hit_rate": 0.013666,
+            "belady_hits": 393192,
+            "capacity": 16384,
+            "lfu_hit_rate": 0.0,
+            "lfu_hits": 0,
+            "lru_hit_rate": 0.0,
+            "lru_hits": 0,
+            "plfu_hit_rate": 0.002131,
+            "plfu_hits": 61319
+          },
+          {
+            "belady_hit_rate": 0.027332,
+            "belady_hits": 786408,
+            "capacity": 32768,
+            "lfu_hit_rate": 0.0,
+            "lfu_hits": 0,
+            "lru_hit_rate": 0.0,
+            "lru_hits": 0,
+            "plfu_hit_rate": 0.005079,
+            "plfu_hits": 146149
+          },
+          {
+            "belady_hit_rate": 0.054665,
+            "belady_hits": 1572840,
+            "capacity": 65536,
+            "lfu_hit_rate": 0.0,
+            "lfu_hits": 0,
+            "lru_hit_rate": 0.0,
+            "lru_hits": 0,
+            "plfu_hit_rate": 0.012074,
+            "plfu_hits": 347388
+          }
+        ],
+        "distinct_keys": 6364180,
+        "references": 28772437,
+        "stack_distance_percentiles": {
+          "p50": 2756789,
+          "p90": 5006002,
+          "p99": 6038287
+        }
+      },
+      "tp256": {
+        "compulsory_miss_rate": 0.00089,
+        "curve": [
+          {
+            "belady_hit_rate": 0.979131,
+            "belady_hits": 28171999,
+            "capacity": 1024,
+            "lfu_hit_rate": 0.979095,
+            "lfu_hits": 28170937,
+            "lru_hit_rate": 0.978278,
+            "lru_hits": 28147447,
+            "plfu_hit_rate": 0.978613,
+            "plfu_hits": 28157086
+          },
+          {
+            "belady_hit_rate": 0.979986,
+            "belady_hits": 28196575,
+            "capacity": 2048,
+            "lfu_hit_rate": 0.979912,
+            "lfu_hits": 28194443,
+            "lru_hit_rate": 0.978278,
+            "lru_hits": 28147447,
+            "plfu_hit_rate": 0.979042,
+            "plfu_hits": 28169428
+          },
+          {
+            "belady_hit_rate": 0.981694,
+            "belady_hits": 28245727,
+            "capacity": 4096,
+            "lfu_hit_rate": 0.981546,
+            "lfu_hits": 28241465,
+            "lru_hit_rate": 0.978278,
+            "lru_hits": 28147447,
+            "plfu_hit_rate": 0.980042,
+            "plfu_hits": 28198199
+          },
+          {
+            "belady_hit_rate": 0.985111,
+            "belady_hits": 28344031,
+            "capacity": 8192,
+            "lfu_hit_rate": 0.984823,
+            "lfu_hits": 28335759,
+            "lru_hit_rate": 0.978278,
+            "lru_hits": 28147447,
+            "plfu_hit_rate": 0.982467,
+            "plfu_hits": 28267963
+          },
+          {
+            "belady_hit_rate": 0.991744,
+            "belady_hits": 28534878,
+            "capacity": 16384,
+            "lfu_hit_rate": 0.991431,
+            "lfu_hits": 28525877,
+            "lru_hit_rate": 0.978278,
+            "lru_hits": 28147447,
+            "plfu_hit_rate": 0.988734,
+            "plfu_hits": 28448290
+          },
+          {
+            "belady_hit_rate": 0.99911,
+            "belady_hits": 28746837,
+            "capacity": 32768,
+            "lfu_hit_rate": 0.99911,
+            "lfu_hits": 28746837,
+            "lru_hit_rate": 0.99911,
+            "lru_hits": 28746837,
+            "plfu_hit_rate": 0.99911,
+            "plfu_hits": 28746837
+          },
+          {
+            "belady_hit_rate": 0.99911,
+            "belady_hits": 28746837,
+            "capacity": 65536,
+            "lfu_hit_rate": 0.99911,
+            "lfu_hits": 28746837,
+            "lru_hit_rate": 0.99911,
+            "lru_hits": 28746837,
+            "plfu_hit_rate": 0.99911,
+            "plfu_hits": 28746837
+          }
+        ],
+        "distinct_keys": 25600,
+        "references": 28772437,
+        "stack_distance_percentiles": {
+          "p50": 0,
+          "p90": 0,
+          "p99": 25599
+        }
+      },
+      "tp512": {
+        "compulsory_miss_rate": 0.000445,
+        "curve": [
+          {
+            "belady_hit_rate": 0.989992,
+            "belady_hits": 28484489,
+            "capacity": 1024,
+            "lfu_hit_rate": 0.989956,
+            "lfu_hits": 28483446,
+            "lru_hit_rate": 0.989139,
+            "lru_hits": 28459937,
+            "plfu_hit_rate": 0.989425,
+            "plfu_hits": 28468163
+          },
+          {
+            "belady_hit_rate": 0.990846,
+            "belady_hits": 28509065,
+            "capacity": 2048,
+            "lfu_hit_rate": 0.990776,
+            "lfu_hits": 28507041,
+            "lru_hit_rate": 0.989139,
+            "lru_hits": 28459937,
+            "plfu_hit_rate": 0.989837,
+            "plfu_hits": 28480029
+          },
+          {
+            "belady_hit_rate": 0.992555,
+            "belady_hits": 28558217,
+            "capacity": 4096,
+            "lfu_hit_rate": 0.992414,
+            "lfu_hits": 28554171,
+            "lru_hit_rate": 0.989139,
+            "lru_hits": 28459937,
+            "plfu_hit_rate": 0.990882,
+            "plfu_hits": 28510085
+          },
+          {
+            "belady_hit_rate": 0.995872,
+            "belady_hits": 28653653,
+            "capacity": 8192,
+            "lfu_hit_rate": 0.995721,
+            "lfu_hits": 28649318,
+            "lru_hit_rate": 0.989139,
+            "lru_hits": 28459937,
+            "plfu_hit_rate": 0.993881,
+            "plfu_hits": 28596376
+          },
+          {
+            "belady_hit_rate": 0.999555,
+            "belady_hits": 28759637,
+            "capacity": 16384,
+            "lfu_hit_rate": 0.999555,
+            "lfu_hits": 28759637,
+            "lru_hit_rate": 0.999555,
+            "lru_hits": 28759637,
+            "plfu_hit_rate": 0.999555,
+            "plfu_hits": 28759637
+          },
+          {
+            "belady_hit_rate": 0.999555,
+            "belady_hits": 28759637,
+            "capacity": 32768,
+            "lfu_hit_rate": 0.999555,
+            "lfu_hits": 28759637,
+            "lru_hit_rate": 0.999555,
+            "lru_hits": 28759637,
+            "plfu_hit_rate": 0.999555,
+            "plfu_hits": 28759637
+          },
+          {
+            "belady_hit_rate": 0.999555,
+            "belady_hits": 28759637,
+            "capacity": 65536,
+            "lfu_hit_rate": 0.999555,
+            "lfu_hits": 28759637,
+            "lru_hit_rate": 0.999555,
+            "lru_hits": 28759637,
+            "plfu_hit_rate": 0.999555,
+            "plfu_hits": 28759637
+          }
+        ],
+        "distinct_keys": 12800,
+        "references": 28772437,
+        "stack_distance_percentiles": {
+          "p50": 0,
+          "p90": 0,
+          "p99": 12799
+        }
+      }
+    },
+    "duration_seconds": 9.999999,
+    "expected_ftl_counters": {
+      "never_written_read_lpns_precondition_fill": 0,
+      "never_written_read_lpns_precondition_none": 6378340,
+      "read_lpns": 28772437,
+      "read_reqs": 4999782,
+      "request_size_histogram_lpns": {
+        "1": 2500076,
+        "17-32": 0,
+        "2": 2499720,
+        "3-4": 2500593,
+        "33-64": 0,
+        "5-8": 0,
+        "9-16": 2499611,
+        ">64": 0
+      },
+      "write_lpns": 28723227,
+      "write_reqs": 5000218
+    },
+    "footprint": {
+      "fits_logical_device": true,
+      "footprint_gib": 24.9842,
+      "max_end_bytes": 26843545600,
+      "min_offset_bytes": 0,
+      "unique_lpns": 6549448,
+      "unique_read_lpns": 6364180,
+      "unique_tp256": 25600,
+      "unique_tp512": 12800,
+      "unique_written_lpns": 6365921
+    },
+    "locality": {
+      "sequential_request_share": 0.249961,
+      "top10pct_lpn_access_share": 0.258112,
+      "top1pct_lpn_access_share": 0.028478,
+      "top20pct_lpn_access_share": 0.422597,
+      "working_set_gib_max": 0.3815,
+      "working_set_lpns_max": 100000,
+      "working_set_lpns_mean": 99992.5,
+      "working_set_window_refs": 100000
+    },
+    "mapping": {
+      "never_written_read_lpns_precondition_none": 6378340,
+      "overwrite_share_of_written_lpns": 0.77837,
+      "read_after_write_share_precondition_fill": 1.0,
+      "read_after_write_share_precondition_none": 0.778318
+    },
+    "mix": {
+      "mean_request_kib": 22.998,
+      "read_percent_by_bytes": 50.043,
+      "read_percent_by_requests": 49.998,
+      "read_reqs": 4999782,
+      "request_sizes": {
+        "R": {
+          "16KiB": 1249990,
+          "4KiB": 1248527,
+          "64KiB": 1251530,
+          "8KiB": 1249735
+        },
+        "W": {
+          "16KiB": 1250603,
+          "4KiB": 1251549,
+          "64KiB": 1248081,
+          "8KiB": 1249985
+        }
+      },
+      "write_reqs": 5000218
+    },
+    "operations": 10000000,
+    "page_aligned": true,
+    "provenance": {
+      "address_range_gib": "25.0",
+      "file": "experiments/traces/full/seq-mixed.trace",
+      "generator": "experiments/scripts/generate_workloads.py",
+      "hot_access_percent": "",
+      "hot_region_percent": "",
+      "operations": "10000000",
+      "pattern": "sequential",
+      "read_percent": "50.0",
+      "request_sizes": "4096,8192,16384,65536",
+      "seed": "42",
+      "sequential_percent": "",
+      "sha256": "86e774fb8b489772963f71afb1cbac24b73ea2eaecef9b296eaf10931665d982",
+      "sha256_matches_git_lfs_oid": true,
+      "sha256_matches_manifest": true,
+      "size_bytes": 280761552,
+      "write_percent": "50.0",
+      "zipf_alpha": ""
+    }
+  },
+  "traces/full/uniform-mixed": {
+    "cache_bounds_read_stream": {
+      "lpn": {
+        "compulsory_miss_rate": 0.225365,
+        "curve": [
+          {
+            "belady_hit_rate": 0.016996,
+            "belady_hits": 488010,
+            "capacity": 1024,
+            "lfu_hit_rate": 0.000161,
+            "lfu_hits": 4628,
+            "lru_hit_rate": 0.000162,
+            "lru_hits": 4661,
+            "plfu_hit_rate": 0.000152,
+            "plfu_hits": 4376
+          },
+          {
+            "belady_hit_rate": 0.024242,
+            "belady_hits": 696063,
+            "capacity": 2048,
+            "lfu_hit_rate": 0.000314,
+            "lfu_hits": 9030,
+            "lru_hit_rate": 0.000313,
+            "lru_hits": 9001,
+            "plfu_hit_rate": 0.000306,
+            "plfu_hits": 8798
+          },
+          {
+            "belady_hit_rate": 0.034469,
+            "belady_hits": 989698,
+            "capacity": 4096,
+            "lfu_hit_rate": 0.000631,
+            "lfu_hits": 18109,
+            "lru_hit_rate": 0.000624,
+            "lru_hits": 17917,
+            "plfu_hit_rate": 0.00062,
+            "plfu_hits": 17807
+          },
+          {
+            "belady_hit_rate": 0.048751,
+            "belady_hits": 1399771,
+            "capacity": 8192,
+            "lfu_hit_rate": 0.001257,
+            "lfu_hits": 36089,
+            "lru_hit_rate": 0.001212,
+            "lru_hits": 34798,
+            "plfu_hit_rate": 0.001241,
+            "plfu_hits": 35644
+          },
+          {
+            "belady_hit_rate": 0.0689,
+            "belady_hits": 1978307,
+            "capacity": 16384,
+            "lfu_hit_rate": 0.002523,
+            "lfu_hits": 72446,
+            "lru_hit_rate": 0.002464,
+            "lru_hits": 70739,
+            "plfu_hit_rate": 0.00249,
+            "plfu_hits": 71490
+          },
+          {
+            "belady_hit_rate": 0.096798,
+            "belady_hits": 2779356,
+            "capacity": 32768,
+            "lfu_hit_rate": 0.00501,
+            "lfu_hits": 143851,
+            "lru_hit_rate": 0.005002,
+            "lru_hits": 143615,
+            "plfu_hit_rate": 0.004992,
+            "plfu_hits": 143329
+          },
+          {
+            "belady_hit_rate": 0.135512,
+            "belady_hits": 3890951,
+            "capacity": 65536,
+            "lfu_hit_rate": 0.010033,
+            "lfu_hits": 288075,
+            "lru_hit_rate": 0.01002,
+            "lru_hits": 287714,
+            "plfu_hit_rate": 0.010003,
+            "plfu_hits": 287228
+          }
+        ],
+        "distinct_keys": 6470885,
+        "references": 28712867,
+        "stack_distance_percentiles": {
+          "p50": 2682568,
+          "p90": 5308532,
+          "p99": 6215595
+        }
+      },
+      "tp256": {
+        "compulsory_miss_rate": 0.000892,
+        "curve": [
+          {
+            "belady_hit_rate": 0.869889,
+            "belady_hits": 24977015,
+            "capacity": 1024,
+            "lfu_hit_rate": 0.829788,
+            "lfu_hits": 23825581,
+            "lru_hit_rate": 0.829761,
+            "lru_hits": 23824820,
+            "plfu_hit_rate": 0.8298,
+            "plfu_hits": 23825943
+          },
+          {
+            "belady_hit_rate": 0.888255,
+            "belady_hits": 25504345,
+            "capacity": 2048,
+            "lfu_hit_rate": 0.836884,
+            "lfu_hits": 24029329,
+            "lru_hit_rate": 0.836852,
+            "lru_hits": 24028430,
+            "plfu_hit_rate": 0.836883,
+            "plfu_hits": 24029298
+          },
+          {
+            "belady_hit_rate": 0.912584,
+            "belady_hits": 26202916,
+            "capacity": 4096,
+            "lfu_hit_rate": 0.851054,
+            "lfu_hits": 24436194,
+            "lru_hit_rate": 0.851033,
+            "lru_hits": 24435605,
+            "plfu_hit_rate": 0.851078,
+            "plfu_hits": 24436891
+          },
+          {
+            "belady_hit_rate": 0.94349,
+            "belady_hits": 27090316,
+            "capacity": 8192,
+            "lfu_hit_rate": 0.879343,
+            "lfu_hits": 25248472,
+            "lru_hit_rate": 0.87942,
+            "lru_hits": 25250670,
+            "plfu_hit_rate": 0.879432,
+            "plfu_hits": 25251027
+          },
+          {
+            "belady_hit_rate": 0.979261,
+            "belady_hits": 28117389,
+            "capacity": 16384,
+            "lfu_hit_rate": 0.935943,
+            "lfu_hits": 26873620,
+            "lru_hit_rate": 0.93593,
+            "lru_hits": 26873240,
+            "plfu_hit_rate": 0.935943,
+            "plfu_hits": 26873612
+          },
+          {
+            "belady_hit_rate": 0.999108,
+            "belady_hits": 28687267,
+            "capacity": 32768,
+            "lfu_hit_rate": 0.999108,
+            "lfu_hits": 28687267,
+            "lru_hit_rate": 0.999108,
+            "lru_hits": 28687267,
+            "plfu_hit_rate": 0.999108,
+            "plfu_hits": 28687267
+          },
+          {
+            "belady_hit_rate": 0.999108,
+            "belady_hits": 28687267,
+            "capacity": 65536,
+            "lfu_hit_rate": 0.999108,
+            "lfu_hits": 28687267,
+            "lru_hit_rate": 0.999108,
+            "lru_hits": 28687267,
+            "plfu_hit_rate": 0.999108,
+            "plfu_hits": 28687267
+          }
+        ],
+        "distinct_keys": 25600,
+        "references": 28712867,
+        "stack_distance_percentiles": {
+          "p50": 0,
+          "p90": 11051,
+          "p99": 24128
+        }
+      },
+      "tp512": {
+        "compulsory_miss_rate": 0.000446,
+        "curve": [
+          {
+            "belady_hit_rate": 0.889082,
+            "belady_hits": 25528098,
+            "capacity": 1024,
+            "lfu_hit_rate": 0.83839,
+            "lfu_hits": 24072582,
+            "lru_hit_rate": 0.838342,
+            "lru_hits": 24071196,
+            "plfu_hit_rate": 0.838372,
+            "plfu_hits": 24072054
+          },
+          {
+            "belady_hit_rate": 0.913252,
+            "belady_hits": 26222072,
+            "capacity": 2048,
+            "lfu_hit_rate": 0.852444,
+            "lfu_hits": 24476115,
+            "lru_hit_rate": 0.852401,
+            "lru_hits": 24474863,
+            "plfu_hit_rate": 0.852443,
+            "plfu_hits": 24476078
+          },
+          {
+            "belady_hit_rate": 0.944034,
+            "belady_hits": 27105921,
+            "capacity": 4096,
+            "lfu_hit_rate": 0.880552,
+            "lfu_hits": 25283173,
+            "lru_hit_rate": 0.880481,
+            "lru_hits": 25281127,
+            "plfu_hit_rate": 0.880541,
+            "plfu_hits": 25282856
+          },
+          {
+            "belady_hit_rate": 0.979685,
+            "belady_hits": 28129575,
+            "capacity": 8192,
+            "lfu_hit_rate": 0.936623,
+            "lfu_hits": 26893142,
+            "lru_hit_rate": 0.936652,
+            "lru_hits": 26893963,
+            "plfu_hit_rate": 0.936705,
+            "plfu_hits": 26895472
+          },
+          {
+            "belady_hit_rate": 0.999554,
+            "belady_hits": 28700067,
+            "capacity": 16384,
+            "lfu_hit_rate": 0.999554,
+            "lfu_hits": 28700067,
+            "lru_hit_rate": 0.999554,
+            "lru_hits": 28700067,
+            "plfu_hit_rate": 0.999554,
+            "plfu_hits": 28700067
+          },
+          {
+            "belady_hit_rate": 0.999554,
+            "belady_hits": 28700067,
+            "capacity": 32768,
+            "lfu_hit_rate": 0.999554,
+            "lfu_hits": 28700067,
+            "lru_hit_rate": 0.999554,
+            "lru_hits": 28700067,
+            "plfu_hit_rate": 0.999554,
+            "plfu_hits": 28700067
+          },
+          {
+            "belady_hit_rate": 0.999554,
+            "belady_hits": 28700067,
+            "capacity": 65536,
+            "lfu_hit_rate": 0.999554,
+            "lfu_hits": 28700067,
+            "lru_hit_rate": 0.999554,
+            "lru_hits": 28700067,
+            "plfu_hit_rate": 0.999554,
+            "plfu_hits": 28700067
+          }
+        ],
+        "distinct_keys": 12800,
+        "references": 28712867,
+        "stack_distance_percentiles": {
+          "p50": 0,
+          "p90": 5490,
+          "p99": 12065
+        }
+      }
+    },
+    "duration_seconds": 9.999999,
+    "expected_ftl_counters": {
+      "never_written_read_lpns_precondition_fill": 0,
+      "never_written_read_lpns_precondition_none": 6466957,
+      "read_lpns": 28712867,
+      "read_reqs": 4998288,
+      "request_size_histogram_lpns": {
+        "1": 2502613,
+        "17-32": 0,
+        "2": 2500963,
+        "3-4": 2499334,
+        "33-64": 0,
+        "5-8": 0,
+        "9-16": 2497090,
+        ">64": 0
+      },
+      "write_lpns": 28742448,
+      "write_reqs": 5001712
+    },
+    "footprint": {
+      "fits_logical_device": true,
+      "footprint_gib": 24.996,
+      "max_end_bytes": 26843545600,
+      "min_offset_bytes": 0,
+      "unique_lpns": 6552544,
+      "unique_read_lpns": 6470885,
+      "unique_tp256": 25600,
+      "unique_tp512": 12800,
+      "unique_written_lpns": 6471855
+    },
+    "locality": {
+      "sequential_request_share": 0.0,
+      "top10pct_lpn_access_share": 0.163325,
+      "top1pct_lpn_access_share": 0.020118,
+      "top20pct_lpn_access_share": 0.298272,
+      "working_set_gib_max": 0.3794,
+      "working_set_lpns_max": 99448,
+      "working_set_lpns_mean": 99164.7,
+      "working_set_window_refs": 100000
+    },
+    "mapping": {
+      "never_written_read_lpns_precondition_none": 6466957,
+      "overwrite_share_of_written_lpns": 0.774833,
+      "read_after_write_share_precondition_fill": 1.0,
+      "read_after_write_share_precondition_none": 0.774771
+    },
+    "mix": {
+      "mean_request_kib": 22.982,
+      "read_percent_by_bytes": 49.974,
+      "read_percent_by_requests": 49.983,
+      "read_reqs": 4998288,
+      "request_sizes": {
+        "R": {
+          "16KiB": 1249781,
+          "4KiB": 1250693,
+          "64KiB": 1247673,
+          "8KiB": 1250141
+        },
+        "W": {
+          "16KiB": 1249553,
+          "4KiB": 1251920,
+          "64KiB": 1249417,
+          "8KiB": 1250822
+        }
+      },
+      "write_reqs": 5001712
+    },
+    "operations": 10000000,
+    "page_aligned": true,
+    "provenance": {
+      "address_range_gib": "25.0",
+      "file": "experiments/traces/full/uniform-mixed.trace",
+      "generator": "experiments/scripts/generate_workloads.py",
+      "hot_access_percent": "",
+      "hot_region_percent": "",
+      "operations": "10000000",
+      "pattern": "uniform",
+      "read_percent": "50.0",
+      "request_sizes": "4096,8192,16384,65536",
+      "seed": "45",
+      "sequential_percent": "",
+      "sha256": "998fc414b8077d90fb1ea5f296d414a87629c098cdc430de8cb80f4b61406bfe",
+      "sha256_matches_git_lfs_oid": true,
+      "sha256_matches_manifest": true,
+      "size_bytes": 280855844,
+      "write_percent": "50.0",
+      "zipf_alpha": ""
+    }
+  },
+  "traces/full/uniform-read": {
+    "cache_bounds_read_stream": {
+      "lpn": {
+        "compulsory_miss_rate": 0.113934,
+        "curve": [
+          {
+            "belady_hit_rate": 0.017004,
+            "belady_hits": 977937,
+            "capacity": 1024,
+            "lfu_hit_rate": 0.000161,
+            "lfu_hits": 9274,
+            "lru_hit_rate": 0.000155,
+            "lru_hits": 8924,
+            "plfu_hit_rate": 0.000158,
+            "plfu_hits": 9069
+          },
+          {
+            "belady_hit_rate": 0.024285,
+            "belady_hits": 1396681,
+            "capacity": 2048,
+            "lfu_hit_rate": 0.000321,
+            "lfu_hits": 18452,
+            "lru_hit_rate": 0.000317,
+            "lru_hits": 18239,
+            "plfu_hit_rate": 0.000314,
+            "plfu_hits": 18043
+          },
+          {
+            "belady_hit_rate": 0.034544,
+            "belady_hits": 1986695,
+            "capacity": 4096,
+            "lfu_hit_rate": 0.000641,
+            "lfu_hits": 36877,
+            "lru_hit_rate": 0.000624,
+            "lru_hits": 35866,
+            "plfu_hit_rate": 0.000628,
+            "plfu_hits": 36125
+          },
+          {
+            "belady_hit_rate": 0.048921,
+            "belady_hits": 2813564,
+            "capacity": 8192,
+            "lfu_hit_rate": 0.001262,
+            "lfu_hits": 72606,
+            "lru_hit_rate": 0.001233,
+            "lru_hits": 70905,
+            "plfu_hit_rate": 0.001246,
+            "plfu_hits": 71680
+          },
+          {
+            "belady_hit_rate": 0.069163,
+            "belady_hits": 3977723,
+            "capacity": 16384,
+            "lfu_hit_rate": 0.002515,
+            "lfu_hits": 144625,
+            "lru_hit_rate": 0.00249,
+            "lru_hits": 143194,
+            "plfu_hit_rate": 0.002489,
+            "plfu_hits": 143167
+          },
+          {
+            "belady_hit_rate": 0.097348,
+            "belady_hits": 5598710,
+            "capacity": 32768,
+            "lfu_hit_rate": 0.005004,
+            "lfu_hits": 287771,
+            "lru_hit_rate": 0.004991,
+            "lru_hits": 287025,
+            "plfu_hit_rate": 0.004985,
+            "plfu_hits": 286686
+          },
+          {
+            "belady_hit_rate": 0.136497,
+            "belady_hits": 7850250,
+            "capacity": 65536,
+            "lfu_hit_rate": 0.01001,
+            "lfu_hits": 575697,
+            "lru_hit_rate": 0.010013,
+            "lru_hits": 575854,
+            "plfu_hit_rate": 0.010001,
+            "plfu_hits": 575185
+          }
+        ],
+        "distinct_keys": 6552605,
+        "references": 57512374,
+        "stack_distance_percentiles": {
+          "p50": 2996150,
+          "p90": 5670609,
+          "p99": 6422392
+        }
+      },
+      "tp256": {
+        "compulsory_miss_rate": 0.000445,
+        "curve": [
+          {
+            "belady_hit_rate": 0.870059,
+            "belady_hits": 50039141,
+            "capacity": 1024,
+            "lfu_hit_rate": 0.829983,
+            "lfu_hits": 47734314,
+            "lru_hit_rate": 0.829968,
+            "lru_hits": 47733419,
+            "plfu_hit_rate": 0.829986,
+            "plfu_hits": 47734490
+          },
+          {
+            "belady_hit_rate": 0.888408,
+            "belady_hits": 51094464,
+            "capacity": 2048,
+            "lfu_hit_rate": 0.837075,
+            "lfu_hits": 48142155,
+            "lru_hit_rate": 0.83706,
+            "lru_hits": 48141319,
+            "plfu_hit_rate": 0.837042,
+            "plfu_hits": 48140283
+          },
+          {
+            "belady_hit_rate": 0.912734,
+            "belady_hits": 52493484,
+            "capacity": 4096,
+            "lfu_hit_rate": 0.851253,
+            "lfu_hits": 48957574,
+            "lru_hit_rate": 0.851223,
+            "lru_hits": 48955881,
+            "plfu_hit_rate": 0.851208,
+            "plfu_hits": 48954997
+          },
+          {
+            "belady_hit_rate": 0.943687,
+            "belady_hits": 54273678,
+            "capacity": 8192,
+            "lfu_hit_rate": 0.879569,
+            "lfu_hits": 50586087,
+            "lru_hit_rate": 0.879552,
+            "lru_hits": 50585145,
+            "plfu_hit_rate": 0.87952,
+            "plfu_hits": 50583288
+          },
+          {
+            "belady_hit_rate": 0.979552,
+            "belady_hits": 56336357,
+            "capacity": 16384,
+            "lfu_hit_rate": 0.936141,
+            "lfu_hits": 53839685,
+            "lru_hit_rate": 0.936096,
+            "lru_hits": 53837095,
+            "plfu_hit_rate": 0.93615,
+            "plfu_hits": 53840210
+          },
+          {
+            "belady_hit_rate": 0.999555,
+            "belady_hits": 57486774,
+            "capacity": 32768,
+            "lfu_hit_rate": 0.999555,
+            "lfu_hits": 57486774,
+            "lru_hit_rate": 0.999555,
+            "lru_hits": 57486774,
+            "plfu_hit_rate": 0.999555,
+            "plfu_hits": 57486774
+          },
+          {
+            "belady_hit_rate": 0.999555,
+            "belady_hits": 57486774,
+            "capacity": 65536,
+            "lfu_hit_rate": 0.999555,
+            "lfu_hits": 57486774,
+            "lru_hit_rate": 0.999555,
+            "lru_hits": 57486774,
+            "plfu_hit_rate": 0.999555,
+            "plfu_hits": 57486774
+          }
+        ],
+        "distinct_keys": 25600,
+        "references": 57512374,
+        "stack_distance_percentiles": {
+          "p50": 0,
+          "p90": 11090,
+          "p99": 24139
+        }
+      },
+      "tp512": {
+        "compulsory_miss_rate": 0.000223,
+        "curve": [
+          {
+            "belady_hit_rate": 0.889208,
+            "belady_hits": 51140464,
+            "capacity": 1024,
+            "lfu_hit_rate": 0.838565,
+            "lfu_hits": 48227873,
+            "lru_hit_rate": 0.838525,
+            "lru_hits": 48225577,
+            "plfu_hit_rate": 0.838534,
+            "plfu_hits": 48226075
+          },
+          {
+            "belady_hit_rate": 0.913373,
+            "belady_hits": 52530222,
+            "capacity": 2048,
+            "lfu_hit_rate": 0.852609,
+            "lfu_hits": 49035578,
+            "lru_hit_rate": 0.852562,
+            "lru_hits": 49032871,
+            "plfu_hit_rate": 0.852555,
+            "plfu_hits": 49032461
+          },
+          {
+            "belady_hit_rate": 0.944149,
+            "belady_hits": 54300257,
+            "capacity": 4096,
+            "lfu_hit_rate": 0.880659,
+            "lfu_hits": 50648769,
+            "lru_hit_rate": 0.880616,
+            "lru_hits": 50646304,
+            "plfu_hit_rate": 0.880622,
+            "plfu_hits": 50646687
+          },
+          {
+            "belady_hit_rate": 0.979825,
+            "belady_hits": 56352036,
+            "capacity": 8192,
+            "lfu_hit_rate": 0.936747,
+            "lfu_hits": 53874572,
+            "lru_hit_rate": 0.936735,
+            "lru_hits": 53873833,
+            "plfu_hit_rate": 0.936771,
+            "plfu_hits": 53875915
+          },
+          {
+            "belady_hit_rate": 0.999777,
+            "belady_hits": 57499574,
+            "capacity": 16384,
+            "lfu_hit_rate": 0.999777,
+            "lfu_hits": 57499574,
+            "lru_hit_rate": 0.999777,
+            "lru_hits": 57499574,
+            "plfu_hit_rate": 0.999777,
+            "plfu_hits": 57499574
+          },
+          {
+            "belady_hit_rate": 0.999777,
+            "belady_hits": 57499574,
+            "capacity": 32768,
+            "lfu_hit_rate": 0.999777,
+            "lfu_hits": 57499574,
+            "lru_hit_rate": 0.999777,
+            "lru_hits": 57499574,
+            "plfu_hit_rate": 0.999777,
+            "plfu_hits": 57499574
+          },
+          {
+            "belady_hit_rate": 0.999777,
+            "belady_hits": 57499574,
+            "capacity": 65536,
+            "lfu_hit_rate": 0.999777,
+            "lfu_hits": 57499574,
+            "lru_hit_rate": 0.999777,
+            "lru_hits": 57499574,
+            "plfu_hit_rate": 0.999777,
+            "plfu_hits": 57499574
+          }
+        ],
+        "distinct_keys": 12800,
+        "references": 57512374,
+        "stack_distance_percentiles": {
+          "p50": 0,
+          "p90": 5494,
+          "p99": 12067
+        }
+      }
+    },
+    "duration_seconds": 9.999999,
+    "expected_ftl_counters": {
+      "never_written_read_lpns_precondition_fill": 0,
+      "never_written_read_lpns_precondition_none": 57512374,
+      "read_lpns": 57512374,
+      "read_reqs": 10000000,
+      "request_size_histogram_lpns": {
+        "1": 2499796,
+        "17-32": 0,
+        "2": 2497569,
+        "3-4": 2502060,
+        "33-64": 0,
+        "5-8": 0,
+        "9-16": 2500575,
+        ">64": 0
+      },
+      "write_lpns": 0,
+      "write_reqs": 0
+    },
+    "footprint": {
+      "fits_logical_device": true,
+      "footprint_gib": 24.9962,
+      "max_end_bytes": 26843545600,
+      "min_offset_bytes": 0,
+      "unique_lpns": 6552605,
+      "unique_read_lpns": 6552605,
+      "unique_tp256": 25600,
+      "unique_tp512": 12800,
+      "unique_written_lpns": 0
+    },
+    "locality": {
+      "sequential_request_share": 0.0,
+      "top10pct_lpn_access_share": 0.163157,
+      "top1pct_lpn_access_share": 0.020073,
+      "top20pct_lpn_access_share": 0.298028,
+      "working_set_gib_max": 0.3794,
+      "working_set_lpns_max": 99446,
+      "working_set_lpns_mean": 99090.2,
+      "working_set_window_refs": 100000
+    },
+    "mapping": {
+      "never_written_read_lpns_precondition_none": 57512374,
+      "overwrite_share_of_written_lpns": null,
+      "read_after_write_share_precondition_fill": 1.0,
+      "read_after_write_share_precondition_none": 0.0
+    },
+    "mix": {
+      "mean_request_kib": 23.005,
+      "read_percent_by_bytes": 100.0,
+      "read_percent_by_requests": 100.0,
+      "read_reqs": 10000000,
+      "request_sizes": {
+        "R": {
+          "16KiB": 2502060,
+          "4KiB": 2499796,
+          "64KiB": 2500575,
+          "8KiB": 2497569
+        },
+        "W": {}
+      },
+      "write_reqs": 0
+    },
+    "operations": 10000000,
+    "page_aligned": true,
+    "provenance": {
+      "address_range_gib": "25.0",
+      "file": "experiments/traces/full/uniform-read.trace",
+      "generator": "experiments/scripts/generate_workloads.py",
+      "hot_access_percent": "",
+      "hot_region_percent": "",
+      "operations": "10000000",
+      "pattern": "uniform",
+      "read_percent": "100.0",
+      "request_sizes": "4096,8192,16384,65536",
+      "seed": "43",
+      "sequential_percent": "",
+      "sha256": "cc214c9d3dea7d3c7f81d2c555e632121723c80a08860bbade1a6c8ae5aefaf7",
+      "sha256_matches_git_lfs_oid": true,
+      "sha256_matches_manifest": true,
+      "size_bytes": 280867425,
+      "write_percent": "0.0",
+      "zipf_alpha": ""
+    }
+  },
+  "traces/full/uniform-write": {
+    "cache_bounds_read_stream": {},
+    "duration_seconds": 9.999999,
+    "expected_ftl_counters": {
+      "never_written_read_lpns_precondition_fill": 0,
+      "never_written_read_lpns_precondition_none": 0,
+      "read_lpns": 0,
+      "read_reqs": 0,
+      "request_size_histogram_lpns": {
+        "1": 2499931,
+        "17-32": 0,
+        "2": 2498731,
+        "3-4": 2500280,
+        "33-64": 0,
+        "5-8": 0,
+        "9-16": 2501058,
+        ">64": 0
+      },
+      "write_lpns": 57515441,
+      "write_reqs": 10000000
+    },
+    "footprint": {
+      "fits_logical_device": true,
+      "footprint_gib": 24.9959,
+      "max_end_bytes": 26843545600,
+      "min_offset_bytes": 4096,
+      "unique_lpns": 6552536,
+      "unique_read_lpns": 0,
+      "unique_tp256": 25600,
+      "unique_tp512": 12800,
+      "unique_written_lpns": 6552536
+    },
+    "locality": {
+      "sequential_request_share": 0.0,
+      "top10pct_lpn_access_share": 0.163043,
+      "top1pct_lpn_access_share": 0.020046,
+      "top20pct_lpn_access_share": 0.297906,
+      "working_set_gib_max": 0.3794,
+      "working_set_lpns_max": 99453,
+      "working_set_lpns_mean": 99096.3,
+      "working_set_window_refs": 100000
+    },
+    "mapping": {
+      "never_written_read_lpns_precondition_none": 0,
+      "overwrite_share_of_written_lpns": 0.886073,
+      "read_after_write_share_precondition_fill": null,
+      "read_after_write_share_precondition_none": null
+    },
+    "mix": {
+      "mean_request_kib": 23.006,
+      "read_percent_by_bytes": 0.0,
+      "read_percent_by_requests": 0.0,
+      "read_reqs": 0,
+      "request_sizes": {
+        "R": {},
+        "W": {
+          "16KiB": 2500280,
+          "4KiB": 2499931,
+          "64KiB": 2501058,
+          "8KiB": 2498731
+        }
+      },
+      "write_reqs": 10000000
+    },
+    "operations": 10000000,
+    "page_aligned": true,
+    "provenance": {
+      "address_range_gib": "25.0",
+      "file": "experiments/traces/full/uniform-write.trace",
+      "generator": "experiments/scripts/generate_workloads.py",
+      "hot_access_percent": "",
+      "hot_region_percent": "",
+      "operations": "10000000",
+      "pattern": "uniform",
+      "read_percent": "0.0",
+      "request_sizes": "4096,8192,16384,65536",
+      "seed": "44",
+      "sequential_percent": "",
+      "sha256": "72ee31323227ff8ee57f12803b21ab0a4cfe904ccf160263307fc5187b0080b4",
+      "sha256_matches_git_lfs_oid": true,
+      "sha256_matches_manifest": true,
+      "size_bytes": 280863982,
+      "write_percent": "100.0",
+      "zipf_alpha": ""
+    }
+  },
+  "traces/full/zipf-80-20": {
+    "cache_bounds_read_stream": {
+      "lpn": {
+        "compulsory_miss_rate": 0.30101,
+        "curve": [
+          {
+            "belady_hit_rate": 0.692659,
+            "belady_hits": 34687,
+            "capacity": 1024,
+            "lfu_hit_rate": 0.648548,
+            "lfu_hits": 32478,
+            "lru_hit_rate": 0.61548,
+            "lru_hits": 30822,
+            "plfu_hit_rate": 0.663565,
+            "plfu_hits": 33230
+          },
+          {
+            "belady_hit_rate": 0.69899,
+            "belady_hits": 35004,
+            "capacity": 2048,
+            "lfu_hit_rate": 0.666021,
+            "lfu_hits": 33353,
+            "lru_hit_rate": 0.648129,
+            "lru_hits": 32457,
+            "plfu_hit_rate": 0.673509,
+            "plfu_hits": 33728
+          },
+          {
+            "belady_hit_rate": 0.69899,
+            "belady_hits": 35004,
+            "capacity": 4096,
+            "lfu_hit_rate": 0.680958,
+            "lfu_hits": 34101,
+            "lru_hit_rate": 0.673729,
+            "lru_hits": 33739,
+            "plfu_hit_rate": 0.682336,
+            "plfu_hits": 34170
+          },
+          {
+            "belady_hit_rate": 0.69899,
+            "belady_hits": 35004,
+            "capacity": 8192,
+            "lfu_hit_rate": 0.693259,
+            "lfu_hits": 34717,
+            "lru_hit_rate": 0.69204,
+            "lru_hits": 34656,
+            "plfu_hit_rate": 0.693259,
+            "plfu_hits": 34717
+          },
+          {
+            "belady_hit_rate": 0.69899,
+            "belady_hits": 35004,
+            "capacity": 16384,
+            "lfu_hit_rate": 0.69899,
+            "lfu_hits": 35004,
+            "lru_hit_rate": 0.69899,
+            "lru_hits": 35004,
+            "plfu_hit_rate": 0.69899,
+            "plfu_hits": 35004
+          },
+          {
+            "belady_hit_rate": 0.69899,
+            "belady_hits": 35004,
+            "capacity": 32768,
+            "lfu_hit_rate": 0.69899,
+            "lfu_hits": 35004,
+            "lru_hit_rate": 0.69899,
+            "lru_hits": 35004,
+            "plfu_hit_rate": 0.69899,
+            "plfu_hits": 35004
+          },
+          {
+            "belady_hit_rate": 0.69899,
+            "belady_hits": 35004,
+            "capacity": 65536,
+            "lfu_hit_rate": 0.69899,
+            "lfu_hits": 35004,
+            "lru_hit_rate": 0.69899,
+            "lru_hits": 35004,
+            "plfu_hit_rate": 0.69899,
+            "plfu_hits": 35004
+          }
+        ],
+        "distinct_keys": 15074,
+        "references": 50078,
+        "stack_distance_percentiles": {
+          "p50": 30,
+          "p90": 1329,
+          "p99": 8175
+        }
+      },
+      "tp256": {
+        "compulsory_miss_rate": 0.020448,
+        "curve": [
+          {
+            "belady_hit_rate": 0.979552,
+            "belady_hits": 49054,
+            "capacity": 1024,
+            "lfu_hit_rate": 0.979552,
+            "lfu_hits": 49054,
+            "lru_hit_rate": 0.979552,
+            "lru_hits": 49054,
+            "plfu_hit_rate": 0.979552,
+            "plfu_hits": 49054
+          },
+          {
+            "belady_hit_rate": 0.979552,
+            "belady_hits": 49054,
+            "capacity": 2048,
+            "lfu_hit_rate": 0.979552,
+            "lfu_hits": 49054,
+            "lru_hit_rate": 0.979552,
+            "lru_hits": 49054,
+            "plfu_hit_rate": 0.979552,
+            "plfu_hits": 49054
+          },
+          {
+            "belady_hit_rate": 0.979552,
+            "belady_hits": 49054,
+            "capacity": 4096,
+            "lfu_hit_rate": 0.979552,
+            "lfu_hits": 49054,
+            "lru_hit_rate": 0.979552,
+            "lru_hits": 49054,
+            "plfu_hit_rate": 0.979552,
+            "plfu_hits": 49054
+          },
+          {
+            "belady_hit_rate": 0.979552,
+            "belady_hits": 49054,
+            "capacity": 8192,
+            "lfu_hit_rate": 0.979552,
+            "lfu_hits": 49054,
+            "lru_hit_rate": 0.979552,
+            "lru_hits": 49054,
+            "plfu_hit_rate": 0.979552,
+            "plfu_hits": 49054
+          },
+          {
+            "belady_hit_rate": 0.979552,
+            "belady_hits": 49054,
+            "capacity": 16384,
+            "lfu_hit_rate": 0.979552,
+            "lfu_hits": 49054,
+            "lru_hit_rate": 0.979552,
+            "lru_hits": 49054,
+            "plfu_hit_rate": 0.979552,
+            "plfu_hits": 49054
+          },
+          {
+            "belady_hit_rate": 0.979552,
+            "belady_hits": 49054,
+            "capacity": 32768,
+            "lfu_hit_rate": 0.979552,
+            "lfu_hits": 49054,
+            "lru_hit_rate": 0.979552,
+            "lru_hits": 49054,
+            "plfu_hit_rate": 0.979552,
+            "plfu_hits": 49054
+          },
+          {
+            "belady_hit_rate": 0.979552,
+            "belady_hits": 49054,
+            "capacity": 65536,
+            "lfu_hit_rate": 0.979552,
+            "lfu_hits": 49054,
+            "lru_hit_rate": 0.979552,
+            "lru_hits": 49054,
+            "plfu_hit_rate": 0.979552,
+            "plfu_hits": 49054
+          }
+        ],
+        "distinct_keys": 1024,
+        "references": 50078,
+        "stack_distance_percentiles": {
+          "p50": 1,
+          "p90": 530,
+          "p99": 954
+        }
+      },
+      "tp512": {
+        "compulsory_miss_rate": 0.010224,
+        "curve": [
+          {
+            "belady_hit_rate": 0.989776,
+            "belady_hits": 49566,
+            "capacity": 1024,
+            "lfu_hit_rate": 0.989776,
+            "lfu_hits": 49566,
+            "lru_hit_rate": 0.989776,
+            "lru_hits": 49566,
+            "plfu_hit_rate": 0.989776,
+            "plfu_hits": 49566
+          },
+          {
+            "belady_hit_rate": 0.989776,
+            "belady_hits": 49566,
+            "capacity": 2048,
+            "lfu_hit_rate": 0.989776,
+            "lfu_hits": 49566,
+            "lru_hit_rate": 0.989776,
+            "lru_hits": 49566,
+            "plfu_hit_rate": 0.989776,
+            "plfu_hits": 49566
+          },
+          {
+            "belady_hit_rate": 0.989776,
+            "belady_hits": 49566,
+            "capacity": 4096,
+            "lfu_hit_rate": 0.989776,
+            "lfu_hits": 49566,
+            "lru_hit_rate": 0.989776,
+            "lru_hits": 49566,
+            "plfu_hit_rate": 0.989776,
+            "plfu_hits": 49566
+          },
+          {
+            "belady_hit_rate": 0.989776,
+            "belady_hits": 49566,
+            "capacity": 8192,
+            "lfu_hit_rate": 0.989776,
+            "lfu_hits": 49566,
+            "lru_hit_rate": 0.989776,
+            "lru_hits": 49566,
+            "plfu_hit_rate": 0.989776,
+            "plfu_hits": 49566
+          },
+          {
+            "belady_hit_rate": 0.989776,
+            "belady_hits": 49566,
+            "capacity": 16384,
+            "lfu_hit_rate": 0.989776,
+            "lfu_hits": 49566,
+            "lru_hit_rate": 0.989776,
+            "lru_hits": 49566,
+            "plfu_hit_rate": 0.989776,
+            "plfu_hits": 49566
+          },
+          {
+            "belady_hit_rate": 0.989776,
+            "belady_hits": 49566,
+            "capacity": 32768,
+            "lfu_hit_rate": 0.989776,
+            "lfu_hits": 49566,
+            "lru_hit_rate": 0.989776,
+            "lru_hits": 49566,
+            "plfu_hit_rate": 0.989776,
+            "plfu_hits": 49566
+          },
+          {
+            "belady_hit_rate": 0.989776,
+            "belady_hits": 49566,
+            "capacity": 65536,
+            "lfu_hit_rate": 0.989776,
+            "lfu_hits": 49566,
+            "lru_hit_rate": 0.989776,
+            "lru_hits": 49566,
+            "plfu_hit_rate": 0.989776,
+            "plfu_hits": 49566
+          }
+        ],
+        "distinct_keys": 512,
+        "references": 50078,
+        "stack_distance_percentiles": {
+          "p50": 1,
+          "p90": 276,
+          "p99": 481
+        }
+      }
+    },
+    "duration_seconds": 0.099999,
+    "expected_ftl_counters": {
+      "never_written_read_lpns_precondition_fill": 0,
+      "never_written_read_lpns_precondition_none": 15118,
+      "read_lpns": 50078,
+      "read_reqs": 50078,
+      "request_size_histogram_lpns": {
+        "1": 100000,
+        "17-32": 0,
+        "2": 0,
+        "3-4": 0,
+        "33-64": 0,
+        "5-8": 0,
+        "9-16": 0,
+        ">64": 0
+      },
+      "write_lpns": 49922,
+      "write_reqs": 49922
+    },
+    "footprint": {
+      "fits_logical_device": true,
+      "footprint_gib": 0.1057,
+      "max_end_bytes": 1073676288,
+      "min_offset_bytes": 0,
+      "unique_lpns": 27705,
+      "unique_read_lpns": 15074,
+      "unique_tp256": 1024,
+      "unique_tp512": 512,
+      "unique_written_lpns": 15211
+    },
+    "locality": {
+      "sequential_request_share": 0.01807,
+      "top10pct_lpn_access_share": 0.74095,
+      "top1pct_lpn_access_share": 0.63322,
+      "top20pct_lpn_access_share": 0.77836,
+      "working_set_gib_max": 0.1057,
+      "working_set_lpns_max": 27705,
+      "working_set_lpns_mean": 27705.0,
+      "working_set_window_refs": 100000
+    },
+    "mapping": {
+      "never_written_read_lpns_precondition_none": 15118,
+      "overwrite_share_of_written_lpns": 0.695305,
+      "read_after_write_share_precondition_fill": 1.0,
+      "read_after_write_share_precondition_none": 0.698111
+    },
+    "mix": {
+      "mean_request_kib": 4.0,
+      "read_percent_by_bytes": 50.078,
+      "read_percent_by_requests": 50.078,
+      "read_reqs": 50078,
+      "request_sizes": {
+        "R": {
+          "4KiB": 50078
+        },
+        "W": {
+          "4KiB": 49922
+        }
+      },
+      "write_reqs": 49922
+    },
+    "operations": 100000,
+    "page_aligned": true,
+    "provenance": {
+      "address_range_gib": "1.0",
+      "file": "experiments/traces/full/zipf-80-20.trace",
+      "generator": "experiments/scripts/generate_8020_trace.py",
+      "hot_access_percent": "80.0",
+      "hot_region_percent": "20.0",
+      "operations": "100000",
+      "pattern": "zipf hot / uniform cold",
+      "read_percent": "50.0",
+      "seed": "42",
+      "sha256": "59f778196cebfd6f1ad0e659f9a41154230e3199874a759676be56125ea6adef",
+      "sha256_matches_git_lfs_oid": true,
+      "size_bytes": 2265547,
+      "source": "parameters from experiments/results/runs.csv run_id 2 (not in manifest)",
+      "write_percent": "50.0",
+      "zipf_alpha": "1.2"
+    }
+  },
+  "traces/full/zipf-hot10-access90-a1.2": {
+    "cache_bounds_read_stream": {
+      "lpn": {
+        "compulsory_miss_rate": 0.095191,
+        "curve": [
+          {
+            "belady_hit_rate": 0.761707,
+            "belady_hits": 21895178,
+            "capacity": 1024,
+            "lfu_hit_rate": 0.735564,
+            "lfu_hits": 21143687,
+            "lru_hit_rate": 0.671974,
+            "lru_hits": 19315801,
+            "plfu_hit_rate": 0.744446,
+            "plfu_hits": 21398994
+          },
+          {
+            "belady_hit_rate": 0.787783,
+            "belady_hits": 22644705,
+            "capacity": 2048,
+            "lfu_hit_rate": 0.76316,
+            "lfu_hits": 21936922,
+            "lru_hit_rate": 0.708694,
+            "lru_hits": 20371311,
+            "plfu_hit_rate": 0.772348,
+            "plfu_hits": 22201028
+          },
+          {
+            "belady_hit_rate": 0.810237,
+            "belady_hits": 23290170,
+            "capacity": 4096,
+            "lfu_hit_rate": 0.787902,
+            "lfu_hits": 22648144,
+            "lru_hit_rate": 0.740448,
+            "lru_hits": 21284087,
+            "plfu_hit_rate": 0.796253,
+            "plfu_hits": 22888191
+          },
+          {
+            "belady_hit_rate": 0.829671,
+            "belady_hits": 23848793,
+            "capacity": 8192,
+            "lfu_hit_rate": 0.810271,
+            "lfu_hits": 23291130,
+            "lru_hit_rate": 0.768099,
+            "lru_hits": 22078919,
+            "plfu_hit_rate": 0.816877,
+            "plfu_hits": 23481028
+          },
+          {
+            "belady_hit_rate": 0.846597,
+            "belady_hits": 24335323,
+            "capacity": 16384,
+            "lfu_hit_rate": 0.82795,
+            "lfu_hits": 23799320,
+            "lru_hit_rate": 0.792156,
+            "lru_hits": 22770427,
+            "plfu_hit_rate": 0.834567,
+            "plfu_hits": 23989520
+          },
+          {
+            "belady_hit_rate": 0.861392,
+            "belady_hits": 24760608,
+            "capacity": 32768,
+            "lfu_hit_rate": 0.842669,
+            "lfu_hits": 24222398,
+            "lru_hit_rate": 0.813219,
+            "lru_hits": 23375883,
+            "plfu_hit_rate": 0.849411,
+            "plfu_hits": 24416199
+          },
+          {
+            "belady_hit_rate": 0.874415,
+            "belady_hits": 25134953,
+            "capacity": 65536,
+            "lfu_hit_rate": 0.854356,
+            "lfu_hits": 24558363,
+            "lru_hit_rate": 0.831643,
+            "lru_hits": 23905476,
+            "plfu_hit_rate": 0.861214,
+            "plfu_hits": 24755471
+          }
+        ],
+        "distinct_keys": 2736259,
+        "references": 28744869,
+        "stack_distance_percentiles": {
+          "p50": 75,
+          "p90": 34097,
+          "p99": 1377435
+        }
+      },
+      "tp256": {
+        "compulsory_miss_rate": 0.000891,
+        "curve": [
+          {
+            "belady_hit_rate": 0.983066,
+            "belady_hits": 28258117,
+            "capacity": 1024,
+            "lfu_hit_rate": 0.97873,
+            "lfu_hits": 28133462,
+            "lru_hit_rate": 0.975853,
+            "lru_hits": 28050755,
+            "plfu_hit_rate": 0.979998,
+            "plfu_hits": 28169912
+          },
+          {
+            "belady_hit_rate": 0.985939,
+            "belady_hits": 28340697,
+            "capacity": 2048,
+            "lfu_hit_rate": 0.980413,
+            "lfu_hits": 28181852,
+            "lru_hit_rate": 0.978542,
+            "lru_hits": 28128056,
+            "plfu_hit_rate": 0.981354,
+            "plfu_hits": 28208881
+          },
+          {
+            "belady_hit_rate": 0.98925,
+            "belady_hits": 28435853,
+            "capacity": 4096,
+            "lfu_hit_rate": 0.982631,
+            "lfu_hits": 28245591,
+            "lru_hit_rate": 0.981619,
+            "lru_hits": 28216516,
+            "plfu_hit_rate": 0.983134,
+            "plfu_hits": 28260070
+          },
+          {
+            "belady_hit_rate": 0.993072,
+            "belady_hits": 28545728,
+            "capacity": 8192,
+            "lfu_hit_rate": 0.986196,
+            "lfu_hits": 28348063,
+            "lru_hit_rate": 0.985794,
+            "lru_hits": 28336523,
+            "plfu_hit_rate": 0.986395,
+            "plfu_hits": 28353808
+          },
+          {
+            "belady_hit_rate": 0.997103,
+            "belady_hits": 28661608,
+            "capacity": 16384,
+            "lfu_hit_rate": 0.992618,
+            "lfu_hits": 28532678,
+            "lru_hit_rate": 0.992511,
+            "lru_hits": 28529594,
+            "plfu_hit_rate": 0.99264,
+            "plfu_hits": 28533319
+          },
+          {
+            "belady_hit_rate": 0.999109,
+            "belady_hits": 28719269,
+            "capacity": 32768,
+            "lfu_hit_rate": 0.999109,
+            "lfu_hits": 28719269,
+            "lru_hit_rate": 0.999109,
+            "lru_hits": 28719269,
+            "plfu_hit_rate": 0.999109,
+            "plfu_hits": 28719269
+          },
+          {
+            "belady_hit_rate": 0.999109,
+            "belady_hits": 28719269,
+            "capacity": 65536,
+            "lfu_hit_rate": 0.999109,
+            "lfu_hits": 28719269,
+            "lru_hit_rate": 0.999109,
+            "lru_hits": 28719269,
+            "plfu_hit_rate": 0.999109,
+            "plfu_hits": 28719269
+          }
+        ],
+        "distinct_keys": 25600,
+        "references": 28744869,
+        "stack_distance_percentiles": {
+          "p50": 0,
+          "p90": 0,
+          "p99": 12084
+        }
+      },
+      "tp512": {
+        "compulsory_miss_rate": 0.000445,
+        "curve": [
+          {
+            "belady_hit_rate": 0.986081,
+            "belady_hits": 28344757,
+            "capacity": 1024,
+            "lfu_hit_rate": 0.98057,
+            "lfu_hits": 28186351,
+            "lru_hit_rate": 0.978753,
+            "lru_hits": 28134138,
+            "plfu_hit_rate": 0.981701,
+            "plfu_hits": 28218868
+          },
+          {
+            "belady_hit_rate": 0.989415,
+            "belady_hits": 28440595,
+            "capacity": 2048,
+            "lfu_hit_rate": 0.982755,
+            "lfu_hits": 28249174,
+            "lru_hit_rate": 0.981793,
+            "lru_hits": 28221498,
+            "plfu_hit_rate": 0.983419,
+            "plfu_hits": 28268260
+          },
+          {
+            "belady_hit_rate": 0.993274,
+            "belady_hits": 28551525,
+            "capacity": 4096,
+            "lfu_hit_rate": 0.986364,
+            "lfu_hits": 28352900,
+            "lru_hit_rate": 0.985977,
+            "lru_hits": 28341767,
+            "plfu_hit_rate": 0.986628,
+            "plfu_hits": 28360503
+          },
+          {
+            "belady_hit_rate": 0.99741,
+            "belady_hits": 28670420,
+            "capacity": 8192,
+            "lfu_hit_rate": 0.99281,
+            "lfu_hits": 28538189,
+            "lru_hit_rate": 0.992725,
+            "lru_hits": 28535742,
+            "plfu_hit_rate": 0.992852,
+            "plfu_hits": 28539390
+          },
+          {
+            "belady_hit_rate": 0.999555,
+            "belady_hits": 28732069,
+            "capacity": 16384,
+            "lfu_hit_rate": 0.999555,
+            "lfu_hits": 28732069,
+            "lru_hit_rate": 0.999555,
+            "lru_hits": 28732069,
+            "plfu_hit_rate": 0.999555,
+            "plfu_hits": 28732069
+          },
+          {
+            "belady_hit_rate": 0.999555,
+            "belady_hits": 28732069,
+            "capacity": 32768,
+            "lfu_hit_rate": 0.999555,
+            "lfu_hits": 28732069,
+            "lru_hit_rate": 0.999555,
+            "lru_hits": 28732069,
+            "plfu_hit_rate": 0.999555,
+            "plfu_hits": 28732069
+          },
+          {
+            "belady_hit_rate": 0.999555,
+            "belady_hits": 28732069,
+            "capacity": 65536,
+            "lfu_hit_rate": 0.999555,
+            "lfu_hits": 28732069,
+            "lru_hit_rate": 0.999555,
+            "lru_hits": 28732069,
+            "plfu_hit_rate": 0.999555,
+            "plfu_hits": 28732069
+          }
+        ],
+        "distinct_keys": 12800,
+        "references": 28744869,
+        "stack_distance_percentiles": {
+          "p50": 0,
+          "p90": 0,
+          "p99": 6199
+        }
+      }
+    },
+    "duration_seconds": 9.999999,
+    "expected_ftl_counters": {
+      "never_written_read_lpns_precondition_fill": 0,
+      "never_written_read_lpns_precondition_none": 2727407,
+      "read_lpns": 28744869,
+      "read_reqs": 4998507,
+      "request_size_histogram_lpns": {
+        "1": 2502660,
+        "17-32": 0,
+        "2": 2499296,
+        "3-4": 2498403,
+        "33-64": 0,
+        "5-8": 0,
+        "9-16": 2499641,
+        ">64": 0
+      },
+      "write_lpns": 28744251,
+      "write_reqs": 5001493
+    },
+    "footprint": {
+      "fits_logical_device": true,
+      "footprint_gib": 16.194,
+      "max_end_bytes": 26843545600,
+      "min_offset_bytes": 0,
+      "unique_lpns": 4245150,
+      "unique_read_lpns": 2736259,
+      "unique_tp256": 25600,
+      "unique_tp512": 12800,
+      "unique_written_lpns": 2750219
+    },
+    "locality": {
+      "sequential_request_share": 0.011471,
+      "top10pct_lpn_access_share": 0.900823,
+      "top1pct_lpn_access_share": 0.8575,
+      "top20pct_lpn_access_share": 0.9218,
+      "working_set_gib_max": 0.0924,
+      "working_set_lpns_max": 24222,
+      "working_set_lpns_mean": 22904.0,
+      "working_set_window_refs": 100000
+    },
+    "mapping": {
+      "never_written_read_lpns_precondition_none": 2727407,
+      "overwrite_share_of_written_lpns": 0.904321,
+      "read_after_write_share_precondition_fill": 1.0,
+      "read_after_write_share_precondition_none": 0.905117
+    },
+    "mix": {
+      "mean_request_kib": 22.996,
+      "read_percent_by_bytes": 50.001,
+      "read_percent_by_requests": 49.985,
+      "read_reqs": 4998507,
+      "request_sizes": {
+        "R": {
+          "16KiB": 1247931,
+          "4KiB": 1251213,
+          "64KiB": 1250229,
+          "8KiB": 1249134
+        },
+        "W": {
+          "16KiB": 1250472,
+          "4KiB": 1251447,
+          "64KiB": 1249412,
+          "8KiB": 1250162
+        }
+      },
+      "write_reqs": 5001493
+    },
+    "operations": 10000000,
+    "page_aligned": true,
+    "provenance": {
+      "address_range_gib": "25.0",
+      "file": "experiments/traces/full/zipf-hot10-access90-a1.2.trace",
+      "generator": "experiments/scripts/generate_workloads.py",
+      "hot_access_percent": "90.0",
+      "hot_region_percent": "10.0",
+      "operations": "10000000",
+      "pattern": "zipf",
+      "read_percent": "50.0",
+      "request_sizes": "4096,8192,16384,65536",
+      "seed": "47",
+      "sequential_percent": "",
+      "sha256": "4311602f615c61590685443b149f95313914becce071e286fb51b85e9b57ab88",
+      "sha256_matches_git_lfs_oid": true,
+      "sha256_matches_manifest": true,
+      "size_bytes": 230671807,
+      "write_percent": "50.0",
+      "zipf_alpha": "1.2"
+    }
+  },
+  "traces/full/zipf-hot20-access80-a0.8": {
+    "cache_bounds_read_stream": {
+      "lpn": {
+        "compulsory_miss_rate": 0.166787,
+        "curve": [
+          {
+            "belady_hit_rate": 0.190265,
+            "belady_hits": 5464096,
+            "capacity": 1024,
+            "lfu_hit_rate": 0.139344,
+            "lfu_hits": 4001722,
+            "lru_hit_rate": 0.06576,
+            "lru_hits": 1888505,
+            "plfu_hit_rate": 0.15679,
+            "plfu_hits": 4502762
+          },
+          {
+            "belady_hit_rate": 0.225949,
+            "belady_hits": 6488880,
+            "capacity": 2048,
+            "lfu_hit_rate": 0.165871,
+            "lfu_hits": 4763534,
+            "lru_hit_rate": 0.089329,
+            "lru_hits": 2565375,
+            "plfu_hit_rate": 0.186851,
+            "plfu_hits": 5366040
+          },
+          {
+            "belady_hit_rate": 0.266482,
+            "belady_hits": 7652927,
+            "capacity": 4096,
+            "lfu_hit_rate": 0.199835,
+            "lfu_hits": 5738933,
+            "lru_hit_rate": 0.115665,
+            "lru_hits": 3321705,
+            "plfu_hit_rate": 0.221074,
+            "plfu_hits": 6348877
+          },
+          {
+            "belady_hit_rate": 0.31261,
+            "belady_hits": 8977638,
+            "capacity": 8192,
+            "lfu_hit_rate": 0.235604,
+            "lfu_hits": 6766165,
+            "lru_hit_rate": 0.147173,
+            "lru_hits": 4226559,
+            "plfu_hit_rate": 0.260134,
+            "plfu_hits": 7470623
+          },
+          {
+            "belady_hit_rate": 0.364896,
+            "belady_hits": 10479206,
+            "capacity": 16384,
+            "lfu_hit_rate": 0.27726,
+            "lfu_hits": 7962451,
+            "lru_hit_rate": 0.185204,
+            "lru_hits": 5318740,
+            "plfu_hit_rate": 0.304598,
+            "plfu_hits": 8747558
+          },
+          {
+            "belady_hit_rate": 0.423839,
+            "belady_hits": 12171950,
+            "capacity": 32768,
+            "lfu_hit_rate": 0.324385,
+            "lfu_hits": 9315800,
+            "lru_hit_rate": 0.231116,
+            "lru_hits": 6637281,
+            "plfu_hit_rate": 0.35487,
+            "plfu_hits": 10191275
+          },
+          {
+            "belady_hit_rate": 0.489843,
+            "belady_hits": 14067491,
+            "capacity": 65536,
+            "lfu_hit_rate": 0.379074,
+            "lfu_hits": 10886368,
+            "lru_hit_rate": 0.286785,
+            "lru_hits": 8235993,
+            "plfu_hit_rate": 0.411553,
+            "plfu_hits": 11819112
+          }
+        ],
+        "distinct_keys": 4789855,
+        "references": 28718340,
+        "stack_distance_percentiles": {
+          "p50": 225368,
+          "p90": 2013237,
+          "p99": 3855814
+        }
+      },
+      "tp256": {
+        "compulsory_miss_rate": 0.000891,
+        "curve": [
+          {
+            "belady_hit_rate": 0.937355,
+            "belady_hits": 26919280,
+            "capacity": 1024,
+            "lfu_hit_rate": 0.915394,
+            "lfu_hits": 26288588,
+            "lru_hit_rate": 0.900242,
+            "lru_hits": 25853467,
+            "plfu_hit_rate": 0.923025,
+            "plfu_hits": 26507751
+          },
+          {
+            "belady_hit_rate": 0.952754,
+            "belady_hits": 27361521,
+            "capacity": 2048,
+            "lfu_hit_rate": 0.931842,
+            "lfu_hits": 26760947,
+            "lru_hit_rate": 0.917883,
+            "lru_hits": 26360070,
+            "plfu_hit_rate": 0.938961,
+            "plfu_hits": 26965410
+          },
+          {
+            "belady_hit_rate": 0.968076,
+            "belady_hits": 27801549,
+            "capacity": 4096,
+            "lfu_hit_rate": 0.949806,
+            "lfu_hits": 27276858,
+            "lru_hit_rate": 0.938637,
+            "lru_hits": 26956098,
+            "plfu_hit_rate": 0.957259,
+            "plfu_hits": 27490899
+          },
+          {
+            "belady_hit_rate": 0.982064,
+            "belady_hits": 28203244,
+            "capacity": 8192,
+            "lfu_hit_rate": 0.967314,
+            "lfu_hits": 27779653,
+            "lru_hit_rate": 0.96134,
+            "lru_hits": 27608077,
+            "plfu_hit_rate": 0.969519,
+            "plfu_hits": 27842974
+          },
+          {
+            "belady_hit_rate": 0.993799,
+            "belady_hits": 28540249,
+            "capacity": 16384,
+            "lfu_hit_rate": 0.983689,
+            "lfu_hits": 28249927,
+            "lru_hit_rate": 0.98326,
+            "lru_hits": 28237608,
+            "plfu_hit_rate": 0.983768,
+            "plfu_hits": 28252186
+          },
+          {
+            "belady_hit_rate": 0.999109,
+            "belady_hits": 28692740,
+            "capacity": 32768,
+            "lfu_hit_rate": 0.999109,
+            "lfu_hits": 28692740,
+            "lru_hit_rate": 0.999109,
+            "lru_hits": 28692740,
+            "plfu_hit_rate": 0.999109,
+            "plfu_hits": 28692740
+          },
+          {
+            "belady_hit_rate": 0.999109,
+            "belady_hits": 28692740,
+            "capacity": 65536,
+            "lfu_hit_rate": 0.999109,
+            "lfu_hits": 28692740,
+            "lru_hit_rate": 0.999109,
+            "lru_hits": 28692740,
+            "plfu_hit_rate": 0.999109,
+            "plfu_hits": 28692740
+          }
+        ],
+        "distinct_keys": 25600,
+        "references": 28718340,
+        "stack_distance_percentiles": {
+          "p50": 0,
+          "p90": 978,
+          "p99": 19597
+        }
+      },
+      "tp512": {
+        "compulsory_miss_rate": 0.000446,
+        "curve": [
+          {
+            "belady_hit_rate": 0.953075,
+            "belady_hits": 27370719,
+            "capacity": 1024,
+            "lfu_hit_rate": 0.932499,
+            "lfu_hits": 26779836,
+            "lru_hit_rate": 0.918624,
+            "lru_hits": 26381343,
+            "plfu_hit_rate": 0.939761,
+            "plfu_hits": 26988384
+          },
+          {
+            "belady_hit_rate": 0.968356,
+            "belady_hits": 27809569,
+            "capacity": 2048,
+            "lfu_hit_rate": 0.95043,
+            "lfu_hits": 27294776,
+            "lru_hit_rate": 0.939169,
+            "lru_hits": 26971381,
+            "plfu_hit_rate": 0.957975,
+            "plfu_hits": 27511462
+          },
+          {
+            "belady_hit_rate": 0.982317,
+            "belady_hits": 28210508,
+            "capacity": 4096,
+            "lfu_hit_rate": 0.967793,
+            "lfu_hits": 27793397,
+            "lru_hit_rate": 0.961726,
+            "lru_hits": 27619174,
+            "plfu_hit_rate": 0.969981,
+            "plfu_hits": 27856254
+          },
+          {
+            "belady_hit_rate": 0.994111,
+            "belady_hits": 28549210,
+            "capacity": 8192,
+            "lfu_hit_rate": 0.984023,
+            "lfu_hits": 28259495,
+            "lru_hit_rate": 0.983514,
+            "lru_hits": 28244880,
+            "plfu_hit_rate": 0.98407,
+            "plfu_hits": 28260869
+          },
+          {
+            "belady_hit_rate": 0.999554,
+            "belady_hits": 28705540,
+            "capacity": 16384,
+            "lfu_hit_rate": 0.999554,
+            "lfu_hits": 28705540,
+            "lru_hit_rate": 0.999554,
+            "lru_hits": 28705540,
+            "plfu_hit_rate": 0.999554,
+            "plfu_hits": 28705540
+          },
+          {
+            "belady_hit_rate": 0.999554,
+            "belady_hits": 28705540,
+            "capacity": 32768,
+            "lfu_hit_rate": 0.999554,
+            "lfu_hits": 28705540,
+            "lru_hit_rate": 0.999554,
+            "lru_hits": 28705540,
+            "plfu_hit_rate": 0.999554,
+            "plfu_hits": 28705540
+          },
+          {
+            "belady_hit_rate": 0.999554,
+            "belady_hits": 28705540,
+            "capacity": 65536,
+            "lfu_hit_rate": 0.999554,
+            "lfu_hits": 28705540,
+            "lru_hit_rate": 0.999554,
+            "lru_hits": 28705540,
+            "plfu_hit_rate": 0.999554,
+            "plfu_hits": 28705540
+          }
+        ],
+        "distinct_keys": 12800,
+        "references": 28718340,
+        "stack_distance_percentiles": {
+          "p50": 0,
+          "p90": 478,
+          "p99": 9847
+        }
+      }
+    },
+    "duration_seconds": 9.999999,
+    "expected_ftl_counters": {
+      "never_written_read_lpns_precondition_fill": 0,
+      "never_written_read_lpns_precondition_none": 4784881,
+      "read_lpns": 28718340,
+      "read_reqs": 4997222,
+      "request_size_histogram_lpns": {
+        "1": 2500018,
+        "17-32": 0,
+        "2": 2499872,
+        "3-4": 2500492,
+        "33-64": 0,
+        "5-8": 0,
+        "9-16": 2499618,
+        ">64": 0
+      },
+      "write_lpns": 28777278,
+      "write_reqs": 5002778
+    },
+    "footprint": {
+      "fits_logical_device": true,
+      "footprint_gib": 22.7566,
+      "max_end_bytes": 26843545600,
+      "min_offset_bytes": 0,
+      "unique_lpns": 5965496,
+      "unique_read_lpns": 4789855,
+      "unique_tp256": 25600,
+      "unique_tp512": 12800,
+      "unique_written_lpns": 4794725
+    },
+    "locality": {
+      "sequential_request_share": 0.000121,
+      "top10pct_lpn_access_share": 0.68365,
+      "top1pct_lpn_access_share": 0.411438,
+      "top20pct_lpn_access_share": 0.790367,
+      "working_set_gib_max": 0.2976,
+      "working_set_lpns_max": 78006,
+      "working_set_lpns_mean": 76713.8,
+      "working_set_window_refs": 100000
+    },
+    "mapping": {
+      "never_written_read_lpns_precondition_none": 4784881,
+      "overwrite_share_of_written_lpns": 0.833385,
+      "read_after_write_share_precondition_fill": 1.0,
+      "read_after_write_share_precondition_none": 0.833386
+    },
+    "mix": {
+      "mean_request_kib": 22.998,
+      "read_percent_by_bytes": 49.949,
+      "read_percent_by_requests": 49.972,
+      "read_reqs": 4997222,
+      "request_sizes": {
+        "R": {
+          "16KiB": 1250203,
+          "4KiB": 1249658,
+          "64KiB": 1248082,
+          "8KiB": 1249279
+        },
+        "W": {
+          "16KiB": 1250289,
+          "4KiB": 1250360,
+          "64KiB": 1251536,
+          "8KiB": 1250593
+        }
+      },
+      "write_reqs": 5002778
+    },
+    "operations": 10000000,
+    "page_aligned": true,
+    "provenance": {
+      "address_range_gib": "25.0",
+      "file": "experiments/traces/full/zipf-hot20-access80-a0.8.trace",
+      "generator": "experiments/scripts/generate_workloads.py",
+      "hot_access_percent": "80.0",
+      "hot_region_percent": "20.0",
+      "operations": "10000000",
+      "pattern": "zipf",
+      "read_percent": "50.0",
+      "request_sizes": "4096,8192,16384,65536",
+      "seed": "48",
+      "sequential_percent": "",
+      "sha256": "2b50e8b8c1b9a44917b491d7bf3d56ed3dcfa41eed59705d87c6bb810fe8febc",
+      "sha256_matches_git_lfs_oid": true,
+      "sha256_matches_manifest": true,
+      "size_bytes": 263565328,
+      "write_percent": "50.0",
+      "zipf_alpha": "0.8"
+    }
+  },
+  "traces/full/zipf-hot20-access80-a1.2": {
+    "cache_bounds_read_stream": {
+      "lpn": {
+        "compulsory_miss_rate": 0.142725,
+        "curve": [
+          {
+            "belady_hit_rate": 0.671355,
+            "belady_hits": 19310486,
+            "capacity": 1024,
+            "lfu_hit_rate": 0.648863,
+            "lfu_hits": 18663524,
+            "lru_hit_rate": 0.577612,
+            "lru_hits": 16614105,
+            "plfu_hit_rate": 0.656113,
+            "plfu_hits": 18872075
+          },
+          {
+            "belady_hit_rate": 0.694372,
+            "belady_hits": 19972520,
+            "capacity": 2048,
+            "lfu_hit_rate": 0.673427,
+            "lfu_hits": 19370075,
+            "lru_hit_rate": 0.610483,
+            "lru_hits": 17559588,
+            "plfu_hit_rate": 0.680472,
+            "plfu_hits": 19572721
+          },
+          {
+            "belady_hit_rate": 0.714357,
+            "belady_hits": 20547379,
+            "capacity": 4096,
+            "lfu_hit_rate": 0.694525,
+            "lfu_hits": 19976926,
+            "lru_hit_rate": 0.639056,
+            "lru_hits": 18381461,
+            "plfu_hit_rate": 0.701551,
+            "plfu_hits": 20179019
+          },
+          {
+            "belady_hit_rate": 0.732011,
+            "belady_hits": 21055150,
+            "capacity": 8192,
+            "lfu_hit_rate": 0.712664,
+            "lfu_hits": 20498666,
+            "lru_hit_rate": 0.664029,
+            "lru_hits": 19099765,
+            "plfu_hit_rate": 0.719635,
+            "plfu_hits": 20699178
+          },
+          {
+            "belady_hit_rate": 0.748103,
+            "belady_hits": 21518005,
+            "capacity": 16384,
+            "lfu_hit_rate": 0.727435,
+            "lfu_hits": 20923531,
+            "lru_hit_rate": 0.685818,
+            "lru_hits": 19726479,
+            "plfu_hit_rate": 0.735086,
+            "plfu_hits": 21143612
+          },
+          {
+            "belady_hit_rate": 0.763494,
+            "belady_hits": 21960707,
+            "capacity": 32768,
+            "lfu_hit_rate": 0.738677,
+            "lfu_hits": 21246900,
+            "lru_hit_rate": 0.705173,
+            "lru_hits": 20283208,
+            "plfu_hit_rate": 0.747681,
+            "plfu_hits": 21505867
+          },
+          {
+            "belady_hit_rate": 0.77921,
+            "belady_hits": 22412763,
+            "capacity": 65536,
+            "lfu_hit_rate": 0.748266,
+            "lfu_hits": 21522710,
+            "lru_hit_rate": 0.722571,
+            "lru_hits": 20783633,
+            "plfu_hit_rate": 0.757273,
+            "plfu_hits": 21781777
+          }
+        ],
+        "distinct_keys": 4105269,
+        "references": 28763441,
+        "stack_distance_percentiles": {
+          "p50": 112,
+          "p90": 485375,
+          "p99": 3012862
+        }
+      },
+      "tp256": {
+        "compulsory_miss_rate": 0.00089,
+        "curve": [
+          {
+            "belady_hit_rate": 0.968591,
+            "belady_hits": 27860013,
+            "capacity": 1024,
+            "lfu_hit_rate": 0.959784,
+            "lfu_hits": 27606679,
+            "lru_hit_rate": 0.956822,
+            "lru_hits": 27521487,
+            "plfu_hit_rate": 0.961152,
+            "plfu_hits": 27646029
+          },
+          {
+            "belady_hit_rate": 0.973593,
+            "belady_hits": 28003889,
+            "capacity": 2048,
+            "lfu_hit_rate": 0.962107,
+            "lfu_hits": 27673505,
+            "lru_hit_rate": 0.960261,
+            "lru_hits": 27620414,
+            "plfu_hit_rate": 0.963049,
+            "plfu_hits": 27700609
+          },
+          {
+            "belady_hit_rate": 0.979793,
+            "belady_hits": 28182230,
+            "capacity": 4096,
+            "lfu_hit_rate": 0.966046,
+            "lfu_hits": 27786818,
+            "lru_hit_rate": 0.965031,
+            "lru_hits": 27757617,
+            "plfu_hit_rate": 0.966653,
+            "plfu_hits": 27804269
+          },
+          {
+            "belady_hit_rate": 0.987249,
+            "belady_hits": 28396692,
+            "capacity": 8192,
+            "lfu_hit_rate": 0.973299,
+            "lfu_hits": 27995422,
+            "lru_hit_rate": 0.972771,
+            "lru_hits": 27980246,
+            "plfu_hit_rate": 0.97374,
+            "plfu_hits": 28008101
+          },
+          {
+            "belady_hit_rate": 0.995339,
+            "belady_hits": 28629366,
+            "capacity": 16384,
+            "lfu_hit_rate": 0.986957,
+            "lfu_hits": 28388267,
+            "lru_hit_rate": 0.986559,
+            "lru_hits": 28376820,
+            "plfu_hit_rate": 0.987553,
+            "plfu_hits": 28405435
+          },
+          {
+            "belady_hit_rate": 0.99911,
+            "belady_hits": 28737841,
+            "capacity": 32768,
+            "lfu_hit_rate": 0.99911,
+            "lfu_hits": 28737841,
+            "lru_hit_rate": 0.99911,
+            "lru_hits": 28737841,
+            "plfu_hit_rate": 0.99911,
+            "plfu_hits": 28737841
+          },
+          {
+            "belady_hit_rate": 0.99911,
+            "belady_hits": 28737841,
+            "capacity": 65536,
+            "lfu_hit_rate": 0.99911,
+            "lfu_hits": 28737841,
+            "lru_hit_rate": 0.99911,
+            "lru_hits": 28737841,
+            "plfu_hit_rate": 0.99911,
+            "plfu_hits": 28737841
+          }
+        ],
+        "distinct_keys": 25600,
+        "references": 28763441,
+        "stack_distance_percentiles": {
+          "p50": 0,
+          "p90": 1,
+          "p99": 17993
+        }
+      },
+      "tp512": {
+        "compulsory_miss_rate": 0.000445,
+        "curve": [
+          {
+            "belady_hit_rate": 0.973827,
+            "belady_hits": 28010612,
+            "capacity": 1024,
+            "lfu_hit_rate": 0.962604,
+            "lfu_hits": 27687797,
+            "lru_hit_rate": 0.960637,
+            "lru_hits": 27631228,
+            "plfu_hit_rate": 0.963483,
+            "plfu_hits": 27713079
+          },
+          {
+            "belady_hit_rate": 0.980011,
+            "belady_hits": 28188476,
+            "capacity": 2048,
+            "lfu_hit_rate": 0.966493,
+            "lfu_hits": 27799673,
+            "lru_hit_rate": 0.965369,
+            "lru_hits": 27767341,
+            "plfu_hit_rate": 0.967039,
+            "plfu_hits": 27815364
+          },
+          {
+            "belady_hit_rate": 0.987477,
+            "belady_hits": 28403223,
+            "capacity": 4096,
+            "lfu_hit_rate": 0.973633,
+            "lfu_hits": 28005043,
+            "lru_hit_rate": 0.97306,
+            "lru_hits": 27988542,
+            "plfu_hit_rate": 0.974053,
+            "plfu_hits": 28017112
+          },
+          {
+            "belady_hit_rate": 0.99564,
+            "belady_hits": 28638025,
+            "capacity": 8192,
+            "lfu_hit_rate": 0.9872,
+            "lfu_hits": 28395275,
+            "lru_hit_rate": 0.986788,
+            "lru_hits": 28383410,
+            "plfu_hit_rate": 0.98792,
+            "plfu_hits": 28415973
+          },
+          {
+            "belady_hit_rate": 0.999555,
+            "belady_hits": 28750641,
+            "capacity": 16384,
+            "lfu_hit_rate": 0.999555,
+            "lfu_hits": 28750641,
+            "lru_hit_rate": 0.999555,
+            "lru_hits": 28750641,
+            "plfu_hit_rate": 0.999555,
+            "plfu_hits": 28750641
+          },
+          {
+            "belady_hit_rate": 0.999555,
+            "belady_hits": 28750641,
+            "capacity": 32768,
+            "lfu_hit_rate": 0.999555,
+            "lfu_hits": 28750641,
+            "lru_hit_rate": 0.999555,
+            "lru_hits": 28750641,
+            "plfu_hit_rate": 0.999555,
+            "plfu_hits": 28750641
+          },
+          {
+            "belady_hit_rate": 0.999555,
+            "belady_hits": 28750641,
+            "capacity": 65536,
+            "lfu_hit_rate": 0.999555,
+            "lfu_hits": 28750641,
+            "lru_hit_rate": 0.999555,
+            "lru_hits": 28750641,
+            "plfu_hit_rate": 0.999555,
+            "plfu_hits": 28750641
+          }
+        ],
+        "distinct_keys": 12800,
+        "references": 28763441,
+        "stack_distance_percentiles": {
+          "p50": 0,
+          "p90": 1,
+          "p99": 9059
+        }
+      }
+    },
+    "duration_seconds": 9.999999,
+    "expected_ftl_counters": {
+      "never_written_read_lpns_precondition_fill": 0,
+      "never_written_read_lpns_precondition_none": 4106975,
+      "read_lpns": 28763441,
+      "read_reqs": 5004697,
+      "request_size_histogram_lpns": {
+        "1": 2501754,
+        "17-32": 0,
+        "2": 2499819,
+        "3-4": 2499005,
+        "33-64": 0,
+        "5-8": 0,
+        "9-16": 2499422,
+        ">64": 0
+      },
+      "write_lpns": 28724723,
+      "write_reqs": 4995303
+    },
+    "footprint": {
+      "fits_logical_device": true,
+      "footprint_gib": 20.9876,
+      "max_end_bytes": 26843545600,
+      "min_offset_bytes": 0,
+      "unique_lpns": 5501780,
+      "unique_read_lpns": 4105269,
+      "unique_tp256": 25600,
+      "unique_tp512": 12800,
+      "unique_written_lpns": 4104549
+    },
+    "locality": {
+      "sequential_request_share": 0.008948,
+      "top10pct_lpn_access_share": 0.814474,
+      "top1pct_lpn_access_share": 0.760184,
+      "top20pct_lpn_access_share": 0.853031,
+      "working_set_gib_max": 0.1306,
+      "working_set_lpns_max": 34224,
+      "working_set_lpns_mean": 32376.4,
+      "working_set_window_refs": 100000
+    },
+    "mapping": {
+      "never_written_read_lpns_precondition_none": 4106975,
+      "overwrite_share_of_written_lpns": 0.857107,
+      "read_after_write_share_precondition_fill": 1.0,
+      "read_after_write_share_precondition_none": 0.857215
+    },
+    "mix": {
+      "mean_request_kib": 22.995,
+      "read_percent_by_bytes": 50.034,
+      "read_percent_by_requests": 50.047,
+      "read_reqs": 5004697,
+      "request_sizes": {
+        "R": {
+          "16KiB": 1250665,
+          "4KiB": 1252603,
+          "64KiB": 1250380,
+          "8KiB": 1251049
+        },
+        "W": {
+          "16KiB": 1248340,
+          "4KiB": 1249151,
+          "64KiB": 1249042,
+          "8KiB": 1248770
+        }
+      },
+      "write_reqs": 4995303
+    },
+    "operations": 10000000,
+    "page_aligned": true,
+    "provenance": {
+      "address_range_gib": "25.0",
+      "file": "experiments/traces/full/zipf-hot20-access80-a1.2.trace",
+      "generator": "experiments/scripts/generate_workloads.py",
+      "hot_access_percent": "80.0",
+      "hot_region_percent": "20.0",
+      "operations": "10000000",
+      "pattern": "zipf",
+      "read_percent": "50.0",
+      "request_sizes": "4096,8192,16384,65536",
+      "seed": "46",
+      "sequential_percent": "",
+      "sha256": "22f64d64836ec4a8f89aa2635575d2017c0ba47f63e71edd1203b6bbd336372b",
+      "sha256_matches_git_lfs_oid": true,
+      "sha256_matches_manifest": true,
+      "size_bytes": 236898134,
+      "write_percent": "50.0",
+      "zipf_alpha": "1.2"
+    }
+  },
+  "traces/matrix/mixed-50-seq-50-random": {
     "cache_bounds_read_stream": {
       "lpn": {
         "compulsory_miss_rate": 0.832997,
@@ -339,7 +3284,7 @@
     "operations": 1000000,
     "page_aligned": true,
     "provenance": {
-      "file": "experiments/matrix-traces/mixed-50-seq-50-random.trace",
+      "file": "experiments/traces/matrix/mixed-50-seq-50-random.trace",
       "generator": "experiments/scripts/prepare_validation_traces.py",
       "is_exact_prefix": true,
       "parent": "experiments/traces/mixed-50-seq-50-random.trace",
@@ -349,7 +3294,7 @@
       "size_bytes": 28016433
     }
   },
-  "matrix-traces/seq-mixed": {
+  "traces/matrix/seq-mixed": {
     "cache_bounds_read_stream": {
       "lpn": {
         "compulsory_miss_rate": 0.825178,
@@ -689,7 +3634,7 @@
     "operations": 1000000,
     "page_aligned": true,
     "provenance": {
-      "file": "experiments/matrix-traces/seq-mixed.trace",
+      "file": "experiments/traces/matrix/seq-mixed.trace",
       "generator": "experiments/scripts/prepare_validation_traces.py",
       "is_exact_prefix": true,
       "parent": "experiments/traces/seq-mixed.trace",
@@ -699,7 +3644,7 @@
       "size_bytes": 27991799
     }
   },
-  "matrix-traces/uniform-mixed": {
+  "traces/matrix/uniform-mixed": {
     "cache_bounds_read_stream": {
       "lpn": {
         "compulsory_miss_rate": 0.808772,
@@ -1039,7 +3984,7 @@
     "operations": 1000000,
     "page_aligned": true,
     "provenance": {
-      "file": "experiments/matrix-traces/uniform-mixed.trace",
+      "file": "experiments/traces/matrix/uniform-mixed.trace",
       "generator": "experiments/scripts/prepare_validation_traces.py",
       "is_exact_prefix": true,
       "parent": "experiments/traces/uniform-mixed.trace",
@@ -1049,7 +3994,7 @@
       "size_bytes": 28087386
     }
   },
-  "matrix-traces/uniform-read": {
+  "traces/matrix/uniform-read": {
     "cache_bounds_read_stream": {
       "lpn": {
         "compulsory_miss_rate": 0.664941,
@@ -1384,7 +4329,7 @@
     "operations": 1000000,
     "page_aligned": true,
     "provenance": {
-      "file": "experiments/matrix-traces/uniform-read.trace",
+      "file": "experiments/traces/matrix/uniform-read.trace",
       "generator": "experiments/scripts/prepare_validation_traces.py",
       "is_exact_prefix": true,
       "parent": "experiments/traces/uniform-read.trace",
@@ -1394,7 +4339,7 @@
       "size_bytes": 28087797
     }
   },
-  "matrix-traces/uniform-write": {
+  "traces/matrix/uniform-write": {
     "cache_bounds_read_stream": {},
     "duration_seconds": 0.999999,
     "expected_ftl_counters": {
@@ -1461,7 +4406,7 @@
     "operations": 1000000,
     "page_aligned": true,
     "provenance": {
-      "file": "experiments/matrix-traces/uniform-write.trace",
+      "file": "experiments/traces/matrix/uniform-write.trace",
       "generator": "experiments/scripts/prepare_validation_traces.py",
       "is_exact_prefix": true,
       "parent": "experiments/traces/uniform-write.trace",
@@ -1471,7 +4416,7 @@
       "size_bytes": 28086659
     }
   },
-  "matrix-traces/zipf-hot10-access90-a1.2": {
+  "traces/matrix/zipf-hot10-access90-a1.2": {
     "cache_bounds_read_stream": {
       "lpn": {
         "compulsory_miss_rate": 0.146031,
@@ -1811,7 +4756,7 @@
     "operations": 1000000,
     "page_aligned": true,
     "provenance": {
-      "file": "experiments/matrix-traces/zipf-hot10-access90-a1.2.trace",
+      "file": "experiments/traces/matrix/zipf-hot10-access90-a1.2.trace",
       "generator": "experiments/scripts/prepare_validation_traces.py",
       "is_exact_prefix": true,
       "parent": "experiments/traces/zipf-hot10-access90-a1.2.trace",
@@ -1821,7 +4766,7 @@
       "size_bytes": 23069523
     }
   },
-  "matrix-traces/zipf-hot20-access80-a0.8": {
+  "traces/matrix/zipf-hot20-access80-a0.8": {
     "cache_bounds_read_stream": {
       "lpn": {
         "compulsory_miss_rate": 0.43778,
@@ -2161,7 +5106,7 @@
     "operations": 1000000,
     "page_aligned": true,
     "provenance": {
-      "file": "experiments/matrix-traces/zipf-hot20-access80-a0.8.trace",
+      "file": "experiments/traces/matrix/zipf-hot20-access80-a0.8.trace",
       "generator": "experiments/scripts/prepare_validation_traces.py",
       "is_exact_prefix": true,
       "parent": "experiments/traces/zipf-hot20-access80-a0.8.trace",
@@ -2171,7 +5116,7 @@
       "size_bytes": 26353438
     }
   },
-  "matrix-traces/zipf-hot20-access80-a1.2": {
+  "traces/matrix/zipf-hot20-access80-a1.2": {
     "cache_bounds_read_stream": {
       "lpn": {
         "compulsory_miss_rate": 0.242172,
@@ -2511,7 +5456,7 @@
     "operations": 1000000,
     "page_aligned": true,
     "provenance": {
-      "file": "experiments/matrix-traces/zipf-hot20-access80-a1.2.trace",
+      "file": "experiments/traces/matrix/zipf-hot20-access80-a1.2.trace",
       "generator": "experiments/scripts/prepare_validation_traces.py",
       "is_exact_prefix": true,
       "parent": "experiments/traces/zipf-hot20-access80-a1.2.trace",
@@ -2521,7 +5466,7 @@
       "size_bytes": 23693852
     }
   },
-  "real-traces/financial1": {
+  "traces/real/financial1": {
     "cache_bounds_read_stream": {
       "lpn": {
         "compulsory_miss_rate": 0.313463,
@@ -2893,7 +5838,7 @@
     "page_aligned": true,
     "provenance": {
       "chunk_bytes": 2097152,
-      "file": "experiments/real-traces/financial1.trace",
+      "file": "experiments/traces/real/financial1.trace",
       "generator": "experiments/scripts/normalize_trace.py",
       "normalisation": "4 KiB alignment by widening; (ASU, chunk) pairs packed densely in (ASU, address) order; offsets within a chunk unchanged",
       "requests_widened_to_4k": 988391,
@@ -2905,7 +5850,7 @@
       "source_url": "https://skulddata.cs.umass.edu/traces/storage/Financial1.spc.bz2"
     }
   },
-  "real-traces/financial2": {
+  "traces/real/financial2": {
     "cache_bounds_read_stream": {
       "lpn": {
         "compulsory_miss_rate": 0.066835,
@@ -3271,7 +6216,7 @@
     "page_aligned": true,
     "provenance": {
       "chunk_bytes": 2097152,
-      "file": "experiments/real-traces/financial2.trace",
+      "file": "experiments/traces/real/financial2.trace",
       "generator": "experiments/scripts/normalize_trace.py",
       "normalisation": "4 KiB alignment by widening; (ASU, chunk) pairs packed densely in (ASU, address) order; offsets within a chunk unchanged",
       "requests_widened_to_4k": 991905,
@@ -3283,7 +6228,7 @@
       "source_url": "https://skulddata.cs.umass.edu/traces/storage/Financial2.spc.bz2"
     }
   },
-  "real-traces/websearch1": {
+  "traces/real/websearch1": {
     "cache_bounds_read_stream": {
       "lpn": {
         "compulsory_miss_rate": 0.41372,
@@ -3625,7 +6570,7 @@
     "page_aligned": true,
     "provenance": {
       "chunk_bytes": 2097152,
-      "file": "experiments/real-traces/websearch1.trace",
+      "file": "experiments/traces/real/websearch1.trace",
       "generator": "experiments/scripts/normalize_trace.py",
       "normalisation": "4 KiB alignment by widening; (ASU, chunk) pairs packed densely in (ASU, address) order; offsets within a chunk unchanged",
       "requests_widened_to_4k": 26,
@@ -3637,7 +6582,7 @@
       "source_url": "https://skulddata.cs.umass.edu/traces/storage/WebSearch1.spc.bz2"
     }
   },
-  "real-traces/websearch2": {
+  "traces/real/websearch2": {
     "cache_bounds_read_stream": {
       "lpn": {
         "compulsory_miss_rate": 0.415131,
@@ -3976,7 +6921,7 @@
     "page_aligned": true,
     "provenance": {
       "chunk_bytes": 2097152,
-      "file": "experiments/real-traces/websearch2.trace",
+      "file": "experiments/traces/real/websearch2.trace",
       "generator": "experiments/scripts/normalize_trace.py",
       "normalisation": "4 KiB alignment by widening; (ASU, chunk) pairs packed densely in (ASU, address) order; offsets within a chunk unchanged",
       "requests_widened_to_4k": 0,
@@ -3988,7 +6933,7 @@
       "source_url": "https://skulddata.cs.umass.edu/traces/storage/WebSearch2.spc.bz2"
     }
   },
-  "real-traces/websearch3": {
+  "traces/real/websearch3": {
     "cache_bounds_read_stream": {
       "lpn": {
         "compulsory_miss_rate": 0.409256,
@@ -4327,7 +7272,7 @@
     "page_aligned": true,
     "provenance": {
       "chunk_bytes": 2097152,
-      "file": "experiments/real-traces/websearch3.trace",
+      "file": "experiments/traces/real/websearch3.trace",
       "generator": "experiments/scripts/normalize_trace.py",
       "normalisation": "4 KiB alignment by widening; (ASU, chunk) pairs packed densely in (ASU, address) order; offsets within a chunk unchanged",
       "requests_widened_to_4k": 0,
@@ -4339,2952 +7284,7 @@
       "source_url": "https://skulddata.cs.umass.edu/traces/storage/WebSearch3.spc.bz2"
     }
   },
-  "traces/mixed-50-seq-50-random": {
-    "cache_bounds_read_stream": {
-      "lpn": {
-        "compulsory_miss_rate": 0.22406,
-        "curve": [
-          {
-            "belady_hit_rate": 0.014713,
-            "belady_hits": 423028,
-            "capacity": 1024,
-            "lfu_hit_rate": 0.000153,
-            "lfu_hits": 4392,
-            "lru_hit_rate": 0.000116,
-            "lru_hits": 3345,
-            "plfu_hit_rate": 0.000152,
-            "plfu_hits": 4380
-          },
-          {
-            "belady_hit_rate": 0.021067,
-            "belady_hits": 605740,
-            "capacity": 2048,
-            "lfu_hit_rate": 0.00032,
-            "lfu_hits": 9192,
-            "lru_hit_rate": 0.000238,
-            "lru_hits": 6845,
-            "plfu_hit_rate": 0.000313,
-            "plfu_hits": 9010
-          },
-          {
-            "belady_hit_rate": 0.029923,
-            "belady_hits": 860371,
-            "capacity": 4096,
-            "lfu_hit_rate": 0.000635,
-            "lfu_hits": 18263,
-            "lru_hit_rate": 0.000467,
-            "lru_hits": 13435,
-            "plfu_hit_rate": 0.000629,
-            "plfu_hits": 18096
-          },
-          {
-            "belady_hit_rate": 0.042353,
-            "belady_hits": 1217749,
-            "capacity": 8192,
-            "lfu_hit_rate": 0.001269,
-            "lfu_hits": 36480,
-            "lru_hit_rate": 0.000941,
-            "lru_hits": 27058,
-            "plfu_hit_rate": 0.001272,
-            "plfu_hits": 36583
-          },
-          {
-            "belady_hit_rate": 0.059702,
-            "belady_hits": 1716571,
-            "capacity": 16384,
-            "lfu_hit_rate": 0.002503,
-            "lfu_hits": 71974,
-            "lru_hit_rate": 0.001882,
-            "lru_hits": 54105,
-            "plfu_hit_rate": 0.002589,
-            "plfu_hits": 74436
-          },
-          {
-            "belady_hit_rate": 0.083971,
-            "belady_hits": 2414366,
-            "capacity": 32768,
-            "lfu_hit_rate": 0.004982,
-            "lfu_hits": 143252,
-            "lru_hit_rate": 0.003752,
-            "lru_hits": 107877,
-            "plfu_hit_rate": 0.00531,
-            "plfu_hits": 152676
-          },
-          {
-            "belady_hit_rate": 0.117445,
-            "belady_hits": 3376844,
-            "capacity": 65536,
-            "lfu_hit_rate": 0.009946,
-            "lfu_hits": 285959,
-            "lru_hit_rate": 0.007519,
-            "lru_hits": 216188,
-            "plfu_hit_rate": 0.01075,
-            "plfu_hits": 309086
-          }
-        ],
-        "distinct_keys": 6442286,
-        "references": 28752508,
-        "stack_distance_percentiles": {
-          "p50": 2687993,
-          "p90": 5204298,
-          "p99": 6148741
-        }
-      },
-      "tp256": {
-        "compulsory_miss_rate": 0.00089,
-        "curve": [
-          {
-            "belady_hit_rate": 0.926888,
-            "belady_hits": 26650364,
-            "capacity": 1024,
-            "lfu_hit_rate": 0.870167,
-            "lfu_hits": 25019474,
-            "lru_hit_rate": 0.904519,
-            "lru_hits": 26007176,
-            "plfu_hit_rate": 0.869958,
-            "plfu_hits": 25013477
-          },
-          {
-            "belady_hit_rate": 0.937122,
-            "belady_hits": 26944614,
-            "capacity": 2048,
-            "lfu_hit_rate": 0.876363,
-            "lfu_hits": 25197629,
-            "lru_hit_rate": 0.908442,
-            "lru_hits": 26120000,
-            "plfu_hit_rate": 0.876002,
-            "plfu_hits": 25187253
-          },
-          {
-            "belady_hit_rate": 0.950697,
-            "belady_hits": 27334931,
-            "capacity": 4096,
-            "lfu_hit_rate": 0.888528,
-            "lfu_hits": 25547410,
-            "lru_hit_rate": 0.916293,
-            "lru_hits": 26345727,
-            "plfu_hit_rate": 0.887988,
-            "plfu_hits": 25531886
-          },
-          {
-            "belady_hit_rate": 0.967978,
-            "belady_hits": 27831792,
-            "capacity": 8192,
-            "lfu_hit_rate": 0.912266,
-            "lfu_hits": 26229941,
-            "lru_hit_rate": 0.932016,
-            "lru_hits": 26797806,
-            "plfu_hit_rate": 0.911472,
-            "plfu_hits": 26207114
-          },
-          {
-            "belady_hit_rate": 0.987957,
-            "belady_hits": 28406238,
-            "capacity": 16384,
-            "lfu_hit_rate": 0.956856,
-            "lfu_hits": 27512001,
-            "lru_hit_rate": 0.963518,
-            "lru_hits": 27703548,
-            "plfu_hit_rate": 0.955885,
-            "plfu_hits": 27484086
-          },
-          {
-            "belady_hit_rate": 0.99911,
-            "belady_hits": 28726908,
-            "capacity": 32768,
-            "lfu_hit_rate": 0.99911,
-            "lfu_hits": 28726908,
-            "lru_hit_rate": 0.99911,
-            "lru_hits": 28726908,
-            "plfu_hit_rate": 0.99911,
-            "plfu_hits": 28726908
-          },
-          {
-            "belady_hit_rate": 0.99911,
-            "belady_hits": 28726908,
-            "capacity": 65536,
-            "lfu_hit_rate": 0.99911,
-            "lfu_hits": 28726908,
-            "lru_hit_rate": 0.99911,
-            "lru_hits": 28726908,
-            "plfu_hit_rate": 0.99911,
-            "plfu_hits": 28726908
-          }
-        ],
-        "distinct_keys": 25600,
-        "references": 28752508,
-        "stack_distance_percentiles": {
-          "p50": 0,
-          "p90": 5,
-          "p99": 23040
-        }
-      },
-      "tp512": {
-        "compulsory_miss_rate": 0.000445,
-        "curve": [
-          {
-            "belady_hit_rate": 0.941088,
-            "belady_hits": 27058652,
-            "capacity": 1024,
-            "lfu_hit_rate": 0.879108,
-            "lfu_hits": 25276568,
-            "lru_hit_rate": 0.914232,
-            "lru_hits": 26286476,
-            "plfu_hit_rate": 0.878911,
-            "plfu_hits": 25270884
-          },
-          {
-            "belady_hit_rate": 0.953882,
-            "belady_hits": 27426501,
-            "capacity": 2048,
-            "lfu_hit_rate": 0.891232,
-            "lfu_hits": 25625153,
-            "lru_hit_rate": 0.921662,
-            "lru_hits": 26500097,
-            "plfu_hit_rate": 0.89086,
-            "plfu_hits": 25614450
-          },
-          {
-            "belady_hit_rate": 0.970176,
-            "belady_hits": 27895007,
-            "capacity": 4096,
-            "lfu_hit_rate": 0.914757,
-            "lfu_hits": 26301549,
-            "lru_hit_rate": 0.936503,
-            "lru_hits": 26926818,
-            "plfu_hit_rate": 0.91424,
-            "plfu_hits": 26286680
-          },
-          {
-            "belady_hit_rate": 0.989045,
-            "belady_hits": 28437522,
-            "capacity": 8192,
-            "lfu_hit_rate": 0.958649,
-            "lfu_hits": 27563555,
-            "lru_hit_rate": 0.966185,
-            "lru_hits": 27780236,
-            "plfu_hit_rate": 0.958025,
-            "plfu_hits": 27545614
-          },
-          {
-            "belady_hit_rate": 0.999555,
-            "belady_hits": 28739708,
-            "capacity": 16384,
-            "lfu_hit_rate": 0.999555,
-            "lfu_hits": 28739708,
-            "lru_hit_rate": 0.999555,
-            "lru_hits": 28739708,
-            "plfu_hit_rate": 0.999555,
-            "plfu_hits": 28739708
-          },
-          {
-            "belady_hit_rate": 0.999555,
-            "belady_hits": 28739708,
-            "capacity": 32768,
-            "lfu_hit_rate": 0.999555,
-            "lfu_hits": 28739708,
-            "lru_hit_rate": 0.999555,
-            "lru_hits": 28739708,
-            "plfu_hit_rate": 0.999555,
-            "plfu_hits": 28739708
-          },
-          {
-            "belady_hit_rate": 0.999555,
-            "belady_hits": 28739708,
-            "capacity": 65536,
-            "lfu_hit_rate": 0.999555,
-            "lfu_hits": 28739708,
-            "lru_hit_rate": 0.999555,
-            "lru_hits": 28739708,
-            "plfu_hit_rate": 0.999555,
-            "plfu_hits": 28739708
-          }
-        ],
-        "distinct_keys": 12800,
-        "references": 28752508,
-        "stack_distance_percentiles": {
-          "p50": 0,
-          "p90": 3,
-          "p99": 11416
-        }
-      }
-    },
-    "duration_seconds": 9.999999,
-    "expected_ftl_counters": {
-      "never_written_read_lpns_precondition_fill": 0,
-      "never_written_read_lpns_precondition_none": 6422051,
-      "read_lpns": 28752508,
-      "read_reqs": 4999884,
-      "request_size_histogram_lpns": {
-        "1": 2499654,
-        "17-32": 0,
-        "2": 2499156,
-        "3-4": 2500707,
-        "33-64": 0,
-        "5-8": 0,
-        "9-16": 2500483,
-        ">64": 0
-      },
-      "write_lpns": 28756014,
-      "write_reqs": 5000116
-    },
-    "footprint": {
-      "fits_logical_device": true,
-      "footprint_gib": 24.9926,
-      "max_end_bytes": 26843545600,
-      "min_offset_bytes": 0,
-      "unique_lpns": 6551658,
-      "unique_read_lpns": 6442286,
-      "unique_tp256": 25600,
-      "unique_tp512": 12800,
-      "unique_written_lpns": 6443898
-    },
-    "locality": {
-      "sequential_request_share": 0.062605,
-      "top10pct_lpn_access_share": 0.187263,
-      "top1pct_lpn_access_share": 0.023038,
-      "top20pct_lpn_access_share": 0.332318,
-      "working_set_gib_max": 0.38,
-      "working_set_lpns_max": 99619,
-      "working_set_lpns_mean": 99272.2,
-      "working_set_window_refs": 100000
-    },
-    "mapping": {
-      "never_written_read_lpns_precondition_none": 6422051,
-      "overwrite_share_of_written_lpns": 0.775911,
-      "read_after_write_share_precondition_fill": 1.0,
-      "read_after_write_share_precondition_none": 0.776644
-    },
-    "mix": {
-      "mean_request_kib": 23.003,
-      "read_percent_by_bytes": 49.997,
-      "read_percent_by_requests": 49.999,
-      "read_reqs": 4999884,
-      "request_sizes": {
-        "R": {
-          "16KiB": 1250680,
-          "4KiB": 1249446,
-          "64KiB": 1250059,
-          "8KiB": 1249699
-        },
-        "W": {
-          "16KiB": 1250027,
-          "4KiB": 1250208,
-          "64KiB": 1250424,
-          "8KiB": 1249457
-        }
-      },
-      "write_reqs": 5000116
-    },
-    "operations": 10000000,
-    "page_aligned": true,
-    "provenance": {
-      "address_range_gib": "25.0",
-      "file": "experiments/traces/mixed-50-seq-50-random.trace",
-      "generator": "experiments/scripts/generate_workloads.py",
-      "hot_access_percent": "",
-      "hot_region_percent": "",
-      "operations": "10000000",
-      "pattern": "mixed",
-      "read_percent": "50.0",
-      "request_sizes": "4096,8192,16384,65536",
-      "seed": "49",
-      "sequential_percent": "50.0",
-      "sha256": "2edc64994cdea3c6d04d30f1a1c0a836402148ff4d6b4846c2bb3830e2636760",
-      "sha256_matches_git_lfs_oid": true,
-      "sha256_matches_manifest": true,
-      "size_bytes": 280795603,
-      "write_percent": "50.0",
-      "zipf_alpha": ""
-    }
-  },
-  "traces/seq-mixed": {
-    "cache_bounds_read_stream": {
-      "lpn": {
-        "compulsory_miss_rate": 0.22119,
-        "curve": [
-          {
-            "belady_hit_rate": 0.000853,
-            "belady_hits": 24552,
-            "capacity": 1024,
-            "lfu_hit_rate": 0.0,
-            "lfu_hits": 0,
-            "lru_hit_rate": 0.0,
-            "lru_hits": 0,
-            "plfu_hit_rate": 6.9e-05,
-            "plfu_hits": 1977
-          },
-          {
-            "belady_hit_rate": 0.001707,
-            "belady_hits": 49128,
-            "capacity": 2048,
-            "lfu_hit_rate": 0.0,
-            "lfu_hits": 0,
-            "lru_hit_rate": 0.0,
-            "lru_hits": 0,
-            "plfu_hit_rate": 0.000163,
-            "plfu_hits": 4694
-          },
-          {
-            "belady_hit_rate": 0.003416,
-            "belady_hits": 98280,
-            "capacity": 4096,
-            "lfu_hit_rate": 0.0,
-            "lfu_hits": 0,
-            "lru_hit_rate": 0.0,
-            "lru_hits": 0,
-            "plfu_hit_rate": 0.000374,
-            "plfu_hits": 10750
-          },
-          {
-            "belady_hit_rate": 0.006832,
-            "belady_hits": 196584,
-            "capacity": 8192,
-            "lfu_hit_rate": 0.0,
-            "lfu_hits": 0,
-            "lru_hit_rate": 0.0,
-            "lru_hits": 0,
-            "plfu_hit_rate": 0.000883,
-            "plfu_hits": 25410
-          },
-          {
-            "belady_hit_rate": 0.013666,
-            "belady_hits": 393192,
-            "capacity": 16384,
-            "lfu_hit_rate": 0.0,
-            "lfu_hits": 0,
-            "lru_hit_rate": 0.0,
-            "lru_hits": 0,
-            "plfu_hit_rate": 0.002131,
-            "plfu_hits": 61319
-          },
-          {
-            "belady_hit_rate": 0.027332,
-            "belady_hits": 786408,
-            "capacity": 32768,
-            "lfu_hit_rate": 0.0,
-            "lfu_hits": 0,
-            "lru_hit_rate": 0.0,
-            "lru_hits": 0,
-            "plfu_hit_rate": 0.005079,
-            "plfu_hits": 146149
-          },
-          {
-            "belady_hit_rate": 0.054665,
-            "belady_hits": 1572840,
-            "capacity": 65536,
-            "lfu_hit_rate": 0.0,
-            "lfu_hits": 0,
-            "lru_hit_rate": 0.0,
-            "lru_hits": 0,
-            "plfu_hit_rate": 0.012074,
-            "plfu_hits": 347388
-          }
-        ],
-        "distinct_keys": 6364180,
-        "references": 28772437,
-        "stack_distance_percentiles": {
-          "p50": 2756789,
-          "p90": 5006002,
-          "p99": 6038287
-        }
-      },
-      "tp256": {
-        "compulsory_miss_rate": 0.00089,
-        "curve": [
-          {
-            "belady_hit_rate": 0.979131,
-            "belady_hits": 28171999,
-            "capacity": 1024,
-            "lfu_hit_rate": 0.979095,
-            "lfu_hits": 28170937,
-            "lru_hit_rate": 0.978278,
-            "lru_hits": 28147447,
-            "plfu_hit_rate": 0.978613,
-            "plfu_hits": 28157086
-          },
-          {
-            "belady_hit_rate": 0.979986,
-            "belady_hits": 28196575,
-            "capacity": 2048,
-            "lfu_hit_rate": 0.979912,
-            "lfu_hits": 28194443,
-            "lru_hit_rate": 0.978278,
-            "lru_hits": 28147447,
-            "plfu_hit_rate": 0.979042,
-            "plfu_hits": 28169428
-          },
-          {
-            "belady_hit_rate": 0.981694,
-            "belady_hits": 28245727,
-            "capacity": 4096,
-            "lfu_hit_rate": 0.981546,
-            "lfu_hits": 28241465,
-            "lru_hit_rate": 0.978278,
-            "lru_hits": 28147447,
-            "plfu_hit_rate": 0.980042,
-            "plfu_hits": 28198199
-          },
-          {
-            "belady_hit_rate": 0.985111,
-            "belady_hits": 28344031,
-            "capacity": 8192,
-            "lfu_hit_rate": 0.984823,
-            "lfu_hits": 28335759,
-            "lru_hit_rate": 0.978278,
-            "lru_hits": 28147447,
-            "plfu_hit_rate": 0.982467,
-            "plfu_hits": 28267963
-          },
-          {
-            "belady_hit_rate": 0.991744,
-            "belady_hits": 28534878,
-            "capacity": 16384,
-            "lfu_hit_rate": 0.991431,
-            "lfu_hits": 28525877,
-            "lru_hit_rate": 0.978278,
-            "lru_hits": 28147447,
-            "plfu_hit_rate": 0.988734,
-            "plfu_hits": 28448290
-          },
-          {
-            "belady_hit_rate": 0.99911,
-            "belady_hits": 28746837,
-            "capacity": 32768,
-            "lfu_hit_rate": 0.99911,
-            "lfu_hits": 28746837,
-            "lru_hit_rate": 0.99911,
-            "lru_hits": 28746837,
-            "plfu_hit_rate": 0.99911,
-            "plfu_hits": 28746837
-          },
-          {
-            "belady_hit_rate": 0.99911,
-            "belady_hits": 28746837,
-            "capacity": 65536,
-            "lfu_hit_rate": 0.99911,
-            "lfu_hits": 28746837,
-            "lru_hit_rate": 0.99911,
-            "lru_hits": 28746837,
-            "plfu_hit_rate": 0.99911,
-            "plfu_hits": 28746837
-          }
-        ],
-        "distinct_keys": 25600,
-        "references": 28772437,
-        "stack_distance_percentiles": {
-          "p50": 0,
-          "p90": 0,
-          "p99": 25599
-        }
-      },
-      "tp512": {
-        "compulsory_miss_rate": 0.000445,
-        "curve": [
-          {
-            "belady_hit_rate": 0.989992,
-            "belady_hits": 28484489,
-            "capacity": 1024,
-            "lfu_hit_rate": 0.989956,
-            "lfu_hits": 28483446,
-            "lru_hit_rate": 0.989139,
-            "lru_hits": 28459937,
-            "plfu_hit_rate": 0.989425,
-            "plfu_hits": 28468163
-          },
-          {
-            "belady_hit_rate": 0.990846,
-            "belady_hits": 28509065,
-            "capacity": 2048,
-            "lfu_hit_rate": 0.990776,
-            "lfu_hits": 28507041,
-            "lru_hit_rate": 0.989139,
-            "lru_hits": 28459937,
-            "plfu_hit_rate": 0.989837,
-            "plfu_hits": 28480029
-          },
-          {
-            "belady_hit_rate": 0.992555,
-            "belady_hits": 28558217,
-            "capacity": 4096,
-            "lfu_hit_rate": 0.992414,
-            "lfu_hits": 28554171,
-            "lru_hit_rate": 0.989139,
-            "lru_hits": 28459937,
-            "plfu_hit_rate": 0.990882,
-            "plfu_hits": 28510085
-          },
-          {
-            "belady_hit_rate": 0.995872,
-            "belady_hits": 28653653,
-            "capacity": 8192,
-            "lfu_hit_rate": 0.995721,
-            "lfu_hits": 28649318,
-            "lru_hit_rate": 0.989139,
-            "lru_hits": 28459937,
-            "plfu_hit_rate": 0.993881,
-            "plfu_hits": 28596376
-          },
-          {
-            "belady_hit_rate": 0.999555,
-            "belady_hits": 28759637,
-            "capacity": 16384,
-            "lfu_hit_rate": 0.999555,
-            "lfu_hits": 28759637,
-            "lru_hit_rate": 0.999555,
-            "lru_hits": 28759637,
-            "plfu_hit_rate": 0.999555,
-            "plfu_hits": 28759637
-          },
-          {
-            "belady_hit_rate": 0.999555,
-            "belady_hits": 28759637,
-            "capacity": 32768,
-            "lfu_hit_rate": 0.999555,
-            "lfu_hits": 28759637,
-            "lru_hit_rate": 0.999555,
-            "lru_hits": 28759637,
-            "plfu_hit_rate": 0.999555,
-            "plfu_hits": 28759637
-          },
-          {
-            "belady_hit_rate": 0.999555,
-            "belady_hits": 28759637,
-            "capacity": 65536,
-            "lfu_hit_rate": 0.999555,
-            "lfu_hits": 28759637,
-            "lru_hit_rate": 0.999555,
-            "lru_hits": 28759637,
-            "plfu_hit_rate": 0.999555,
-            "plfu_hits": 28759637
-          }
-        ],
-        "distinct_keys": 12800,
-        "references": 28772437,
-        "stack_distance_percentiles": {
-          "p50": 0,
-          "p90": 0,
-          "p99": 12799
-        }
-      }
-    },
-    "duration_seconds": 9.999999,
-    "expected_ftl_counters": {
-      "never_written_read_lpns_precondition_fill": 0,
-      "never_written_read_lpns_precondition_none": 6378340,
-      "read_lpns": 28772437,
-      "read_reqs": 4999782,
-      "request_size_histogram_lpns": {
-        "1": 2500076,
-        "17-32": 0,
-        "2": 2499720,
-        "3-4": 2500593,
-        "33-64": 0,
-        "5-8": 0,
-        "9-16": 2499611,
-        ">64": 0
-      },
-      "write_lpns": 28723227,
-      "write_reqs": 5000218
-    },
-    "footprint": {
-      "fits_logical_device": true,
-      "footprint_gib": 24.9842,
-      "max_end_bytes": 26843545600,
-      "min_offset_bytes": 0,
-      "unique_lpns": 6549448,
-      "unique_read_lpns": 6364180,
-      "unique_tp256": 25600,
-      "unique_tp512": 12800,
-      "unique_written_lpns": 6365921
-    },
-    "locality": {
-      "sequential_request_share": 0.249961,
-      "top10pct_lpn_access_share": 0.258112,
-      "top1pct_lpn_access_share": 0.028478,
-      "top20pct_lpn_access_share": 0.422597,
-      "working_set_gib_max": 0.3815,
-      "working_set_lpns_max": 100000,
-      "working_set_lpns_mean": 99992.5,
-      "working_set_window_refs": 100000
-    },
-    "mapping": {
-      "never_written_read_lpns_precondition_none": 6378340,
-      "overwrite_share_of_written_lpns": 0.77837,
-      "read_after_write_share_precondition_fill": 1.0,
-      "read_after_write_share_precondition_none": 0.778318
-    },
-    "mix": {
-      "mean_request_kib": 22.998,
-      "read_percent_by_bytes": 50.043,
-      "read_percent_by_requests": 49.998,
-      "read_reqs": 4999782,
-      "request_sizes": {
-        "R": {
-          "16KiB": 1249990,
-          "4KiB": 1248527,
-          "64KiB": 1251530,
-          "8KiB": 1249735
-        },
-        "W": {
-          "16KiB": 1250603,
-          "4KiB": 1251549,
-          "64KiB": 1248081,
-          "8KiB": 1249985
-        }
-      },
-      "write_reqs": 5000218
-    },
-    "operations": 10000000,
-    "page_aligned": true,
-    "provenance": {
-      "address_range_gib": "25.0",
-      "file": "experiments/traces/seq-mixed.trace",
-      "generator": "experiments/scripts/generate_workloads.py",
-      "hot_access_percent": "",
-      "hot_region_percent": "",
-      "operations": "10000000",
-      "pattern": "sequential",
-      "read_percent": "50.0",
-      "request_sizes": "4096,8192,16384,65536",
-      "seed": "42",
-      "sequential_percent": "",
-      "sha256": "86e774fb8b489772963f71afb1cbac24b73ea2eaecef9b296eaf10931665d982",
-      "sha256_matches_git_lfs_oid": true,
-      "sha256_matches_manifest": true,
-      "size_bytes": 280761552,
-      "write_percent": "50.0",
-      "zipf_alpha": ""
-    }
-  },
-  "traces/uniform-mixed": {
-    "cache_bounds_read_stream": {
-      "lpn": {
-        "compulsory_miss_rate": 0.225365,
-        "curve": [
-          {
-            "belady_hit_rate": 0.016996,
-            "belady_hits": 488010,
-            "capacity": 1024,
-            "lfu_hit_rate": 0.000161,
-            "lfu_hits": 4628,
-            "lru_hit_rate": 0.000162,
-            "lru_hits": 4661,
-            "plfu_hit_rate": 0.000152,
-            "plfu_hits": 4376
-          },
-          {
-            "belady_hit_rate": 0.024242,
-            "belady_hits": 696063,
-            "capacity": 2048,
-            "lfu_hit_rate": 0.000314,
-            "lfu_hits": 9030,
-            "lru_hit_rate": 0.000313,
-            "lru_hits": 9001,
-            "plfu_hit_rate": 0.000306,
-            "plfu_hits": 8798
-          },
-          {
-            "belady_hit_rate": 0.034469,
-            "belady_hits": 989698,
-            "capacity": 4096,
-            "lfu_hit_rate": 0.000631,
-            "lfu_hits": 18109,
-            "lru_hit_rate": 0.000624,
-            "lru_hits": 17917,
-            "plfu_hit_rate": 0.00062,
-            "plfu_hits": 17807
-          },
-          {
-            "belady_hit_rate": 0.048751,
-            "belady_hits": 1399771,
-            "capacity": 8192,
-            "lfu_hit_rate": 0.001257,
-            "lfu_hits": 36089,
-            "lru_hit_rate": 0.001212,
-            "lru_hits": 34798,
-            "plfu_hit_rate": 0.001241,
-            "plfu_hits": 35644
-          },
-          {
-            "belady_hit_rate": 0.0689,
-            "belady_hits": 1978307,
-            "capacity": 16384,
-            "lfu_hit_rate": 0.002523,
-            "lfu_hits": 72446,
-            "lru_hit_rate": 0.002464,
-            "lru_hits": 70739,
-            "plfu_hit_rate": 0.00249,
-            "plfu_hits": 71490
-          },
-          {
-            "belady_hit_rate": 0.096798,
-            "belady_hits": 2779356,
-            "capacity": 32768,
-            "lfu_hit_rate": 0.00501,
-            "lfu_hits": 143851,
-            "lru_hit_rate": 0.005002,
-            "lru_hits": 143615,
-            "plfu_hit_rate": 0.004992,
-            "plfu_hits": 143329
-          },
-          {
-            "belady_hit_rate": 0.135512,
-            "belady_hits": 3890951,
-            "capacity": 65536,
-            "lfu_hit_rate": 0.010033,
-            "lfu_hits": 288075,
-            "lru_hit_rate": 0.01002,
-            "lru_hits": 287714,
-            "plfu_hit_rate": 0.010003,
-            "plfu_hits": 287228
-          }
-        ],
-        "distinct_keys": 6470885,
-        "references": 28712867,
-        "stack_distance_percentiles": {
-          "p50": 2682568,
-          "p90": 5308532,
-          "p99": 6215595
-        }
-      },
-      "tp256": {
-        "compulsory_miss_rate": 0.000892,
-        "curve": [
-          {
-            "belady_hit_rate": 0.869889,
-            "belady_hits": 24977015,
-            "capacity": 1024,
-            "lfu_hit_rate": 0.829788,
-            "lfu_hits": 23825581,
-            "lru_hit_rate": 0.829761,
-            "lru_hits": 23824820,
-            "plfu_hit_rate": 0.8298,
-            "plfu_hits": 23825943
-          },
-          {
-            "belady_hit_rate": 0.888255,
-            "belady_hits": 25504345,
-            "capacity": 2048,
-            "lfu_hit_rate": 0.836884,
-            "lfu_hits": 24029329,
-            "lru_hit_rate": 0.836852,
-            "lru_hits": 24028430,
-            "plfu_hit_rate": 0.836883,
-            "plfu_hits": 24029298
-          },
-          {
-            "belady_hit_rate": 0.912584,
-            "belady_hits": 26202916,
-            "capacity": 4096,
-            "lfu_hit_rate": 0.851054,
-            "lfu_hits": 24436194,
-            "lru_hit_rate": 0.851033,
-            "lru_hits": 24435605,
-            "plfu_hit_rate": 0.851078,
-            "plfu_hits": 24436891
-          },
-          {
-            "belady_hit_rate": 0.94349,
-            "belady_hits": 27090316,
-            "capacity": 8192,
-            "lfu_hit_rate": 0.879343,
-            "lfu_hits": 25248472,
-            "lru_hit_rate": 0.87942,
-            "lru_hits": 25250670,
-            "plfu_hit_rate": 0.879432,
-            "plfu_hits": 25251027
-          },
-          {
-            "belady_hit_rate": 0.979261,
-            "belady_hits": 28117389,
-            "capacity": 16384,
-            "lfu_hit_rate": 0.935943,
-            "lfu_hits": 26873620,
-            "lru_hit_rate": 0.93593,
-            "lru_hits": 26873240,
-            "plfu_hit_rate": 0.935943,
-            "plfu_hits": 26873612
-          },
-          {
-            "belady_hit_rate": 0.999108,
-            "belady_hits": 28687267,
-            "capacity": 32768,
-            "lfu_hit_rate": 0.999108,
-            "lfu_hits": 28687267,
-            "lru_hit_rate": 0.999108,
-            "lru_hits": 28687267,
-            "plfu_hit_rate": 0.999108,
-            "plfu_hits": 28687267
-          },
-          {
-            "belady_hit_rate": 0.999108,
-            "belady_hits": 28687267,
-            "capacity": 65536,
-            "lfu_hit_rate": 0.999108,
-            "lfu_hits": 28687267,
-            "lru_hit_rate": 0.999108,
-            "lru_hits": 28687267,
-            "plfu_hit_rate": 0.999108,
-            "plfu_hits": 28687267
-          }
-        ],
-        "distinct_keys": 25600,
-        "references": 28712867,
-        "stack_distance_percentiles": {
-          "p50": 0,
-          "p90": 11051,
-          "p99": 24128
-        }
-      },
-      "tp512": {
-        "compulsory_miss_rate": 0.000446,
-        "curve": [
-          {
-            "belady_hit_rate": 0.889082,
-            "belady_hits": 25528098,
-            "capacity": 1024,
-            "lfu_hit_rate": 0.83839,
-            "lfu_hits": 24072582,
-            "lru_hit_rate": 0.838342,
-            "lru_hits": 24071196,
-            "plfu_hit_rate": 0.838372,
-            "plfu_hits": 24072054
-          },
-          {
-            "belady_hit_rate": 0.913252,
-            "belady_hits": 26222072,
-            "capacity": 2048,
-            "lfu_hit_rate": 0.852444,
-            "lfu_hits": 24476115,
-            "lru_hit_rate": 0.852401,
-            "lru_hits": 24474863,
-            "plfu_hit_rate": 0.852443,
-            "plfu_hits": 24476078
-          },
-          {
-            "belady_hit_rate": 0.944034,
-            "belady_hits": 27105921,
-            "capacity": 4096,
-            "lfu_hit_rate": 0.880552,
-            "lfu_hits": 25283173,
-            "lru_hit_rate": 0.880481,
-            "lru_hits": 25281127,
-            "plfu_hit_rate": 0.880541,
-            "plfu_hits": 25282856
-          },
-          {
-            "belady_hit_rate": 0.979685,
-            "belady_hits": 28129575,
-            "capacity": 8192,
-            "lfu_hit_rate": 0.936623,
-            "lfu_hits": 26893142,
-            "lru_hit_rate": 0.936652,
-            "lru_hits": 26893963,
-            "plfu_hit_rate": 0.936705,
-            "plfu_hits": 26895472
-          },
-          {
-            "belady_hit_rate": 0.999554,
-            "belady_hits": 28700067,
-            "capacity": 16384,
-            "lfu_hit_rate": 0.999554,
-            "lfu_hits": 28700067,
-            "lru_hit_rate": 0.999554,
-            "lru_hits": 28700067,
-            "plfu_hit_rate": 0.999554,
-            "plfu_hits": 28700067
-          },
-          {
-            "belady_hit_rate": 0.999554,
-            "belady_hits": 28700067,
-            "capacity": 32768,
-            "lfu_hit_rate": 0.999554,
-            "lfu_hits": 28700067,
-            "lru_hit_rate": 0.999554,
-            "lru_hits": 28700067,
-            "plfu_hit_rate": 0.999554,
-            "plfu_hits": 28700067
-          },
-          {
-            "belady_hit_rate": 0.999554,
-            "belady_hits": 28700067,
-            "capacity": 65536,
-            "lfu_hit_rate": 0.999554,
-            "lfu_hits": 28700067,
-            "lru_hit_rate": 0.999554,
-            "lru_hits": 28700067,
-            "plfu_hit_rate": 0.999554,
-            "plfu_hits": 28700067
-          }
-        ],
-        "distinct_keys": 12800,
-        "references": 28712867,
-        "stack_distance_percentiles": {
-          "p50": 0,
-          "p90": 5490,
-          "p99": 12065
-        }
-      }
-    },
-    "duration_seconds": 9.999999,
-    "expected_ftl_counters": {
-      "never_written_read_lpns_precondition_fill": 0,
-      "never_written_read_lpns_precondition_none": 6466957,
-      "read_lpns": 28712867,
-      "read_reqs": 4998288,
-      "request_size_histogram_lpns": {
-        "1": 2502613,
-        "17-32": 0,
-        "2": 2500963,
-        "3-4": 2499334,
-        "33-64": 0,
-        "5-8": 0,
-        "9-16": 2497090,
-        ">64": 0
-      },
-      "write_lpns": 28742448,
-      "write_reqs": 5001712
-    },
-    "footprint": {
-      "fits_logical_device": true,
-      "footprint_gib": 24.996,
-      "max_end_bytes": 26843545600,
-      "min_offset_bytes": 0,
-      "unique_lpns": 6552544,
-      "unique_read_lpns": 6470885,
-      "unique_tp256": 25600,
-      "unique_tp512": 12800,
-      "unique_written_lpns": 6471855
-    },
-    "locality": {
-      "sequential_request_share": 0.0,
-      "top10pct_lpn_access_share": 0.163325,
-      "top1pct_lpn_access_share": 0.020118,
-      "top20pct_lpn_access_share": 0.298272,
-      "working_set_gib_max": 0.3794,
-      "working_set_lpns_max": 99448,
-      "working_set_lpns_mean": 99164.7,
-      "working_set_window_refs": 100000
-    },
-    "mapping": {
-      "never_written_read_lpns_precondition_none": 6466957,
-      "overwrite_share_of_written_lpns": 0.774833,
-      "read_after_write_share_precondition_fill": 1.0,
-      "read_after_write_share_precondition_none": 0.774771
-    },
-    "mix": {
-      "mean_request_kib": 22.982,
-      "read_percent_by_bytes": 49.974,
-      "read_percent_by_requests": 49.983,
-      "read_reqs": 4998288,
-      "request_sizes": {
-        "R": {
-          "16KiB": 1249781,
-          "4KiB": 1250693,
-          "64KiB": 1247673,
-          "8KiB": 1250141
-        },
-        "W": {
-          "16KiB": 1249553,
-          "4KiB": 1251920,
-          "64KiB": 1249417,
-          "8KiB": 1250822
-        }
-      },
-      "write_reqs": 5001712
-    },
-    "operations": 10000000,
-    "page_aligned": true,
-    "provenance": {
-      "address_range_gib": "25.0",
-      "file": "experiments/traces/uniform-mixed.trace",
-      "generator": "experiments/scripts/generate_workloads.py",
-      "hot_access_percent": "",
-      "hot_region_percent": "",
-      "operations": "10000000",
-      "pattern": "uniform",
-      "read_percent": "50.0",
-      "request_sizes": "4096,8192,16384,65536",
-      "seed": "45",
-      "sequential_percent": "",
-      "sha256": "998fc414b8077d90fb1ea5f296d414a87629c098cdc430de8cb80f4b61406bfe",
-      "sha256_matches_git_lfs_oid": true,
-      "sha256_matches_manifest": true,
-      "size_bytes": 280855844,
-      "write_percent": "50.0",
-      "zipf_alpha": ""
-    }
-  },
-  "traces/uniform-read": {
-    "cache_bounds_read_stream": {
-      "lpn": {
-        "compulsory_miss_rate": 0.113934,
-        "curve": [
-          {
-            "belady_hit_rate": 0.017004,
-            "belady_hits": 977937,
-            "capacity": 1024,
-            "lfu_hit_rate": 0.000161,
-            "lfu_hits": 9274,
-            "lru_hit_rate": 0.000155,
-            "lru_hits": 8924,
-            "plfu_hit_rate": 0.000158,
-            "plfu_hits": 9069
-          },
-          {
-            "belady_hit_rate": 0.024285,
-            "belady_hits": 1396681,
-            "capacity": 2048,
-            "lfu_hit_rate": 0.000321,
-            "lfu_hits": 18452,
-            "lru_hit_rate": 0.000317,
-            "lru_hits": 18239,
-            "plfu_hit_rate": 0.000314,
-            "plfu_hits": 18043
-          },
-          {
-            "belady_hit_rate": 0.034544,
-            "belady_hits": 1986695,
-            "capacity": 4096,
-            "lfu_hit_rate": 0.000641,
-            "lfu_hits": 36877,
-            "lru_hit_rate": 0.000624,
-            "lru_hits": 35866,
-            "plfu_hit_rate": 0.000628,
-            "plfu_hits": 36125
-          },
-          {
-            "belady_hit_rate": 0.048921,
-            "belady_hits": 2813564,
-            "capacity": 8192,
-            "lfu_hit_rate": 0.001262,
-            "lfu_hits": 72606,
-            "lru_hit_rate": 0.001233,
-            "lru_hits": 70905,
-            "plfu_hit_rate": 0.001246,
-            "plfu_hits": 71680
-          },
-          {
-            "belady_hit_rate": 0.069163,
-            "belady_hits": 3977723,
-            "capacity": 16384,
-            "lfu_hit_rate": 0.002515,
-            "lfu_hits": 144625,
-            "lru_hit_rate": 0.00249,
-            "lru_hits": 143194,
-            "plfu_hit_rate": 0.002489,
-            "plfu_hits": 143167
-          },
-          {
-            "belady_hit_rate": 0.097348,
-            "belady_hits": 5598710,
-            "capacity": 32768,
-            "lfu_hit_rate": 0.005004,
-            "lfu_hits": 287771,
-            "lru_hit_rate": 0.004991,
-            "lru_hits": 287025,
-            "plfu_hit_rate": 0.004985,
-            "plfu_hits": 286686
-          },
-          {
-            "belady_hit_rate": 0.136497,
-            "belady_hits": 7850250,
-            "capacity": 65536,
-            "lfu_hit_rate": 0.01001,
-            "lfu_hits": 575697,
-            "lru_hit_rate": 0.010013,
-            "lru_hits": 575854,
-            "plfu_hit_rate": 0.010001,
-            "plfu_hits": 575185
-          }
-        ],
-        "distinct_keys": 6552605,
-        "references": 57512374,
-        "stack_distance_percentiles": {
-          "p50": 2996150,
-          "p90": 5670609,
-          "p99": 6422392
-        }
-      },
-      "tp256": {
-        "compulsory_miss_rate": 0.000445,
-        "curve": [
-          {
-            "belady_hit_rate": 0.870059,
-            "belady_hits": 50039141,
-            "capacity": 1024,
-            "lfu_hit_rate": 0.829983,
-            "lfu_hits": 47734314,
-            "lru_hit_rate": 0.829968,
-            "lru_hits": 47733419,
-            "plfu_hit_rate": 0.829986,
-            "plfu_hits": 47734490
-          },
-          {
-            "belady_hit_rate": 0.888408,
-            "belady_hits": 51094464,
-            "capacity": 2048,
-            "lfu_hit_rate": 0.837075,
-            "lfu_hits": 48142155,
-            "lru_hit_rate": 0.83706,
-            "lru_hits": 48141319,
-            "plfu_hit_rate": 0.837042,
-            "plfu_hits": 48140283
-          },
-          {
-            "belady_hit_rate": 0.912734,
-            "belady_hits": 52493484,
-            "capacity": 4096,
-            "lfu_hit_rate": 0.851253,
-            "lfu_hits": 48957574,
-            "lru_hit_rate": 0.851223,
-            "lru_hits": 48955881,
-            "plfu_hit_rate": 0.851208,
-            "plfu_hits": 48954997
-          },
-          {
-            "belady_hit_rate": 0.943687,
-            "belady_hits": 54273678,
-            "capacity": 8192,
-            "lfu_hit_rate": 0.879569,
-            "lfu_hits": 50586087,
-            "lru_hit_rate": 0.879552,
-            "lru_hits": 50585145,
-            "plfu_hit_rate": 0.87952,
-            "plfu_hits": 50583288
-          },
-          {
-            "belady_hit_rate": 0.979552,
-            "belady_hits": 56336357,
-            "capacity": 16384,
-            "lfu_hit_rate": 0.936141,
-            "lfu_hits": 53839685,
-            "lru_hit_rate": 0.936096,
-            "lru_hits": 53837095,
-            "plfu_hit_rate": 0.93615,
-            "plfu_hits": 53840210
-          },
-          {
-            "belady_hit_rate": 0.999555,
-            "belady_hits": 57486774,
-            "capacity": 32768,
-            "lfu_hit_rate": 0.999555,
-            "lfu_hits": 57486774,
-            "lru_hit_rate": 0.999555,
-            "lru_hits": 57486774,
-            "plfu_hit_rate": 0.999555,
-            "plfu_hits": 57486774
-          },
-          {
-            "belady_hit_rate": 0.999555,
-            "belady_hits": 57486774,
-            "capacity": 65536,
-            "lfu_hit_rate": 0.999555,
-            "lfu_hits": 57486774,
-            "lru_hit_rate": 0.999555,
-            "lru_hits": 57486774,
-            "plfu_hit_rate": 0.999555,
-            "plfu_hits": 57486774
-          }
-        ],
-        "distinct_keys": 25600,
-        "references": 57512374,
-        "stack_distance_percentiles": {
-          "p50": 0,
-          "p90": 11090,
-          "p99": 24139
-        }
-      },
-      "tp512": {
-        "compulsory_miss_rate": 0.000223,
-        "curve": [
-          {
-            "belady_hit_rate": 0.889208,
-            "belady_hits": 51140464,
-            "capacity": 1024,
-            "lfu_hit_rate": 0.838565,
-            "lfu_hits": 48227873,
-            "lru_hit_rate": 0.838525,
-            "lru_hits": 48225577,
-            "plfu_hit_rate": 0.838534,
-            "plfu_hits": 48226075
-          },
-          {
-            "belady_hit_rate": 0.913373,
-            "belady_hits": 52530222,
-            "capacity": 2048,
-            "lfu_hit_rate": 0.852609,
-            "lfu_hits": 49035578,
-            "lru_hit_rate": 0.852562,
-            "lru_hits": 49032871,
-            "plfu_hit_rate": 0.852555,
-            "plfu_hits": 49032461
-          },
-          {
-            "belady_hit_rate": 0.944149,
-            "belady_hits": 54300257,
-            "capacity": 4096,
-            "lfu_hit_rate": 0.880659,
-            "lfu_hits": 50648769,
-            "lru_hit_rate": 0.880616,
-            "lru_hits": 50646304,
-            "plfu_hit_rate": 0.880622,
-            "plfu_hits": 50646687
-          },
-          {
-            "belady_hit_rate": 0.979825,
-            "belady_hits": 56352036,
-            "capacity": 8192,
-            "lfu_hit_rate": 0.936747,
-            "lfu_hits": 53874572,
-            "lru_hit_rate": 0.936735,
-            "lru_hits": 53873833,
-            "plfu_hit_rate": 0.936771,
-            "plfu_hits": 53875915
-          },
-          {
-            "belady_hit_rate": 0.999777,
-            "belady_hits": 57499574,
-            "capacity": 16384,
-            "lfu_hit_rate": 0.999777,
-            "lfu_hits": 57499574,
-            "lru_hit_rate": 0.999777,
-            "lru_hits": 57499574,
-            "plfu_hit_rate": 0.999777,
-            "plfu_hits": 57499574
-          },
-          {
-            "belady_hit_rate": 0.999777,
-            "belady_hits": 57499574,
-            "capacity": 32768,
-            "lfu_hit_rate": 0.999777,
-            "lfu_hits": 57499574,
-            "lru_hit_rate": 0.999777,
-            "lru_hits": 57499574,
-            "plfu_hit_rate": 0.999777,
-            "plfu_hits": 57499574
-          },
-          {
-            "belady_hit_rate": 0.999777,
-            "belady_hits": 57499574,
-            "capacity": 65536,
-            "lfu_hit_rate": 0.999777,
-            "lfu_hits": 57499574,
-            "lru_hit_rate": 0.999777,
-            "lru_hits": 57499574,
-            "plfu_hit_rate": 0.999777,
-            "plfu_hits": 57499574
-          }
-        ],
-        "distinct_keys": 12800,
-        "references": 57512374,
-        "stack_distance_percentiles": {
-          "p50": 0,
-          "p90": 5494,
-          "p99": 12067
-        }
-      }
-    },
-    "duration_seconds": 9.999999,
-    "expected_ftl_counters": {
-      "never_written_read_lpns_precondition_fill": 0,
-      "never_written_read_lpns_precondition_none": 57512374,
-      "read_lpns": 57512374,
-      "read_reqs": 10000000,
-      "request_size_histogram_lpns": {
-        "1": 2499796,
-        "17-32": 0,
-        "2": 2497569,
-        "3-4": 2502060,
-        "33-64": 0,
-        "5-8": 0,
-        "9-16": 2500575,
-        ">64": 0
-      },
-      "write_lpns": 0,
-      "write_reqs": 0
-    },
-    "footprint": {
-      "fits_logical_device": true,
-      "footprint_gib": 24.9962,
-      "max_end_bytes": 26843545600,
-      "min_offset_bytes": 0,
-      "unique_lpns": 6552605,
-      "unique_read_lpns": 6552605,
-      "unique_tp256": 25600,
-      "unique_tp512": 12800,
-      "unique_written_lpns": 0
-    },
-    "locality": {
-      "sequential_request_share": 0.0,
-      "top10pct_lpn_access_share": 0.163157,
-      "top1pct_lpn_access_share": 0.020073,
-      "top20pct_lpn_access_share": 0.298028,
-      "working_set_gib_max": 0.3794,
-      "working_set_lpns_max": 99446,
-      "working_set_lpns_mean": 99090.2,
-      "working_set_window_refs": 100000
-    },
-    "mapping": {
-      "never_written_read_lpns_precondition_none": 57512374,
-      "overwrite_share_of_written_lpns": null,
-      "read_after_write_share_precondition_fill": 1.0,
-      "read_after_write_share_precondition_none": 0.0
-    },
-    "mix": {
-      "mean_request_kib": 23.005,
-      "read_percent_by_bytes": 100.0,
-      "read_percent_by_requests": 100.0,
-      "read_reqs": 10000000,
-      "request_sizes": {
-        "R": {
-          "16KiB": 2502060,
-          "4KiB": 2499796,
-          "64KiB": 2500575,
-          "8KiB": 2497569
-        },
-        "W": {}
-      },
-      "write_reqs": 0
-    },
-    "operations": 10000000,
-    "page_aligned": true,
-    "provenance": {
-      "address_range_gib": "25.0",
-      "file": "experiments/traces/uniform-read.trace",
-      "generator": "experiments/scripts/generate_workloads.py",
-      "hot_access_percent": "",
-      "hot_region_percent": "",
-      "operations": "10000000",
-      "pattern": "uniform",
-      "read_percent": "100.0",
-      "request_sizes": "4096,8192,16384,65536",
-      "seed": "43",
-      "sequential_percent": "",
-      "sha256": "cc214c9d3dea7d3c7f81d2c555e632121723c80a08860bbade1a6c8ae5aefaf7",
-      "sha256_matches_git_lfs_oid": true,
-      "sha256_matches_manifest": true,
-      "size_bytes": 280867425,
-      "write_percent": "0.0",
-      "zipf_alpha": ""
-    }
-  },
-  "traces/uniform-write": {
-    "cache_bounds_read_stream": {},
-    "duration_seconds": 9.999999,
-    "expected_ftl_counters": {
-      "never_written_read_lpns_precondition_fill": 0,
-      "never_written_read_lpns_precondition_none": 0,
-      "read_lpns": 0,
-      "read_reqs": 0,
-      "request_size_histogram_lpns": {
-        "1": 2499931,
-        "17-32": 0,
-        "2": 2498731,
-        "3-4": 2500280,
-        "33-64": 0,
-        "5-8": 0,
-        "9-16": 2501058,
-        ">64": 0
-      },
-      "write_lpns": 57515441,
-      "write_reqs": 10000000
-    },
-    "footprint": {
-      "fits_logical_device": true,
-      "footprint_gib": 24.9959,
-      "max_end_bytes": 26843545600,
-      "min_offset_bytes": 4096,
-      "unique_lpns": 6552536,
-      "unique_read_lpns": 0,
-      "unique_tp256": 25600,
-      "unique_tp512": 12800,
-      "unique_written_lpns": 6552536
-    },
-    "locality": {
-      "sequential_request_share": 0.0,
-      "top10pct_lpn_access_share": 0.163043,
-      "top1pct_lpn_access_share": 0.020046,
-      "top20pct_lpn_access_share": 0.297906,
-      "working_set_gib_max": 0.3794,
-      "working_set_lpns_max": 99453,
-      "working_set_lpns_mean": 99096.3,
-      "working_set_window_refs": 100000
-    },
-    "mapping": {
-      "never_written_read_lpns_precondition_none": 0,
-      "overwrite_share_of_written_lpns": 0.886073,
-      "read_after_write_share_precondition_fill": null,
-      "read_after_write_share_precondition_none": null
-    },
-    "mix": {
-      "mean_request_kib": 23.006,
-      "read_percent_by_bytes": 0.0,
-      "read_percent_by_requests": 0.0,
-      "read_reqs": 0,
-      "request_sizes": {
-        "R": {},
-        "W": {
-          "16KiB": 2500280,
-          "4KiB": 2499931,
-          "64KiB": 2501058,
-          "8KiB": 2498731
-        }
-      },
-      "write_reqs": 10000000
-    },
-    "operations": 10000000,
-    "page_aligned": true,
-    "provenance": {
-      "address_range_gib": "25.0",
-      "file": "experiments/traces/uniform-write.trace",
-      "generator": "experiments/scripts/generate_workloads.py",
-      "hot_access_percent": "",
-      "hot_region_percent": "",
-      "operations": "10000000",
-      "pattern": "uniform",
-      "read_percent": "0.0",
-      "request_sizes": "4096,8192,16384,65536",
-      "seed": "44",
-      "sequential_percent": "",
-      "sha256": "72ee31323227ff8ee57f12803b21ab0a4cfe904ccf160263307fc5187b0080b4",
-      "sha256_matches_git_lfs_oid": true,
-      "sha256_matches_manifest": true,
-      "size_bytes": 280863982,
-      "write_percent": "100.0",
-      "zipf_alpha": ""
-    }
-  },
-  "traces/zipf-80-20": {
-    "cache_bounds_read_stream": {
-      "lpn": {
-        "compulsory_miss_rate": 0.30101,
-        "curve": [
-          {
-            "belady_hit_rate": 0.692659,
-            "belady_hits": 34687,
-            "capacity": 1024,
-            "lfu_hit_rate": 0.648548,
-            "lfu_hits": 32478,
-            "lru_hit_rate": 0.61548,
-            "lru_hits": 30822,
-            "plfu_hit_rate": 0.663565,
-            "plfu_hits": 33230
-          },
-          {
-            "belady_hit_rate": 0.69899,
-            "belady_hits": 35004,
-            "capacity": 2048,
-            "lfu_hit_rate": 0.666021,
-            "lfu_hits": 33353,
-            "lru_hit_rate": 0.648129,
-            "lru_hits": 32457,
-            "plfu_hit_rate": 0.673509,
-            "plfu_hits": 33728
-          },
-          {
-            "belady_hit_rate": 0.69899,
-            "belady_hits": 35004,
-            "capacity": 4096,
-            "lfu_hit_rate": 0.680958,
-            "lfu_hits": 34101,
-            "lru_hit_rate": 0.673729,
-            "lru_hits": 33739,
-            "plfu_hit_rate": 0.682336,
-            "plfu_hits": 34170
-          },
-          {
-            "belady_hit_rate": 0.69899,
-            "belady_hits": 35004,
-            "capacity": 8192,
-            "lfu_hit_rate": 0.693259,
-            "lfu_hits": 34717,
-            "lru_hit_rate": 0.69204,
-            "lru_hits": 34656,
-            "plfu_hit_rate": 0.693259,
-            "plfu_hits": 34717
-          },
-          {
-            "belady_hit_rate": 0.69899,
-            "belady_hits": 35004,
-            "capacity": 16384,
-            "lfu_hit_rate": 0.69899,
-            "lfu_hits": 35004,
-            "lru_hit_rate": 0.69899,
-            "lru_hits": 35004,
-            "plfu_hit_rate": 0.69899,
-            "plfu_hits": 35004
-          },
-          {
-            "belady_hit_rate": 0.69899,
-            "belady_hits": 35004,
-            "capacity": 32768,
-            "lfu_hit_rate": 0.69899,
-            "lfu_hits": 35004,
-            "lru_hit_rate": 0.69899,
-            "lru_hits": 35004,
-            "plfu_hit_rate": 0.69899,
-            "plfu_hits": 35004
-          },
-          {
-            "belady_hit_rate": 0.69899,
-            "belady_hits": 35004,
-            "capacity": 65536,
-            "lfu_hit_rate": 0.69899,
-            "lfu_hits": 35004,
-            "lru_hit_rate": 0.69899,
-            "lru_hits": 35004,
-            "plfu_hit_rate": 0.69899,
-            "plfu_hits": 35004
-          }
-        ],
-        "distinct_keys": 15074,
-        "references": 50078,
-        "stack_distance_percentiles": {
-          "p50": 30,
-          "p90": 1329,
-          "p99": 8175
-        }
-      },
-      "tp256": {
-        "compulsory_miss_rate": 0.020448,
-        "curve": [
-          {
-            "belady_hit_rate": 0.979552,
-            "belady_hits": 49054,
-            "capacity": 1024,
-            "lfu_hit_rate": 0.979552,
-            "lfu_hits": 49054,
-            "lru_hit_rate": 0.979552,
-            "lru_hits": 49054,
-            "plfu_hit_rate": 0.979552,
-            "plfu_hits": 49054
-          },
-          {
-            "belady_hit_rate": 0.979552,
-            "belady_hits": 49054,
-            "capacity": 2048,
-            "lfu_hit_rate": 0.979552,
-            "lfu_hits": 49054,
-            "lru_hit_rate": 0.979552,
-            "lru_hits": 49054,
-            "plfu_hit_rate": 0.979552,
-            "plfu_hits": 49054
-          },
-          {
-            "belady_hit_rate": 0.979552,
-            "belady_hits": 49054,
-            "capacity": 4096,
-            "lfu_hit_rate": 0.979552,
-            "lfu_hits": 49054,
-            "lru_hit_rate": 0.979552,
-            "lru_hits": 49054,
-            "plfu_hit_rate": 0.979552,
-            "plfu_hits": 49054
-          },
-          {
-            "belady_hit_rate": 0.979552,
-            "belady_hits": 49054,
-            "capacity": 8192,
-            "lfu_hit_rate": 0.979552,
-            "lfu_hits": 49054,
-            "lru_hit_rate": 0.979552,
-            "lru_hits": 49054,
-            "plfu_hit_rate": 0.979552,
-            "plfu_hits": 49054
-          },
-          {
-            "belady_hit_rate": 0.979552,
-            "belady_hits": 49054,
-            "capacity": 16384,
-            "lfu_hit_rate": 0.979552,
-            "lfu_hits": 49054,
-            "lru_hit_rate": 0.979552,
-            "lru_hits": 49054,
-            "plfu_hit_rate": 0.979552,
-            "plfu_hits": 49054
-          },
-          {
-            "belady_hit_rate": 0.979552,
-            "belady_hits": 49054,
-            "capacity": 32768,
-            "lfu_hit_rate": 0.979552,
-            "lfu_hits": 49054,
-            "lru_hit_rate": 0.979552,
-            "lru_hits": 49054,
-            "plfu_hit_rate": 0.979552,
-            "plfu_hits": 49054
-          },
-          {
-            "belady_hit_rate": 0.979552,
-            "belady_hits": 49054,
-            "capacity": 65536,
-            "lfu_hit_rate": 0.979552,
-            "lfu_hits": 49054,
-            "lru_hit_rate": 0.979552,
-            "lru_hits": 49054,
-            "plfu_hit_rate": 0.979552,
-            "plfu_hits": 49054
-          }
-        ],
-        "distinct_keys": 1024,
-        "references": 50078,
-        "stack_distance_percentiles": {
-          "p50": 1,
-          "p90": 530,
-          "p99": 954
-        }
-      },
-      "tp512": {
-        "compulsory_miss_rate": 0.010224,
-        "curve": [
-          {
-            "belady_hit_rate": 0.989776,
-            "belady_hits": 49566,
-            "capacity": 1024,
-            "lfu_hit_rate": 0.989776,
-            "lfu_hits": 49566,
-            "lru_hit_rate": 0.989776,
-            "lru_hits": 49566,
-            "plfu_hit_rate": 0.989776,
-            "plfu_hits": 49566
-          },
-          {
-            "belady_hit_rate": 0.989776,
-            "belady_hits": 49566,
-            "capacity": 2048,
-            "lfu_hit_rate": 0.989776,
-            "lfu_hits": 49566,
-            "lru_hit_rate": 0.989776,
-            "lru_hits": 49566,
-            "plfu_hit_rate": 0.989776,
-            "plfu_hits": 49566
-          },
-          {
-            "belady_hit_rate": 0.989776,
-            "belady_hits": 49566,
-            "capacity": 4096,
-            "lfu_hit_rate": 0.989776,
-            "lfu_hits": 49566,
-            "lru_hit_rate": 0.989776,
-            "lru_hits": 49566,
-            "plfu_hit_rate": 0.989776,
-            "plfu_hits": 49566
-          },
-          {
-            "belady_hit_rate": 0.989776,
-            "belady_hits": 49566,
-            "capacity": 8192,
-            "lfu_hit_rate": 0.989776,
-            "lfu_hits": 49566,
-            "lru_hit_rate": 0.989776,
-            "lru_hits": 49566,
-            "plfu_hit_rate": 0.989776,
-            "plfu_hits": 49566
-          },
-          {
-            "belady_hit_rate": 0.989776,
-            "belady_hits": 49566,
-            "capacity": 16384,
-            "lfu_hit_rate": 0.989776,
-            "lfu_hits": 49566,
-            "lru_hit_rate": 0.989776,
-            "lru_hits": 49566,
-            "plfu_hit_rate": 0.989776,
-            "plfu_hits": 49566
-          },
-          {
-            "belady_hit_rate": 0.989776,
-            "belady_hits": 49566,
-            "capacity": 32768,
-            "lfu_hit_rate": 0.989776,
-            "lfu_hits": 49566,
-            "lru_hit_rate": 0.989776,
-            "lru_hits": 49566,
-            "plfu_hit_rate": 0.989776,
-            "plfu_hits": 49566
-          },
-          {
-            "belady_hit_rate": 0.989776,
-            "belady_hits": 49566,
-            "capacity": 65536,
-            "lfu_hit_rate": 0.989776,
-            "lfu_hits": 49566,
-            "lru_hit_rate": 0.989776,
-            "lru_hits": 49566,
-            "plfu_hit_rate": 0.989776,
-            "plfu_hits": 49566
-          }
-        ],
-        "distinct_keys": 512,
-        "references": 50078,
-        "stack_distance_percentiles": {
-          "p50": 1,
-          "p90": 276,
-          "p99": 481
-        }
-      }
-    },
-    "duration_seconds": 0.099999,
-    "expected_ftl_counters": {
-      "never_written_read_lpns_precondition_fill": 0,
-      "never_written_read_lpns_precondition_none": 15118,
-      "read_lpns": 50078,
-      "read_reqs": 50078,
-      "request_size_histogram_lpns": {
-        "1": 100000,
-        "17-32": 0,
-        "2": 0,
-        "3-4": 0,
-        "33-64": 0,
-        "5-8": 0,
-        "9-16": 0,
-        ">64": 0
-      },
-      "write_lpns": 49922,
-      "write_reqs": 49922
-    },
-    "footprint": {
-      "fits_logical_device": true,
-      "footprint_gib": 0.1057,
-      "max_end_bytes": 1073676288,
-      "min_offset_bytes": 0,
-      "unique_lpns": 27705,
-      "unique_read_lpns": 15074,
-      "unique_tp256": 1024,
-      "unique_tp512": 512,
-      "unique_written_lpns": 15211
-    },
-    "locality": {
-      "sequential_request_share": 0.01807,
-      "top10pct_lpn_access_share": 0.74095,
-      "top1pct_lpn_access_share": 0.63322,
-      "top20pct_lpn_access_share": 0.77836,
-      "working_set_gib_max": 0.1057,
-      "working_set_lpns_max": 27705,
-      "working_set_lpns_mean": 27705.0,
-      "working_set_window_refs": 100000
-    },
-    "mapping": {
-      "never_written_read_lpns_precondition_none": 15118,
-      "overwrite_share_of_written_lpns": 0.695305,
-      "read_after_write_share_precondition_fill": 1.0,
-      "read_after_write_share_precondition_none": 0.698111
-    },
-    "mix": {
-      "mean_request_kib": 4.0,
-      "read_percent_by_bytes": 50.078,
-      "read_percent_by_requests": 50.078,
-      "read_reqs": 50078,
-      "request_sizes": {
-        "R": {
-          "4KiB": 50078
-        },
-        "W": {
-          "4KiB": 49922
-        }
-      },
-      "write_reqs": 49922
-    },
-    "operations": 100000,
-    "page_aligned": true,
-    "provenance": {
-      "address_range_gib": "1.0",
-      "file": "experiments/traces/zipf-80-20.trace",
-      "generator": "experiments/scripts/generate_8020_trace.py",
-      "hot_access_percent": "80.0",
-      "hot_region_percent": "20.0",
-      "operations": "100000",
-      "pattern": "zipf hot / uniform cold",
-      "read_percent": "50.0",
-      "seed": "42",
-      "sha256": "59f778196cebfd6f1ad0e659f9a41154230e3199874a759676be56125ea6adef",
-      "sha256_matches_git_lfs_oid": true,
-      "size_bytes": 2265547,
-      "source": "parameters from experiments/results/runs.csv run_id 2 (not in manifest)",
-      "write_percent": "50.0",
-      "zipf_alpha": "1.2"
-    }
-  },
-  "traces/zipf-hot10-access90-a1.2": {
-    "cache_bounds_read_stream": {
-      "lpn": {
-        "compulsory_miss_rate": 0.095191,
-        "curve": [
-          {
-            "belady_hit_rate": 0.761707,
-            "belady_hits": 21895178,
-            "capacity": 1024,
-            "lfu_hit_rate": 0.735564,
-            "lfu_hits": 21143687,
-            "lru_hit_rate": 0.671974,
-            "lru_hits": 19315801,
-            "plfu_hit_rate": 0.744446,
-            "plfu_hits": 21398994
-          },
-          {
-            "belady_hit_rate": 0.787783,
-            "belady_hits": 22644705,
-            "capacity": 2048,
-            "lfu_hit_rate": 0.76316,
-            "lfu_hits": 21936922,
-            "lru_hit_rate": 0.708694,
-            "lru_hits": 20371311,
-            "plfu_hit_rate": 0.772348,
-            "plfu_hits": 22201028
-          },
-          {
-            "belady_hit_rate": 0.810237,
-            "belady_hits": 23290170,
-            "capacity": 4096,
-            "lfu_hit_rate": 0.787902,
-            "lfu_hits": 22648144,
-            "lru_hit_rate": 0.740448,
-            "lru_hits": 21284087,
-            "plfu_hit_rate": 0.796253,
-            "plfu_hits": 22888191
-          },
-          {
-            "belady_hit_rate": 0.829671,
-            "belady_hits": 23848793,
-            "capacity": 8192,
-            "lfu_hit_rate": 0.810271,
-            "lfu_hits": 23291130,
-            "lru_hit_rate": 0.768099,
-            "lru_hits": 22078919,
-            "plfu_hit_rate": 0.816877,
-            "plfu_hits": 23481028
-          },
-          {
-            "belady_hit_rate": 0.846597,
-            "belady_hits": 24335323,
-            "capacity": 16384,
-            "lfu_hit_rate": 0.82795,
-            "lfu_hits": 23799320,
-            "lru_hit_rate": 0.792156,
-            "lru_hits": 22770427,
-            "plfu_hit_rate": 0.834567,
-            "plfu_hits": 23989520
-          },
-          {
-            "belady_hit_rate": 0.861392,
-            "belady_hits": 24760608,
-            "capacity": 32768,
-            "lfu_hit_rate": 0.842669,
-            "lfu_hits": 24222398,
-            "lru_hit_rate": 0.813219,
-            "lru_hits": 23375883,
-            "plfu_hit_rate": 0.849411,
-            "plfu_hits": 24416199
-          },
-          {
-            "belady_hit_rate": 0.874415,
-            "belady_hits": 25134953,
-            "capacity": 65536,
-            "lfu_hit_rate": 0.854356,
-            "lfu_hits": 24558363,
-            "lru_hit_rate": 0.831643,
-            "lru_hits": 23905476,
-            "plfu_hit_rate": 0.861214,
-            "plfu_hits": 24755471
-          }
-        ],
-        "distinct_keys": 2736259,
-        "references": 28744869,
-        "stack_distance_percentiles": {
-          "p50": 75,
-          "p90": 34097,
-          "p99": 1377435
-        }
-      },
-      "tp256": {
-        "compulsory_miss_rate": 0.000891,
-        "curve": [
-          {
-            "belady_hit_rate": 0.983066,
-            "belady_hits": 28258117,
-            "capacity": 1024,
-            "lfu_hit_rate": 0.97873,
-            "lfu_hits": 28133462,
-            "lru_hit_rate": 0.975853,
-            "lru_hits": 28050755,
-            "plfu_hit_rate": 0.979998,
-            "plfu_hits": 28169912
-          },
-          {
-            "belady_hit_rate": 0.985939,
-            "belady_hits": 28340697,
-            "capacity": 2048,
-            "lfu_hit_rate": 0.980413,
-            "lfu_hits": 28181852,
-            "lru_hit_rate": 0.978542,
-            "lru_hits": 28128056,
-            "plfu_hit_rate": 0.981354,
-            "plfu_hits": 28208881
-          },
-          {
-            "belady_hit_rate": 0.98925,
-            "belady_hits": 28435853,
-            "capacity": 4096,
-            "lfu_hit_rate": 0.982631,
-            "lfu_hits": 28245591,
-            "lru_hit_rate": 0.981619,
-            "lru_hits": 28216516,
-            "plfu_hit_rate": 0.983134,
-            "plfu_hits": 28260070
-          },
-          {
-            "belady_hit_rate": 0.993072,
-            "belady_hits": 28545728,
-            "capacity": 8192,
-            "lfu_hit_rate": 0.986196,
-            "lfu_hits": 28348063,
-            "lru_hit_rate": 0.985794,
-            "lru_hits": 28336523,
-            "plfu_hit_rate": 0.986395,
-            "plfu_hits": 28353808
-          },
-          {
-            "belady_hit_rate": 0.997103,
-            "belady_hits": 28661608,
-            "capacity": 16384,
-            "lfu_hit_rate": 0.992618,
-            "lfu_hits": 28532678,
-            "lru_hit_rate": 0.992511,
-            "lru_hits": 28529594,
-            "plfu_hit_rate": 0.99264,
-            "plfu_hits": 28533319
-          },
-          {
-            "belady_hit_rate": 0.999109,
-            "belady_hits": 28719269,
-            "capacity": 32768,
-            "lfu_hit_rate": 0.999109,
-            "lfu_hits": 28719269,
-            "lru_hit_rate": 0.999109,
-            "lru_hits": 28719269,
-            "plfu_hit_rate": 0.999109,
-            "plfu_hits": 28719269
-          },
-          {
-            "belady_hit_rate": 0.999109,
-            "belady_hits": 28719269,
-            "capacity": 65536,
-            "lfu_hit_rate": 0.999109,
-            "lfu_hits": 28719269,
-            "lru_hit_rate": 0.999109,
-            "lru_hits": 28719269,
-            "plfu_hit_rate": 0.999109,
-            "plfu_hits": 28719269
-          }
-        ],
-        "distinct_keys": 25600,
-        "references": 28744869,
-        "stack_distance_percentiles": {
-          "p50": 0,
-          "p90": 0,
-          "p99": 12084
-        }
-      },
-      "tp512": {
-        "compulsory_miss_rate": 0.000445,
-        "curve": [
-          {
-            "belady_hit_rate": 0.986081,
-            "belady_hits": 28344757,
-            "capacity": 1024,
-            "lfu_hit_rate": 0.98057,
-            "lfu_hits": 28186351,
-            "lru_hit_rate": 0.978753,
-            "lru_hits": 28134138,
-            "plfu_hit_rate": 0.981701,
-            "plfu_hits": 28218868
-          },
-          {
-            "belady_hit_rate": 0.989415,
-            "belady_hits": 28440595,
-            "capacity": 2048,
-            "lfu_hit_rate": 0.982755,
-            "lfu_hits": 28249174,
-            "lru_hit_rate": 0.981793,
-            "lru_hits": 28221498,
-            "plfu_hit_rate": 0.983419,
-            "plfu_hits": 28268260
-          },
-          {
-            "belady_hit_rate": 0.993274,
-            "belady_hits": 28551525,
-            "capacity": 4096,
-            "lfu_hit_rate": 0.986364,
-            "lfu_hits": 28352900,
-            "lru_hit_rate": 0.985977,
-            "lru_hits": 28341767,
-            "plfu_hit_rate": 0.986628,
-            "plfu_hits": 28360503
-          },
-          {
-            "belady_hit_rate": 0.99741,
-            "belady_hits": 28670420,
-            "capacity": 8192,
-            "lfu_hit_rate": 0.99281,
-            "lfu_hits": 28538189,
-            "lru_hit_rate": 0.992725,
-            "lru_hits": 28535742,
-            "plfu_hit_rate": 0.992852,
-            "plfu_hits": 28539390
-          },
-          {
-            "belady_hit_rate": 0.999555,
-            "belady_hits": 28732069,
-            "capacity": 16384,
-            "lfu_hit_rate": 0.999555,
-            "lfu_hits": 28732069,
-            "lru_hit_rate": 0.999555,
-            "lru_hits": 28732069,
-            "plfu_hit_rate": 0.999555,
-            "plfu_hits": 28732069
-          },
-          {
-            "belady_hit_rate": 0.999555,
-            "belady_hits": 28732069,
-            "capacity": 32768,
-            "lfu_hit_rate": 0.999555,
-            "lfu_hits": 28732069,
-            "lru_hit_rate": 0.999555,
-            "lru_hits": 28732069,
-            "plfu_hit_rate": 0.999555,
-            "plfu_hits": 28732069
-          },
-          {
-            "belady_hit_rate": 0.999555,
-            "belady_hits": 28732069,
-            "capacity": 65536,
-            "lfu_hit_rate": 0.999555,
-            "lfu_hits": 28732069,
-            "lru_hit_rate": 0.999555,
-            "lru_hits": 28732069,
-            "plfu_hit_rate": 0.999555,
-            "plfu_hits": 28732069
-          }
-        ],
-        "distinct_keys": 12800,
-        "references": 28744869,
-        "stack_distance_percentiles": {
-          "p50": 0,
-          "p90": 0,
-          "p99": 6199
-        }
-      }
-    },
-    "duration_seconds": 9.999999,
-    "expected_ftl_counters": {
-      "never_written_read_lpns_precondition_fill": 0,
-      "never_written_read_lpns_precondition_none": 2727407,
-      "read_lpns": 28744869,
-      "read_reqs": 4998507,
-      "request_size_histogram_lpns": {
-        "1": 2502660,
-        "17-32": 0,
-        "2": 2499296,
-        "3-4": 2498403,
-        "33-64": 0,
-        "5-8": 0,
-        "9-16": 2499641,
-        ">64": 0
-      },
-      "write_lpns": 28744251,
-      "write_reqs": 5001493
-    },
-    "footprint": {
-      "fits_logical_device": true,
-      "footprint_gib": 16.194,
-      "max_end_bytes": 26843545600,
-      "min_offset_bytes": 0,
-      "unique_lpns": 4245150,
-      "unique_read_lpns": 2736259,
-      "unique_tp256": 25600,
-      "unique_tp512": 12800,
-      "unique_written_lpns": 2750219
-    },
-    "locality": {
-      "sequential_request_share": 0.011471,
-      "top10pct_lpn_access_share": 0.900823,
-      "top1pct_lpn_access_share": 0.8575,
-      "top20pct_lpn_access_share": 0.9218,
-      "working_set_gib_max": 0.0924,
-      "working_set_lpns_max": 24222,
-      "working_set_lpns_mean": 22904.0,
-      "working_set_window_refs": 100000
-    },
-    "mapping": {
-      "never_written_read_lpns_precondition_none": 2727407,
-      "overwrite_share_of_written_lpns": 0.904321,
-      "read_after_write_share_precondition_fill": 1.0,
-      "read_after_write_share_precondition_none": 0.905117
-    },
-    "mix": {
-      "mean_request_kib": 22.996,
-      "read_percent_by_bytes": 50.001,
-      "read_percent_by_requests": 49.985,
-      "read_reqs": 4998507,
-      "request_sizes": {
-        "R": {
-          "16KiB": 1247931,
-          "4KiB": 1251213,
-          "64KiB": 1250229,
-          "8KiB": 1249134
-        },
-        "W": {
-          "16KiB": 1250472,
-          "4KiB": 1251447,
-          "64KiB": 1249412,
-          "8KiB": 1250162
-        }
-      },
-      "write_reqs": 5001493
-    },
-    "operations": 10000000,
-    "page_aligned": true,
-    "provenance": {
-      "address_range_gib": "25.0",
-      "file": "experiments/traces/zipf-hot10-access90-a1.2.trace",
-      "generator": "experiments/scripts/generate_workloads.py",
-      "hot_access_percent": "90.0",
-      "hot_region_percent": "10.0",
-      "operations": "10000000",
-      "pattern": "zipf",
-      "read_percent": "50.0",
-      "request_sizes": "4096,8192,16384,65536",
-      "seed": "47",
-      "sequential_percent": "",
-      "sha256": "4311602f615c61590685443b149f95313914becce071e286fb51b85e9b57ab88",
-      "sha256_matches_git_lfs_oid": true,
-      "sha256_matches_manifest": true,
-      "size_bytes": 230671807,
-      "write_percent": "50.0",
-      "zipf_alpha": "1.2"
-    }
-  },
-  "traces/zipf-hot20-access80-a0.8": {
-    "cache_bounds_read_stream": {
-      "lpn": {
-        "compulsory_miss_rate": 0.166787,
-        "curve": [
-          {
-            "belady_hit_rate": 0.190265,
-            "belady_hits": 5464096,
-            "capacity": 1024,
-            "lfu_hit_rate": 0.139344,
-            "lfu_hits": 4001722,
-            "lru_hit_rate": 0.06576,
-            "lru_hits": 1888505,
-            "plfu_hit_rate": 0.15679,
-            "plfu_hits": 4502762
-          },
-          {
-            "belady_hit_rate": 0.225949,
-            "belady_hits": 6488880,
-            "capacity": 2048,
-            "lfu_hit_rate": 0.165871,
-            "lfu_hits": 4763534,
-            "lru_hit_rate": 0.089329,
-            "lru_hits": 2565375,
-            "plfu_hit_rate": 0.186851,
-            "plfu_hits": 5366040
-          },
-          {
-            "belady_hit_rate": 0.266482,
-            "belady_hits": 7652927,
-            "capacity": 4096,
-            "lfu_hit_rate": 0.199835,
-            "lfu_hits": 5738933,
-            "lru_hit_rate": 0.115665,
-            "lru_hits": 3321705,
-            "plfu_hit_rate": 0.221074,
-            "plfu_hits": 6348877
-          },
-          {
-            "belady_hit_rate": 0.31261,
-            "belady_hits": 8977638,
-            "capacity": 8192,
-            "lfu_hit_rate": 0.235604,
-            "lfu_hits": 6766165,
-            "lru_hit_rate": 0.147173,
-            "lru_hits": 4226559,
-            "plfu_hit_rate": 0.260134,
-            "plfu_hits": 7470623
-          },
-          {
-            "belady_hit_rate": 0.364896,
-            "belady_hits": 10479206,
-            "capacity": 16384,
-            "lfu_hit_rate": 0.27726,
-            "lfu_hits": 7962451,
-            "lru_hit_rate": 0.185204,
-            "lru_hits": 5318740,
-            "plfu_hit_rate": 0.304598,
-            "plfu_hits": 8747558
-          },
-          {
-            "belady_hit_rate": 0.423839,
-            "belady_hits": 12171950,
-            "capacity": 32768,
-            "lfu_hit_rate": 0.324385,
-            "lfu_hits": 9315800,
-            "lru_hit_rate": 0.231116,
-            "lru_hits": 6637281,
-            "plfu_hit_rate": 0.35487,
-            "plfu_hits": 10191275
-          },
-          {
-            "belady_hit_rate": 0.489843,
-            "belady_hits": 14067491,
-            "capacity": 65536,
-            "lfu_hit_rate": 0.379074,
-            "lfu_hits": 10886368,
-            "lru_hit_rate": 0.286785,
-            "lru_hits": 8235993,
-            "plfu_hit_rate": 0.411553,
-            "plfu_hits": 11819112
-          }
-        ],
-        "distinct_keys": 4789855,
-        "references": 28718340,
-        "stack_distance_percentiles": {
-          "p50": 225368,
-          "p90": 2013237,
-          "p99": 3855814
-        }
-      },
-      "tp256": {
-        "compulsory_miss_rate": 0.000891,
-        "curve": [
-          {
-            "belady_hit_rate": 0.937355,
-            "belady_hits": 26919280,
-            "capacity": 1024,
-            "lfu_hit_rate": 0.915394,
-            "lfu_hits": 26288588,
-            "lru_hit_rate": 0.900242,
-            "lru_hits": 25853467,
-            "plfu_hit_rate": 0.923025,
-            "plfu_hits": 26507751
-          },
-          {
-            "belady_hit_rate": 0.952754,
-            "belady_hits": 27361521,
-            "capacity": 2048,
-            "lfu_hit_rate": 0.931842,
-            "lfu_hits": 26760947,
-            "lru_hit_rate": 0.917883,
-            "lru_hits": 26360070,
-            "plfu_hit_rate": 0.938961,
-            "plfu_hits": 26965410
-          },
-          {
-            "belady_hit_rate": 0.968076,
-            "belady_hits": 27801549,
-            "capacity": 4096,
-            "lfu_hit_rate": 0.949806,
-            "lfu_hits": 27276858,
-            "lru_hit_rate": 0.938637,
-            "lru_hits": 26956098,
-            "plfu_hit_rate": 0.957259,
-            "plfu_hits": 27490899
-          },
-          {
-            "belady_hit_rate": 0.982064,
-            "belady_hits": 28203244,
-            "capacity": 8192,
-            "lfu_hit_rate": 0.967314,
-            "lfu_hits": 27779653,
-            "lru_hit_rate": 0.96134,
-            "lru_hits": 27608077,
-            "plfu_hit_rate": 0.969519,
-            "plfu_hits": 27842974
-          },
-          {
-            "belady_hit_rate": 0.993799,
-            "belady_hits": 28540249,
-            "capacity": 16384,
-            "lfu_hit_rate": 0.983689,
-            "lfu_hits": 28249927,
-            "lru_hit_rate": 0.98326,
-            "lru_hits": 28237608,
-            "plfu_hit_rate": 0.983768,
-            "plfu_hits": 28252186
-          },
-          {
-            "belady_hit_rate": 0.999109,
-            "belady_hits": 28692740,
-            "capacity": 32768,
-            "lfu_hit_rate": 0.999109,
-            "lfu_hits": 28692740,
-            "lru_hit_rate": 0.999109,
-            "lru_hits": 28692740,
-            "plfu_hit_rate": 0.999109,
-            "plfu_hits": 28692740
-          },
-          {
-            "belady_hit_rate": 0.999109,
-            "belady_hits": 28692740,
-            "capacity": 65536,
-            "lfu_hit_rate": 0.999109,
-            "lfu_hits": 28692740,
-            "lru_hit_rate": 0.999109,
-            "lru_hits": 28692740,
-            "plfu_hit_rate": 0.999109,
-            "plfu_hits": 28692740
-          }
-        ],
-        "distinct_keys": 25600,
-        "references": 28718340,
-        "stack_distance_percentiles": {
-          "p50": 0,
-          "p90": 978,
-          "p99": 19597
-        }
-      },
-      "tp512": {
-        "compulsory_miss_rate": 0.000446,
-        "curve": [
-          {
-            "belady_hit_rate": 0.953075,
-            "belady_hits": 27370719,
-            "capacity": 1024,
-            "lfu_hit_rate": 0.932499,
-            "lfu_hits": 26779836,
-            "lru_hit_rate": 0.918624,
-            "lru_hits": 26381343,
-            "plfu_hit_rate": 0.939761,
-            "plfu_hits": 26988384
-          },
-          {
-            "belady_hit_rate": 0.968356,
-            "belady_hits": 27809569,
-            "capacity": 2048,
-            "lfu_hit_rate": 0.95043,
-            "lfu_hits": 27294776,
-            "lru_hit_rate": 0.939169,
-            "lru_hits": 26971381,
-            "plfu_hit_rate": 0.957975,
-            "plfu_hits": 27511462
-          },
-          {
-            "belady_hit_rate": 0.982317,
-            "belady_hits": 28210508,
-            "capacity": 4096,
-            "lfu_hit_rate": 0.967793,
-            "lfu_hits": 27793397,
-            "lru_hit_rate": 0.961726,
-            "lru_hits": 27619174,
-            "plfu_hit_rate": 0.969981,
-            "plfu_hits": 27856254
-          },
-          {
-            "belady_hit_rate": 0.994111,
-            "belady_hits": 28549210,
-            "capacity": 8192,
-            "lfu_hit_rate": 0.984023,
-            "lfu_hits": 28259495,
-            "lru_hit_rate": 0.983514,
-            "lru_hits": 28244880,
-            "plfu_hit_rate": 0.98407,
-            "plfu_hits": 28260869
-          },
-          {
-            "belady_hit_rate": 0.999554,
-            "belady_hits": 28705540,
-            "capacity": 16384,
-            "lfu_hit_rate": 0.999554,
-            "lfu_hits": 28705540,
-            "lru_hit_rate": 0.999554,
-            "lru_hits": 28705540,
-            "plfu_hit_rate": 0.999554,
-            "plfu_hits": 28705540
-          },
-          {
-            "belady_hit_rate": 0.999554,
-            "belady_hits": 28705540,
-            "capacity": 32768,
-            "lfu_hit_rate": 0.999554,
-            "lfu_hits": 28705540,
-            "lru_hit_rate": 0.999554,
-            "lru_hits": 28705540,
-            "plfu_hit_rate": 0.999554,
-            "plfu_hits": 28705540
-          },
-          {
-            "belady_hit_rate": 0.999554,
-            "belady_hits": 28705540,
-            "capacity": 65536,
-            "lfu_hit_rate": 0.999554,
-            "lfu_hits": 28705540,
-            "lru_hit_rate": 0.999554,
-            "lru_hits": 28705540,
-            "plfu_hit_rate": 0.999554,
-            "plfu_hits": 28705540
-          }
-        ],
-        "distinct_keys": 12800,
-        "references": 28718340,
-        "stack_distance_percentiles": {
-          "p50": 0,
-          "p90": 478,
-          "p99": 9847
-        }
-      }
-    },
-    "duration_seconds": 9.999999,
-    "expected_ftl_counters": {
-      "never_written_read_lpns_precondition_fill": 0,
-      "never_written_read_lpns_precondition_none": 4784881,
-      "read_lpns": 28718340,
-      "read_reqs": 4997222,
-      "request_size_histogram_lpns": {
-        "1": 2500018,
-        "17-32": 0,
-        "2": 2499872,
-        "3-4": 2500492,
-        "33-64": 0,
-        "5-8": 0,
-        "9-16": 2499618,
-        ">64": 0
-      },
-      "write_lpns": 28777278,
-      "write_reqs": 5002778
-    },
-    "footprint": {
-      "fits_logical_device": true,
-      "footprint_gib": 22.7566,
-      "max_end_bytes": 26843545600,
-      "min_offset_bytes": 0,
-      "unique_lpns": 5965496,
-      "unique_read_lpns": 4789855,
-      "unique_tp256": 25600,
-      "unique_tp512": 12800,
-      "unique_written_lpns": 4794725
-    },
-    "locality": {
-      "sequential_request_share": 0.000121,
-      "top10pct_lpn_access_share": 0.68365,
-      "top1pct_lpn_access_share": 0.411438,
-      "top20pct_lpn_access_share": 0.790367,
-      "working_set_gib_max": 0.2976,
-      "working_set_lpns_max": 78006,
-      "working_set_lpns_mean": 76713.8,
-      "working_set_window_refs": 100000
-    },
-    "mapping": {
-      "never_written_read_lpns_precondition_none": 4784881,
-      "overwrite_share_of_written_lpns": 0.833385,
-      "read_after_write_share_precondition_fill": 1.0,
-      "read_after_write_share_precondition_none": 0.833386
-    },
-    "mix": {
-      "mean_request_kib": 22.998,
-      "read_percent_by_bytes": 49.949,
-      "read_percent_by_requests": 49.972,
-      "read_reqs": 4997222,
-      "request_sizes": {
-        "R": {
-          "16KiB": 1250203,
-          "4KiB": 1249658,
-          "64KiB": 1248082,
-          "8KiB": 1249279
-        },
-        "W": {
-          "16KiB": 1250289,
-          "4KiB": 1250360,
-          "64KiB": 1251536,
-          "8KiB": 1250593
-        }
-      },
-      "write_reqs": 5002778
-    },
-    "operations": 10000000,
-    "page_aligned": true,
-    "provenance": {
-      "address_range_gib": "25.0",
-      "file": "experiments/traces/zipf-hot20-access80-a0.8.trace",
-      "generator": "experiments/scripts/generate_workloads.py",
-      "hot_access_percent": "80.0",
-      "hot_region_percent": "20.0",
-      "operations": "10000000",
-      "pattern": "zipf",
-      "read_percent": "50.0",
-      "request_sizes": "4096,8192,16384,65536",
-      "seed": "48",
-      "sequential_percent": "",
-      "sha256": "2b50e8b8c1b9a44917b491d7bf3d56ed3dcfa41eed59705d87c6bb810fe8febc",
-      "sha256_matches_git_lfs_oid": true,
-      "sha256_matches_manifest": true,
-      "size_bytes": 263565328,
-      "write_percent": "50.0",
-      "zipf_alpha": "0.8"
-    }
-  },
-  "traces/zipf-hot20-access80-a1.2": {
-    "cache_bounds_read_stream": {
-      "lpn": {
-        "compulsory_miss_rate": 0.142725,
-        "curve": [
-          {
-            "belady_hit_rate": 0.671355,
-            "belady_hits": 19310486,
-            "capacity": 1024,
-            "lfu_hit_rate": 0.648863,
-            "lfu_hits": 18663524,
-            "lru_hit_rate": 0.577612,
-            "lru_hits": 16614105,
-            "plfu_hit_rate": 0.656113,
-            "plfu_hits": 18872075
-          },
-          {
-            "belady_hit_rate": 0.694372,
-            "belady_hits": 19972520,
-            "capacity": 2048,
-            "lfu_hit_rate": 0.673427,
-            "lfu_hits": 19370075,
-            "lru_hit_rate": 0.610483,
-            "lru_hits": 17559588,
-            "plfu_hit_rate": 0.680472,
-            "plfu_hits": 19572721
-          },
-          {
-            "belady_hit_rate": 0.714357,
-            "belady_hits": 20547379,
-            "capacity": 4096,
-            "lfu_hit_rate": 0.694525,
-            "lfu_hits": 19976926,
-            "lru_hit_rate": 0.639056,
-            "lru_hits": 18381461,
-            "plfu_hit_rate": 0.701551,
-            "plfu_hits": 20179019
-          },
-          {
-            "belady_hit_rate": 0.732011,
-            "belady_hits": 21055150,
-            "capacity": 8192,
-            "lfu_hit_rate": 0.712664,
-            "lfu_hits": 20498666,
-            "lru_hit_rate": 0.664029,
-            "lru_hits": 19099765,
-            "plfu_hit_rate": 0.719635,
-            "plfu_hits": 20699178
-          },
-          {
-            "belady_hit_rate": 0.748103,
-            "belady_hits": 21518005,
-            "capacity": 16384,
-            "lfu_hit_rate": 0.727435,
-            "lfu_hits": 20923531,
-            "lru_hit_rate": 0.685818,
-            "lru_hits": 19726479,
-            "plfu_hit_rate": 0.735086,
-            "plfu_hits": 21143612
-          },
-          {
-            "belady_hit_rate": 0.763494,
-            "belady_hits": 21960707,
-            "capacity": 32768,
-            "lfu_hit_rate": 0.738677,
-            "lfu_hits": 21246900,
-            "lru_hit_rate": 0.705173,
-            "lru_hits": 20283208,
-            "plfu_hit_rate": 0.747681,
-            "plfu_hits": 21505867
-          },
-          {
-            "belady_hit_rate": 0.77921,
-            "belady_hits": 22412763,
-            "capacity": 65536,
-            "lfu_hit_rate": 0.748266,
-            "lfu_hits": 21522710,
-            "lru_hit_rate": 0.722571,
-            "lru_hits": 20783633,
-            "plfu_hit_rate": 0.757273,
-            "plfu_hits": 21781777
-          }
-        ],
-        "distinct_keys": 4105269,
-        "references": 28763441,
-        "stack_distance_percentiles": {
-          "p50": 112,
-          "p90": 485375,
-          "p99": 3012862
-        }
-      },
-      "tp256": {
-        "compulsory_miss_rate": 0.00089,
-        "curve": [
-          {
-            "belady_hit_rate": 0.968591,
-            "belady_hits": 27860013,
-            "capacity": 1024,
-            "lfu_hit_rate": 0.959784,
-            "lfu_hits": 27606679,
-            "lru_hit_rate": 0.956822,
-            "lru_hits": 27521487,
-            "plfu_hit_rate": 0.961152,
-            "plfu_hits": 27646029
-          },
-          {
-            "belady_hit_rate": 0.973593,
-            "belady_hits": 28003889,
-            "capacity": 2048,
-            "lfu_hit_rate": 0.962107,
-            "lfu_hits": 27673505,
-            "lru_hit_rate": 0.960261,
-            "lru_hits": 27620414,
-            "plfu_hit_rate": 0.963049,
-            "plfu_hits": 27700609
-          },
-          {
-            "belady_hit_rate": 0.979793,
-            "belady_hits": 28182230,
-            "capacity": 4096,
-            "lfu_hit_rate": 0.966046,
-            "lfu_hits": 27786818,
-            "lru_hit_rate": 0.965031,
-            "lru_hits": 27757617,
-            "plfu_hit_rate": 0.966653,
-            "plfu_hits": 27804269
-          },
-          {
-            "belady_hit_rate": 0.987249,
-            "belady_hits": 28396692,
-            "capacity": 8192,
-            "lfu_hit_rate": 0.973299,
-            "lfu_hits": 27995422,
-            "lru_hit_rate": 0.972771,
-            "lru_hits": 27980246,
-            "plfu_hit_rate": 0.97374,
-            "plfu_hits": 28008101
-          },
-          {
-            "belady_hit_rate": 0.995339,
-            "belady_hits": 28629366,
-            "capacity": 16384,
-            "lfu_hit_rate": 0.986957,
-            "lfu_hits": 28388267,
-            "lru_hit_rate": 0.986559,
-            "lru_hits": 28376820,
-            "plfu_hit_rate": 0.987553,
-            "plfu_hits": 28405435
-          },
-          {
-            "belady_hit_rate": 0.99911,
-            "belady_hits": 28737841,
-            "capacity": 32768,
-            "lfu_hit_rate": 0.99911,
-            "lfu_hits": 28737841,
-            "lru_hit_rate": 0.99911,
-            "lru_hits": 28737841,
-            "plfu_hit_rate": 0.99911,
-            "plfu_hits": 28737841
-          },
-          {
-            "belady_hit_rate": 0.99911,
-            "belady_hits": 28737841,
-            "capacity": 65536,
-            "lfu_hit_rate": 0.99911,
-            "lfu_hits": 28737841,
-            "lru_hit_rate": 0.99911,
-            "lru_hits": 28737841,
-            "plfu_hit_rate": 0.99911,
-            "plfu_hits": 28737841
-          }
-        ],
-        "distinct_keys": 25600,
-        "references": 28763441,
-        "stack_distance_percentiles": {
-          "p50": 0,
-          "p90": 1,
-          "p99": 17993
-        }
-      },
-      "tp512": {
-        "compulsory_miss_rate": 0.000445,
-        "curve": [
-          {
-            "belady_hit_rate": 0.973827,
-            "belady_hits": 28010612,
-            "capacity": 1024,
-            "lfu_hit_rate": 0.962604,
-            "lfu_hits": 27687797,
-            "lru_hit_rate": 0.960637,
-            "lru_hits": 27631228,
-            "plfu_hit_rate": 0.963483,
-            "plfu_hits": 27713079
-          },
-          {
-            "belady_hit_rate": 0.980011,
-            "belady_hits": 28188476,
-            "capacity": 2048,
-            "lfu_hit_rate": 0.966493,
-            "lfu_hits": 27799673,
-            "lru_hit_rate": 0.965369,
-            "lru_hits": 27767341,
-            "plfu_hit_rate": 0.967039,
-            "plfu_hits": 27815364
-          },
-          {
-            "belady_hit_rate": 0.987477,
-            "belady_hits": 28403223,
-            "capacity": 4096,
-            "lfu_hit_rate": 0.973633,
-            "lfu_hits": 28005043,
-            "lru_hit_rate": 0.97306,
-            "lru_hits": 27988542,
-            "plfu_hit_rate": 0.974053,
-            "plfu_hits": 28017112
-          },
-          {
-            "belady_hit_rate": 0.99564,
-            "belady_hits": 28638025,
-            "capacity": 8192,
-            "lfu_hit_rate": 0.9872,
-            "lfu_hits": 28395275,
-            "lru_hit_rate": 0.986788,
-            "lru_hits": 28383410,
-            "plfu_hit_rate": 0.98792,
-            "plfu_hits": 28415973
-          },
-          {
-            "belady_hit_rate": 0.999555,
-            "belady_hits": 28750641,
-            "capacity": 16384,
-            "lfu_hit_rate": 0.999555,
-            "lfu_hits": 28750641,
-            "lru_hit_rate": 0.999555,
-            "lru_hits": 28750641,
-            "plfu_hit_rate": 0.999555,
-            "plfu_hits": 28750641
-          },
-          {
-            "belady_hit_rate": 0.999555,
-            "belady_hits": 28750641,
-            "capacity": 32768,
-            "lfu_hit_rate": 0.999555,
-            "lfu_hits": 28750641,
-            "lru_hit_rate": 0.999555,
-            "lru_hits": 28750641,
-            "plfu_hit_rate": 0.999555,
-            "plfu_hits": 28750641
-          },
-          {
-            "belady_hit_rate": 0.999555,
-            "belady_hits": 28750641,
-            "capacity": 65536,
-            "lfu_hit_rate": 0.999555,
-            "lfu_hits": 28750641,
-            "lru_hit_rate": 0.999555,
-            "lru_hits": 28750641,
-            "plfu_hit_rate": 0.999555,
-            "plfu_hits": 28750641
-          }
-        ],
-        "distinct_keys": 12800,
-        "references": 28763441,
-        "stack_distance_percentiles": {
-          "p50": 0,
-          "p90": 1,
-          "p99": 9059
-        }
-      }
-    },
-    "duration_seconds": 9.999999,
-    "expected_ftl_counters": {
-      "never_written_read_lpns_precondition_fill": 0,
-      "never_written_read_lpns_precondition_none": 4106975,
-      "read_lpns": 28763441,
-      "read_reqs": 5004697,
-      "request_size_histogram_lpns": {
-        "1": 2501754,
-        "17-32": 0,
-        "2": 2499819,
-        "3-4": 2499005,
-        "33-64": 0,
-        "5-8": 0,
-        "9-16": 2499422,
-        ">64": 0
-      },
-      "write_lpns": 28724723,
-      "write_reqs": 4995303
-    },
-    "footprint": {
-      "fits_logical_device": true,
-      "footprint_gib": 20.9876,
-      "max_end_bytes": 26843545600,
-      "min_offset_bytes": 0,
-      "unique_lpns": 5501780,
-      "unique_read_lpns": 4105269,
-      "unique_tp256": 25600,
-      "unique_tp512": 12800,
-      "unique_written_lpns": 4104549
-    },
-    "locality": {
-      "sequential_request_share": 0.008948,
-      "top10pct_lpn_access_share": 0.814474,
-      "top1pct_lpn_access_share": 0.760184,
-      "top20pct_lpn_access_share": 0.853031,
-      "working_set_gib_max": 0.1306,
-      "working_set_lpns_max": 34224,
-      "working_set_lpns_mean": 32376.4,
-      "working_set_window_refs": 100000
-    },
-    "mapping": {
-      "never_written_read_lpns_precondition_none": 4106975,
-      "overwrite_share_of_written_lpns": 0.857107,
-      "read_after_write_share_precondition_fill": 1.0,
-      "read_after_write_share_precondition_none": 0.857215
-    },
-    "mix": {
-      "mean_request_kib": 22.995,
-      "read_percent_by_bytes": 50.034,
-      "read_percent_by_requests": 50.047,
-      "read_reqs": 5004697,
-      "request_sizes": {
-        "R": {
-          "16KiB": 1250665,
-          "4KiB": 1252603,
-          "64KiB": 1250380,
-          "8KiB": 1251049
-        },
-        "W": {
-          "16KiB": 1248340,
-          "4KiB": 1249151,
-          "64KiB": 1249042,
-          "8KiB": 1248770
-        }
-      },
-      "write_reqs": 4995303
-    },
-    "operations": 10000000,
-    "page_aligned": true,
-    "provenance": {
-      "address_range_gib": "25.0",
-      "file": "experiments/traces/zipf-hot20-access80-a1.2.trace",
-      "generator": "experiments/scripts/generate_workloads.py",
-      "hot_access_percent": "80.0",
-      "hot_region_percent": "20.0",
-      "operations": "10000000",
-      "pattern": "zipf",
-      "read_percent": "50.0",
-      "request_sizes": "4096,8192,16384,65536",
-      "seed": "46",
-      "sequential_percent": "",
-      "sha256": "22f64d64836ec4a8f89aa2635575d2017c0ba47f63e71edd1203b6bbd336372b",
-      "sha256_matches_git_lfs_oid": true,
-      "sha256_matches_manifest": true,
-      "size_bytes": 236898134,
-      "write_percent": "50.0",
-      "zipf_alpha": "1.2"
-    }
-  },
-  "validation-traces/mixed-50-seq-50-random": {
+  "traces/validation/mixed-50-seq-50-random": {
     "cache_bounds_read_stream": {
       "lpn": {
         "compulsory_miss_rate": 0.983102,
@@ -7624,7 +7624,7 @@
     "operations": 100000,
     "page_aligned": true,
     "provenance": {
-      "file": "experiments/validation-traces/mixed-50-seq-50-random.trace",
+      "file": "experiments/traces/validation/mixed-50-seq-50-random.trace",
       "generator": "experiments/scripts/prepare_validation_traces.py",
       "is_exact_prefix": true,
       "parent": "experiments/traces/mixed-50-seq-50-random.trace",
@@ -7634,7 +7634,7 @@
       "size_bytes": 2762376
     }
   },
-  "validation-traces/seq-mixed": {
+  "traces/validation/seq-mixed": {
     "cache_bounds_read_stream": {
       "lpn": {
         "compulsory_miss_rate": 1.0,
@@ -7970,7 +7970,7 @@
     "operations": 100000,
     "page_aligned": true,
     "provenance": {
-      "file": "experiments/validation-traces/seq-mixed.trace",
+      "file": "experiments/traces/validation/seq-mixed.trace",
       "generator": "experiments/scripts/prepare_validation_traces.py",
       "is_exact_prefix": true,
       "parent": "experiments/traces/seq-mixed.trace",
@@ -7980,7 +7980,7 @@
       "size_bytes": 2733242
     }
   },
-  "validation-traces/uniform-mixed": {
+  "traces/validation/uniform-mixed": {
     "cache_bounds_read_stream": {
       "lpn": {
         "compulsory_miss_rate": 0.977217,
@@ -8320,7 +8320,7 @@
     "operations": 100000,
     "page_aligned": true,
     "provenance": {
-      "file": "experiments/validation-traces/uniform-mixed.trace",
+      "file": "experiments/traces/validation/uniform-mixed.trace",
       "generator": "experiments/scripts/prepare_validation_traces.py",
       "is_exact_prefix": true,
       "parent": "experiments/traces/uniform-mixed.trace",
@@ -8330,7 +8330,7 @@
       "size_bytes": 2808792
     }
   },
-  "validation-traces/uniform-read": {
+  "traces/validation/uniform-read": {
     "cache_bounds_read_stream": {
       "lpn": {
         "compulsory_miss_rate": 0.956565,
@@ -8665,7 +8665,7 @@
     "operations": 100000,
     "page_aligned": true,
     "provenance": {
-      "file": "experiments/validation-traces/uniform-read.trace",
+      "file": "experiments/traces/validation/uniform-read.trace",
       "generator": "experiments/scripts/prepare_validation_traces.py",
       "is_exact_prefix": true,
       "parent": "experiments/traces/uniform-read.trace",
@@ -8675,7 +8675,7 @@
       "size_bytes": 2808659
     }
   },
-  "validation-traces/uniform-write": {
+  "traces/validation/uniform-write": {
     "cache_bounds_read_stream": {},
     "duration_seconds": 0.099999,
     "expected_ftl_counters": {
@@ -8742,7 +8742,7 @@
     "operations": 100000,
     "page_aligned": true,
     "provenance": {
-      "file": "experiments/validation-traces/uniform-write.trace",
+      "file": "experiments/traces/validation/uniform-write.trace",
       "generator": "experiments/scripts/prepare_validation_traces.py",
       "is_exact_prefix": true,
       "parent": "experiments/traces/uniform-write.trace",
@@ -8752,7 +8752,7 @@
       "size_bytes": 2808861
     }
   },
-  "validation-traces/zipf-80-20": {
+  "traces/validation/zipf-80-20": {
     "cache_bounds_read_stream": {
       "lpn": {
         "compulsory_miss_rate": 0.30101,
@@ -9086,7 +9086,7 @@
     "operations": 100000,
     "page_aligned": true,
     "provenance": {
-      "file": "experiments/validation-traces/zipf-80-20.trace",
+      "file": "experiments/traces/validation/zipf-80-20.trace",
       "generator": "experiments/scripts/prepare_validation_traces.py",
       "is_exact_prefix": true,
       "parent": "experiments/traces/zipf-80-20.trace",
@@ -9096,7 +9096,7 @@
       "size_bytes": 2265547
     }
   },
-  "validation-traces/zipf-hot10-access90-a1.2": {
+  "traces/validation/zipf-hot10-access90-a1.2": {
     "cache_bounds_read_stream": {
       "lpn": {
         "compulsory_miss_rate": 0.20321,
@@ -9436,7 +9436,7 @@
     "operations": 100000,
     "page_aligned": true,
     "provenance": {
-      "file": "experiments/validation-traces/zipf-hot10-access90-a1.2.trace",
+      "file": "experiments/traces/validation/zipf-hot10-access90-a1.2.trace",
       "generator": "experiments/scripts/prepare_validation_traces.py",
       "is_exact_prefix": true,
       "parent": "experiments/traces/zipf-hot10-access90-a1.2.trace",
@@ -9446,7 +9446,7 @@
       "size_bytes": 2307988
     }
   },
-  "validation-traces/zipf-hot20-access80-a0.8": {
+  "traces/validation/zipf-hot20-access80-a0.8": {
     "cache_bounds_read_stream": {
       "lpn": {
         "compulsory_miss_rate": 0.689177,
@@ -9786,7 +9786,7 @@
     "operations": 100000,
     "page_aligned": true,
     "provenance": {
-      "file": "experiments/validation-traces/zipf-hot20-access80-a0.8.trace",
+      "file": "experiments/traces/validation/zipf-hot20-access80-a0.8.trace",
       "generator": "experiments/scripts/prepare_validation_traces.py",
       "is_exact_prefix": true,
       "parent": "experiments/traces/zipf-hot20-access80-a0.8.trace",
@@ -9796,7 +9796,7 @@
       "size_bytes": 2634456
     }
   },
-  "validation-traces/zipf-hot20-access80-a1.2": {
+  "traces/validation/zipf-hot20-access80-a1.2": {
     "cache_bounds_read_stream": {
       "lpn": {
         "compulsory_miss_rate": 0.295827,
@@ -10136,7 +10136,7 @@
     "operations": 100000,
     "page_aligned": true,
     "provenance": {
-      "file": "experiments/validation-traces/zipf-hot20-access80-a1.2.trace",
+      "file": "experiments/traces/validation/zipf-hot20-access80-a1.2.trace",
       "generator": "experiments/scripts/prepare_validation_traces.py",
       "is_exact_prefix": true,
       "parent": "experiments/traces/zipf-hot20-access80-a1.2.trace",

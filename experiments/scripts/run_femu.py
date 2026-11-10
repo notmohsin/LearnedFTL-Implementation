@@ -134,7 +134,8 @@ def main() -> int:
     parser.add_argument("--seed", type=int, required=True)
     parser.add_argument("--precondition", choices=("none", "warm", "fill", "steady"), required=True)
     parser.add_argument("--qemu", type=Path, help="default: build-ftl/<ftl>/build/qemu-system-x86_64")
-    parser.add_argument("--results-dir", type=Path, default=REPO / "experiments" / "results")
+    parser.add_argument("--results-dir", type=Path, default=REPO / "experiments" / "results" / "manual",
+                        help="where the run folder is created (run_matrix.py passes results/<stage>)")
     parser.add_argument("--run-id")
     parser.add_argument("--repeat", type=int, default=1, help="repeat index, recorded in the manifest")
     parser.add_argument("--devsz-mb", type=int, default=30720)

@@ -1,7 +1,7 @@
 {
   "description": "Phase 5 gates on the 100k-op validation traces. none: empty device (shows the unmapped-read artefact). warm: the trace's footprint written first, all reads target written data (main condition). fill: whole 30 GiB written first, GC active from the first workload write (GC stress). Three repeats with the same seed check invariant 11. LearnedFTL under fill runs once per trace: its GC trains models on almost every write when fewer than 4 lines are free (about 8-15 requests/s, ~1.7 h per 100k-op run).",
   "ftls": ["leaftl", "learnedftl"],
-  "traces": ["experiments/validation-traces/*.trace"],
+  "traces": ["experiments/traces/validation/*.trace"],
   "preconditions": ["none", "warm", "fill"],
   "seeds": [{"seed": 1, "repeat": 1}, {"seed": 1, "repeat": 2}, {"seed": 1, "repeat": 3}],
   "seeds_by_ftl_precondition": {"learnedftl": {"fill": [{"seed": 1, "repeat": 1}]}}
