@@ -1,0 +1,42 @@
+# Configuration for replaying Traces/stg_0.txt.
+# Full file is ~2.03 million records (IOLimit = 0). Use trace_stg_0_smoke.cfg first.
+#
+# Units: offset and +length in this file are BYTES (512..16KiB typical).
+# Do NOT use LBAOffset/LBALength — that multiplies by LBASize=512 and inflates
+# each I/O ~512x (8KiB becomes 4MiB; offsets can exceed the SSD).
+# blkparse-sector alternative (commented): LBAOffset=4 LBALength=5 LBASize=512
+# and empty ByteOffset/ByteLength.
+#
+# Pair with config/ssd_trace_replay.cfg (FillRatio=0). Do not warm 80% of 512GiB.
+# Keep CMTWindowFill = false until replay sizes look like KiB, not MiB.
+
+[global]
+Mode = 1
+LogPeriod = 0
+LogFile = sim_stats.log
+DebugLogFile =
+LatencyLogFile =
+ProgressPeriod = 0
+Interface = 1
+Scheduler = 0
+SubmissionLatency = 5us
+CompletionLatency = 5us
+
+[trace]
+File = @TRACE@
+TimingMode = 0
+QueueDepth = 1
+IOLimit = 0
+Regex = "([0-9]+)[.]([0-9]+) +(R) +([0-9]+) +([0-9]+)"
+Operation = 3
+ByteOffset = 4
+ByteLength = 5
+LBAOffset =
+LBALength =
+Second = 1
+Millisecond =
+Microsecond = 2
+Nanosecond =
+Picosecond =
+LBASize = 512
+UseHexadecimal = 0

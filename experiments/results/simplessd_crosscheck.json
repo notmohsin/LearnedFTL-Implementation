@@ -1,0 +1,970 @@
+{
+  "what": "LRU and LFU hit counts of an N-entry cache on each trace's read stream, keyed per 4 KiB page: ours (experiments/traces/profiles.json, computed by experiments/tools/cachesim.c) vs SimpleSSD's CMT.",
+  "match_rule": "exact: same hit count, SimpleSSD looked up every read page (hits + misses = read pages), CMT capacity as requested, run exited with code 0, and the trace file's SHA-256 equals the one in profiles.json (so both sides read the same file)",
+  "summary": {
+    "comparisons": 42,
+    "matching": 42,
+    "all_match": true,
+    "traces": 22,
+    "policies": [
+      "lru",
+      "lfu"
+    ],
+    "capacities": [
+      8192
+    ]
+  },
+  "simplessd": {
+    "repo": "/home/mohsin/SSD-Simulator",
+    "commit": "b860388ec0f26788533551b20b643d4ce83ace40",
+    "binary": "/home/mohsin/SSD-Simulator/build/simplessd-standalone",
+    "binary_sha256": "4ed4f9127cd6773eca0b53001d58426fd3ccf8d86b33f3ff38828be58141fe79",
+    "uncommitted_changes": [
+      " M run.sh"
+    ],
+    "source_files_changed_since_build": [],
+    "config": "experiments/crosscheck/simplessd/{sim,ssd}.cfg.template"
+  },
+  "traces": [
+    {
+      "trace": "traces/validation/mixed-50-seq-50-random",
+      "trace_sha256": {
+        "file": "f795103442279ad0890e353d3732df09d8985f6ec5ca5356d5b465a1c9028a28",
+        "profiled": "f795103442279ad0890e353d3732df09d8985f6ec5ca5356d5b465a1c9028a28",
+        "match": true
+      },
+      "read_requests": {
+        "ours": 50142,
+        "simplessd": 50142,
+        "match": true
+      },
+      "read_pages": {
+        "ours": 288440,
+        "simplessd": 288440,
+        "match": true
+      },
+      "simplessd_exit_code": 0,
+      "lru": {
+        "8192": {
+          "ours_hits": 228,
+          "simplessd_hits": 228,
+          "ours_hit_rate": 0.00079,
+          "simplessd_hit_rate": 0.00079,
+          "simplessd_lookups": 288440,
+          "difference_hits": 0,
+          "match": true,
+          "simplessd_exit_code": 0,
+          "simplessd_run": "results/crosscheck/simplessd/validation-mixed-50-seq-50-random-lru-c8192"
+        }
+      },
+      "lfu": {
+        "8192": {
+          "ours_hits": 228,
+          "simplessd_hits": 228,
+          "ours_hit_rate": 0.00079,
+          "simplessd_hit_rate": 0.00079,
+          "simplessd_lookups": 288440,
+          "difference_hits": 0,
+          "match": true,
+          "simplessd_exit_code": 0,
+          "simplessd_run": "results/crosscheck/simplessd/validation-mixed-50-seq-50-random-lfu-c8192"
+        }
+      }
+    },
+    {
+      "trace": "traces/validation/seq-mixed",
+      "trace_sha256": {
+        "file": "4c3671b126f9cf60497b5c0240639a9e7d932da8178f67c8bb3c581187772f70",
+        "profiled": "4c3671b126f9cf60497b5c0240639a9e7d932da8178f67c8bb3c581187772f70",
+        "match": true
+      },
+      "read_requests": {
+        "ours": 50273,
+        "simplessd": 50273,
+        "match": true
+      },
+      "read_pages": {
+        "ours": 293074,
+        "simplessd": 293074,
+        "match": true
+      },
+      "simplessd_exit_code": 0,
+      "lru": {
+        "8192": {
+          "ours_hits": 0,
+          "simplessd_hits": 0,
+          "ours_hit_rate": 0.0,
+          "simplessd_hit_rate": 0.0,
+          "simplessd_lookups": 293074,
+          "difference_hits": 0,
+          "match": true,
+          "simplessd_exit_code": 0,
+          "simplessd_run": "results/crosscheck/simplessd/validation-seq-mixed-lru-c8192"
+        }
+      },
+      "lfu": {
+        "8192": {
+          "ours_hits": 0,
+          "simplessd_hits": 0,
+          "ours_hit_rate": 0.0,
+          "simplessd_hit_rate": 0.0,
+          "simplessd_lookups": 293074,
+          "difference_hits": 0,
+          "match": true,
+          "simplessd_exit_code": 0,
+          "simplessd_run": "results/crosscheck/simplessd/validation-seq-mixed-lfu-c8192"
+        }
+      }
+    },
+    {
+      "trace": "traces/validation/uniform-mixed",
+      "trace_sha256": {
+        "file": "4d67a21e94987bc47dbfe590dc8039661ddcba1b5ed9365aa5a3552aa17d50ed",
+        "profiled": "4d67a21e94987bc47dbfe590dc8039661ddcba1b5ed9365aa5a3552aa17d50ed",
+        "match": true
+      },
+      "read_requests": {
+        "ours": 50177,
+        "simplessd": 50177,
+        "match": true
+      },
+      "read_pages": {
+        "ours": 289869,
+        "simplessd": 289869,
+        "match": true
+      },
+      "simplessd_exit_code": 0,
+      "lru": {
+        "8192": {
+          "ours_hits": 287,
+          "simplessd_hits": 287,
+          "ours_hit_rate": 0.00099,
+          "simplessd_hit_rate": 0.00099,
+          "simplessd_lookups": 289869,
+          "difference_hits": 0,
+          "match": true,
+          "simplessd_exit_code": 0,
+          "simplessd_run": "results/crosscheck/simplessd/validation-uniform-mixed-lru-c8192"
+        }
+      },
+      "lfu": {
+        "8192": {
+          "ours_hits": 294,
+          "simplessd_hits": 294,
+          "ours_hit_rate": 0.001014,
+          "simplessd_hit_rate": 0.001014,
+          "simplessd_lookups": 289869,
+          "difference_hits": 0,
+          "match": true,
+          "simplessd_exit_code": 0,
+          "simplessd_run": "results/crosscheck/simplessd/validation-uniform-mixed-lfu-c8192"
+        }
+      }
+    },
+    {
+      "trace": "traces/validation/uniform-read",
+      "trace_sha256": {
+        "file": "1580eea5c6dbd890de4b0192703485cc806c8308a6a11b593c1a77701bb33c32",
+        "profiled": "1580eea5c6dbd890de4b0192703485cc806c8308a6a11b593c1a77701bb33c32",
+        "match": true
+      },
+      "read_requests": {
+        "ours": 100000,
+        "simplessd": 100000,
+        "match": true
+      },
+      "read_pages": {
+        "ours": 577985,
+        "simplessd": 577985,
+        "match": true
+      },
+      "simplessd_exit_code": 0,
+      "lru": {
+        "8192": {
+          "ours_hits": 739,
+          "simplessd_hits": 739,
+          "ours_hit_rate": 0.001279,
+          "simplessd_hit_rate": 0.001279,
+          "simplessd_lookups": 577985,
+          "difference_hits": 0,
+          "match": true,
+          "simplessd_exit_code": 0,
+          "simplessd_run": "results/crosscheck/simplessd/validation-uniform-read-lru-c8192"
+        }
+      },
+      "lfu": {
+        "8192": {
+          "ours_hits": 746,
+          "simplessd_hits": 746,
+          "ours_hit_rate": 0.001291,
+          "simplessd_hit_rate": 0.001291,
+          "simplessd_lookups": 577985,
+          "difference_hits": 0,
+          "match": true,
+          "simplessd_exit_code": 0,
+          "simplessd_run": "results/crosscheck/simplessd/validation-uniform-read-lfu-c8192"
+        }
+      }
+    },
+    {
+      "trace": "traces/validation/uniform-write",
+      "trace_sha256": {
+        "file": "48fb6b403678a925fbaa91102c76547c25efee4a80818cdf3633b736d85ffd11",
+        "profiled": "48fb6b403678a925fbaa91102c76547c25efee4a80818cdf3633b736d85ffd11",
+        "match": true
+      },
+      "read_requests": {
+        "ours": 0,
+        "simplessd": 0,
+        "match": true
+      },
+      "read_pages": {
+        "ours": 0,
+        "simplessd": 0,
+        "match": true
+      },
+      "simplessd_exit_code": 0,
+      "note": "trace has no reads, so it has no LRU/LFU numbers; only the zero read counts are compared"
+    },
+    {
+      "trace": "traces/validation/zipf-80-20",
+      "trace_sha256": {
+        "file": "59f778196cebfd6f1ad0e659f9a41154230e3199874a759676be56125ea6adef",
+        "profiled": "59f778196cebfd6f1ad0e659f9a41154230e3199874a759676be56125ea6adef",
+        "match": true
+      },
+      "read_requests": {
+        "ours": 50078,
+        "simplessd": 50078,
+        "match": true
+      },
+      "read_pages": {
+        "ours": 50078,
+        "simplessd": 50078,
+        "match": true
+      },
+      "simplessd_exit_code": 0,
+      "lru": {
+        "8192": {
+          "ours_hits": 34656,
+          "simplessd_hits": 34656,
+          "ours_hit_rate": 0.69204,
+          "simplessd_hit_rate": 0.69204,
+          "simplessd_lookups": 50078,
+          "difference_hits": 0,
+          "match": true,
+          "simplessd_exit_code": 0,
+          "simplessd_run": "results/crosscheck/simplessd/validation-zipf-80-20-lru-c8192"
+        }
+      },
+      "lfu": {
+        "8192": {
+          "ours_hits": 34717,
+          "simplessd_hits": 34717,
+          "ours_hit_rate": 0.693259,
+          "simplessd_hit_rate": 0.693259,
+          "simplessd_lookups": 50078,
+          "difference_hits": 0,
+          "match": true,
+          "simplessd_exit_code": 0,
+          "simplessd_run": "results/crosscheck/simplessd/validation-zipf-80-20-lfu-c8192"
+        }
+      }
+    },
+    {
+      "trace": "traces/validation/zipf-hot10-access90-a1.2",
+      "trace_sha256": {
+        "file": "aa36dda89769f40a98b70d36f52f835c22674e1a9d9e6d22e1764fcf9a928f6a",
+        "profiled": "aa36dda89769f40a98b70d36f52f835c22674e1a9d9e6d22e1764fcf9a928f6a",
+        "match": true
+      },
+      "read_requests": {
+        "ours": 49875,
+        "simplessd": 49875,
+        "match": true
+      },
+      "read_pages": {
+        "ours": 287929,
+        "simplessd": 287929,
+        "match": true
+      },
+      "simplessd_exit_code": 0,
+      "lru": {
+        "8192": {
+          "ours_hits": 218112,
+          "simplessd_hits": 218112,
+          "ours_hit_rate": 0.75752,
+          "simplessd_hit_rate": 0.75752,
+          "simplessd_lookups": 287929,
+          "difference_hits": 0,
+          "match": true,
+          "simplessd_exit_code": 0,
+          "simplessd_run": "results/crosscheck/simplessd/validation-zipf-hot10-access90-a1.2-lru-c8192"
+        }
+      },
+      "lfu": {
+        "8192": {
+          "ours_hits": 222190,
+          "simplessd_hits": 222190,
+          "ours_hit_rate": 0.771683,
+          "simplessd_hit_rate": 0.771683,
+          "simplessd_lookups": 287929,
+          "difference_hits": 0,
+          "match": true,
+          "simplessd_exit_code": 0,
+          "simplessd_run": "results/crosscheck/simplessd/validation-zipf-hot10-access90-a1.2-lfu-c8192"
+        }
+      }
+    },
+    {
+      "trace": "traces/validation/zipf-hot20-access80-a0.8",
+      "trace_sha256": {
+        "file": "6cf1ff42309a54932a6a100e23ee3c0897e7a20903c040f3d32b352eaef98dc7",
+        "profiled": "6cf1ff42309a54932a6a100e23ee3c0897e7a20903c040f3d32b352eaef98dc7",
+        "match": true
+      },
+      "read_requests": {
+        "ours": 50100,
+        "simplessd": 50100,
+        "match": true
+      },
+      "read_pages": {
+        "ours": 287942,
+        "simplessd": 287942,
+        "match": true
+      },
+      "simplessd_exit_code": 0,
+      "lru": {
+        "8192": {
+          "ours_hits": 40950,
+          "simplessd_hits": 40950,
+          "ours_hit_rate": 0.142216,
+          "simplessd_hit_rate": 0.142216,
+          "simplessd_lookups": 287942,
+          "difference_hits": 0,
+          "match": true,
+          "simplessd_exit_code": 0,
+          "simplessd_run": "results/crosscheck/simplessd/validation-zipf-hot20-access80-a0.8-lru-c8192"
+        }
+      },
+      "lfu": {
+        "8192": {
+          "ours_hits": 53052,
+          "simplessd_hits": 53052,
+          "ours_hit_rate": 0.184245,
+          "simplessd_hit_rate": 0.184245,
+          "simplessd_lookups": 287942,
+          "difference_hits": 0,
+          "match": true,
+          "simplessd_exit_code": 0,
+          "simplessd_run": "results/crosscheck/simplessd/validation-zipf-hot20-access80-a0.8-lfu-c8192"
+        }
+      }
+    },
+    {
+      "trace": "traces/validation/zipf-hot20-access80-a1.2",
+      "trace_sha256": {
+        "file": "283f2f014dba1d579b824ea72b1bc9881bfa0c6c6293bce1c0c6ad215a9669fc",
+        "profiled": "283f2f014dba1d579b824ea72b1bc9881bfa0c6c6293bce1c0c6ad215a9669fc",
+        "match": true
+      },
+      "read_requests": {
+        "ours": 50141,
+        "simplessd": 50141,
+        "match": true
+      },
+      "read_pages": {
+        "ours": 287141,
+        "simplessd": 287141,
+        "match": true
+      },
+      "simplessd_exit_code": 0,
+      "lru": {
+        "8192": {
+          "ours_hits": 189257,
+          "simplessd_hits": 189257,
+          "ours_hit_rate": 0.659108,
+          "simplessd_hit_rate": 0.659108,
+          "simplessd_lookups": 287141,
+          "difference_hits": 0,
+          "match": true,
+          "simplessd_exit_code": 0,
+          "simplessd_run": "results/crosscheck/simplessd/validation-zipf-hot20-access80-a1.2-lru-c8192"
+        }
+      },
+      "lfu": {
+        "8192": {
+          "ours_hits": 194509,
+          "simplessd_hits": 194509,
+          "ours_hit_rate": 0.677399,
+          "simplessd_hit_rate": 0.677399,
+          "simplessd_lookups": 287141,
+          "difference_hits": 0,
+          "match": true,
+          "simplessd_exit_code": 0,
+          "simplessd_run": "results/crosscheck/simplessd/validation-zipf-hot20-access80-a1.2-lfu-c8192"
+        }
+      }
+    },
+    {
+      "trace": "traces/matrix/mixed-50-seq-50-random",
+      "trace_sha256": {
+        "file": "8c6095748dea305b1fa96b1c8bedd0eac1c760e2e32dec31b56fa805b7556abb",
+        "profiled": "8c6095748dea305b1fa96b1c8bedd0eac1c760e2e32dec31b56fa805b7556abb",
+        "match": true
+      },
+      "read_requests": {
+        "ours": 499061,
+        "simplessd": 499061,
+        "match": true
+      },
+      "read_pages": {
+        "ours": 2864563,
+        "simplessd": 2864563,
+        "match": true
+      },
+      "simplessd_exit_code": 0,
+      "lru": {
+        "8192": {
+          "ours_hits": 2724,
+          "simplessd_hits": 2724,
+          "ours_hit_rate": 0.000951,
+          "simplessd_hit_rate": 0.000951,
+          "simplessd_lookups": 2864563,
+          "difference_hits": 0,
+          "match": true,
+          "simplessd_exit_code": 0,
+          "simplessd_run": "results/crosscheck/simplessd/matrix-mixed-50-seq-50-random-lru-c8192"
+        }
+      },
+      "lfu": {
+        "8192": {
+          "ours_hits": 2745,
+          "simplessd_hits": 2745,
+          "ours_hit_rate": 0.000958,
+          "simplessd_hit_rate": 0.000958,
+          "simplessd_lookups": 2864563,
+          "difference_hits": 0,
+          "match": true,
+          "simplessd_exit_code": 0,
+          "simplessd_run": "results/crosscheck/simplessd/matrix-mixed-50-seq-50-random-lfu-c8192"
+        }
+      }
+    },
+    {
+      "trace": "traces/matrix/seq-mixed",
+      "trace_sha256": {
+        "file": "e1542935abea82ac2fad146a6ab9fc215d6c396ba98131d21e4460258bd3c778",
+        "profiled": "e1542935abea82ac2fad146a6ab9fc215d6c396ba98131d21e4460258bd3c778",
+        "match": true
+      },
+      "read_requests": {
+        "ours": 500796,
+        "simplessd": 500796,
+        "match": true
+      },
+      "read_pages": {
+        "ours": 2880712,
+        "simplessd": 2880712,
+        "match": true
+      },
+      "simplessd_exit_code": 0,
+      "lru": {
+        "8192": {
+          "ours_hits": 0,
+          "simplessd_hits": 0,
+          "ours_hit_rate": 0.0,
+          "simplessd_hit_rate": 0.0,
+          "simplessd_lookups": 2880712,
+          "difference_hits": 0,
+          "match": true,
+          "simplessd_exit_code": 0,
+          "simplessd_run": "results/crosscheck/simplessd/matrix-seq-mixed-lru-c8192"
+        }
+      },
+      "lfu": {
+        "8192": {
+          "ours_hits": 0,
+          "simplessd_hits": 0,
+          "ours_hit_rate": 0.0,
+          "simplessd_hit_rate": 0.0,
+          "simplessd_lookups": 2880712,
+          "difference_hits": 0,
+          "match": true,
+          "simplessd_exit_code": 0,
+          "simplessd_run": "results/crosscheck/simplessd/matrix-seq-mixed-lfu-c8192"
+        }
+      }
+    },
+    {
+      "trace": "traces/matrix/uniform-mixed",
+      "trace_sha256": {
+        "file": "0d78ebad8db9c237c1f534ccb5c9eaab4735632b500128aa27e781e1967ebfdc",
+        "profiled": "0d78ebad8db9c237c1f534ccb5c9eaab4735632b500128aa27e781e1967ebfdc",
+        "match": true
+      },
+      "read_requests": {
+        "ours": 499827,
+        "simplessd": 499827,
+        "match": true
+      },
+      "read_pages": {
+        "ours": 2874931,
+        "simplessd": 2874931,
+        "match": true
+      },
+      "simplessd_exit_code": 0,
+      "lru": {
+        "8192": {
+          "ours_hits": 3301,
+          "simplessd_hits": 3301,
+          "ours_hit_rate": 0.001148,
+          "simplessd_hit_rate": 0.001148,
+          "simplessd_lookups": 2874931,
+          "difference_hits": 0,
+          "match": true,
+          "simplessd_exit_code": 0,
+          "simplessd_run": "results/crosscheck/simplessd/matrix-uniform-mixed-lru-c8192"
+        }
+      },
+      "lfu": {
+        "8192": {
+          "ours_hits": 3306,
+          "simplessd_hits": 3306,
+          "ours_hit_rate": 0.00115,
+          "simplessd_hit_rate": 0.00115,
+          "simplessd_lookups": 2874931,
+          "difference_hits": 0,
+          "match": true,
+          "simplessd_exit_code": 0,
+          "simplessd_run": "results/crosscheck/simplessd/matrix-uniform-mixed-lfu-c8192"
+        }
+      }
+    },
+    {
+      "trace": "traces/matrix/uniform-read",
+      "trace_sha256": {
+        "file": "5bcc0a7dc6f52394c91234dd2669d5e28baa3c3a6bd8caa2e23252c7f59a782f",
+        "profiled": "5bcc0a7dc6f52394c91234dd2669d5e28baa3c3a6bd8caa2e23252c7f59a782f",
+        "match": true
+      },
+      "read_requests": {
+        "ours": 1000000,
+        "simplessd": 1000000,
+        "match": true
+      },
+      "read_pages": {
+        "ours": 5756558,
+        "simplessd": 5756558,
+        "match": true
+      },
+      "simplessd_exit_code": 0,
+      "lru": {
+        "8192": {
+          "ours_hits": 7173,
+          "simplessd_hits": 7173,
+          "ours_hit_rate": 0.001246,
+          "simplessd_hit_rate": 0.001246,
+          "simplessd_lookups": 5756558,
+          "difference_hits": 0,
+          "match": true,
+          "simplessd_exit_code": 0,
+          "simplessd_run": "results/crosscheck/simplessd/matrix-uniform-read-lru-c8192"
+        }
+      },
+      "lfu": {
+        "8192": {
+          "ours_hits": 7209,
+          "simplessd_hits": 7209,
+          "ours_hit_rate": 0.001252,
+          "simplessd_hit_rate": 0.001252,
+          "simplessd_lookups": 5756558,
+          "difference_hits": 0,
+          "match": true,
+          "simplessd_exit_code": 0,
+          "simplessd_run": "results/crosscheck/simplessd/matrix-uniform-read-lfu-c8192"
+        }
+      }
+    },
+    {
+      "trace": "traces/matrix/uniform-write",
+      "trace_sha256": {
+        "file": "8a7aaa2dad6eb61d74afa474dcfeddf047ca91ca57db8cc5bc718babf532fe2b",
+        "profiled": "8a7aaa2dad6eb61d74afa474dcfeddf047ca91ca57db8cc5bc718babf532fe2b",
+        "match": true
+      },
+      "read_requests": {
+        "ours": 0,
+        "simplessd": 0,
+        "match": true
+      },
+      "read_pages": {
+        "ours": 0,
+        "simplessd": 0,
+        "match": true
+      },
+      "simplessd_exit_code": 0,
+      "note": "trace has no reads, so it has no LRU/LFU numbers; only the zero read counts are compared"
+    },
+    {
+      "trace": "traces/matrix/zipf-hot10-access90-a1.2",
+      "trace_sha256": {
+        "file": "87ecde93af96cf272c471dfcfff5a5bf5a2aa96b2438d6e760bc80ba15de27e9",
+        "profiled": "87ecde93af96cf272c471dfcfff5a5bf5a2aa96b2438d6e760bc80ba15de27e9",
+        "match": true
+      },
+      "read_requests": {
+        "ours": 499909,
+        "simplessd": 499909,
+        "match": true
+      },
+      "read_pages": {
+        "ours": 2874824,
+        "simplessd": 2874824,
+        "match": true
+      },
+      "simplessd_exit_code": 0,
+      "lru": {
+        "8192": {
+          "ours_hits": 2207340,
+          "simplessd_hits": 2207340,
+          "ours_hit_rate": 0.767817,
+          "simplessd_hit_rate": 0.767817,
+          "simplessd_lookups": 2874824,
+          "difference_hits": 0,
+          "match": true,
+          "simplessd_exit_code": 0,
+          "simplessd_run": "results/crosscheck/simplessd/matrix-zipf-hot10-access90-a1.2-lru-c8192"
+        }
+      },
+      "lfu": {
+        "8192": {
+          "ours_hits": 2307667,
+          "simplessd_hits": 2307667,
+          "ours_hit_rate": 0.802716,
+          "simplessd_hit_rate": 0.802716,
+          "simplessd_lookups": 2874824,
+          "difference_hits": 0,
+          "match": true,
+          "simplessd_exit_code": 0,
+          "simplessd_run": "results/crosscheck/simplessd/matrix-zipf-hot10-access90-a1.2-lfu-c8192"
+        }
+      }
+    },
+    {
+      "trace": "traces/matrix/zipf-hot20-access80-a0.8",
+      "trace_sha256": {
+        "file": "8fb3804a021907834966f78d0e21f647d10439ac4e5957642eff5b12fb98729f",
+        "profiled": "8fb3804a021907834966f78d0e21f647d10439ac4e5957642eff5b12fb98729f",
+        "match": true
+      },
+      "read_requests": {
+        "ours": 499452,
+        "simplessd": 499452,
+        "match": true
+      },
+      "read_pages": {
+        "ours": 2870476,
+        "simplessd": 2870476,
+        "match": true
+      },
+      "simplessd_exit_code": 0,
+      "lru": {
+        "8192": {
+          "ours_hits": 425553,
+          "simplessd_hits": 425553,
+          "ours_hit_rate": 0.148252,
+          "simplessd_hit_rate": 0.148252,
+          "simplessd_lookups": 2870476,
+          "difference_hits": 0,
+          "match": true,
+          "simplessd_exit_code": 0,
+          "simplessd_run": "results/crosscheck/simplessd/matrix-zipf-hot20-access80-a0.8-lru-c8192"
+        }
+      },
+      "lfu": {
+        "8192": {
+          "ours_hits": 653099,
+          "simplessd_hits": 653099,
+          "ours_hit_rate": 0.227523,
+          "simplessd_hit_rate": 0.227523,
+          "simplessd_lookups": 2870476,
+          "difference_hits": 0,
+          "match": true,
+          "simplessd_exit_code": 0,
+          "simplessd_run": "results/crosscheck/simplessd/matrix-zipf-hot20-access80-a0.8-lfu-c8192"
+        }
+      }
+    },
+    {
+      "trace": "traces/matrix/zipf-hot20-access80-a1.2",
+      "trace_sha256": {
+        "file": "fcca5d72410c5d3171b091fd2ecdc2adf77fceab8c68bdb454894dc7cd17f756",
+        "profiled": "fcca5d72410c5d3171b091fd2ecdc2adf77fceab8c68bdb454894dc7cd17f756",
+        "match": true
+      },
+      "read_requests": {
+        "ours": 501066,
+        "simplessd": 501066,
+        "match": true
+      },
+      "read_pages": {
+        "ours": 2874025,
+        "simplessd": 2874025,
+        "match": true
+      },
+      "simplessd_exit_code": 0,
+      "lru": {
+        "8192": {
+          "ours_hits": 1900662,
+          "simplessd_hits": 1900662,
+          "ours_hit_rate": 0.661324,
+          "simplessd_hit_rate": 0.661324,
+          "simplessd_lookups": 2874025,
+          "difference_hits": 0,
+          "match": true,
+          "simplessd_exit_code": 0,
+          "simplessd_run": "results/crosscheck/simplessd/matrix-zipf-hot20-access80-a1.2-lru-c8192"
+        }
+      },
+      "lfu": {
+        "8192": {
+          "ours_hits": 2012140,
+          "simplessd_hits": 2012140,
+          "ours_hit_rate": 0.700112,
+          "simplessd_hit_rate": 0.700112,
+          "simplessd_lookups": 2874025,
+          "difference_hits": 0,
+          "match": true,
+          "simplessd_exit_code": 0,
+          "simplessd_run": "results/crosscheck/simplessd/matrix-zipf-hot20-access80-a1.2-lfu-c8192"
+        }
+      }
+    },
+    {
+      "trace": "traces/real/financial1",
+      "trace_sha256": {
+        "file": "dbfd0c6bdb9fad57d370a840f2723ef30d8cc0d8b7c4468c174818473fd9d03a",
+        "profiled": "dbfd0c6bdb9fad57d370a840f2723ef30d8cc0d8b7c4468c174818473fd9d03a",
+        "match": true
+      },
+      "read_requests": {
+        "ours": 212681,
+        "simplessd": 212681,
+        "match": true
+      },
+      "read_pages": {
+        "ours": 345479,
+        "simplessd": 345479,
+        "match": true
+      },
+      "simplessd_exit_code": 0,
+      "lru": {
+        "8192": {
+          "ours_hits": 205747,
+          "simplessd_hits": 205747,
+          "ours_hit_rate": 0.595541,
+          "simplessd_hit_rate": 0.595541,
+          "simplessd_lookups": 345479,
+          "difference_hits": 0,
+          "match": true,
+          "simplessd_exit_code": 0,
+          "simplessd_run": "results/crosscheck/simplessd/real-financial1-lru-c8192"
+        }
+      },
+      "lfu": {
+        "8192": {
+          "ours_hits": 102844,
+          "simplessd_hits": 102844,
+          "ours_hit_rate": 0.297685,
+          "simplessd_hit_rate": 0.297685,
+          "simplessd_lookups": 345479,
+          "difference_hits": 0,
+          "match": true,
+          "simplessd_exit_code": 0,
+          "simplessd_run": "results/crosscheck/simplessd/real-financial1-lfu-c8192"
+        }
+      }
+    },
+    {
+      "trace": "traces/real/financial2",
+      "trace_sha256": {
+        "file": "4594057b48598f42e1fd378baf2fe6f047c50298df33225510ce61e956e1ab04",
+        "profiled": "4594057b48598f42e1fd378baf2fe6f047c50298df33225510ce61e956e1ab04",
+        "match": true
+      },
+      "read_requests": {
+        "ours": 818059,
+        "simplessd": 818059,
+        "match": true
+      },
+      "read_pages": {
+        "ours": 1147815,
+        "simplessd": 1147815,
+        "match": true
+      },
+      "simplessd_exit_code": 0,
+      "lru": {
+        "8192": {
+          "ours_hits": 933730,
+          "simplessd_hits": 933730,
+          "ours_hit_rate": 0.813485,
+          "simplessd_hit_rate": 0.813485,
+          "simplessd_lookups": 1147815,
+          "difference_hits": 0,
+          "match": true,
+          "simplessd_exit_code": 0,
+          "simplessd_run": "results/crosscheck/simplessd/real-financial2-lru-c8192"
+        }
+      },
+      "lfu": {
+        "8192": {
+          "ours_hits": 748157,
+          "simplessd_hits": 748157,
+          "ours_hit_rate": 0.65181,
+          "simplessd_hit_rate": 0.65181,
+          "simplessd_lookups": 1147815,
+          "difference_hits": 0,
+          "match": true,
+          "simplessd_exit_code": 0,
+          "simplessd_run": "results/crosscheck/simplessd/real-financial2-lfu-c8192"
+        }
+      }
+    },
+    {
+      "trace": "traces/real/websearch1",
+      "trace_sha256": {
+        "file": "2e071a40cd0bdd698951fd24f8584473a902a5ac57e5b6732b867414fe59b70d",
+        "profiled": "2e071a40cd0bdd698951fd24f8584473a902a5ac57e5b6732b867414fe59b70d",
+        "match": true
+      },
+      "read_requests": {
+        "ours": 999800,
+        "simplessd": 999800,
+        "match": true
+      },
+      "read_pages": {
+        "ours": 3790556,
+        "simplessd": 3790556,
+        "match": true
+      },
+      "simplessd_exit_code": 0,
+      "lru": {
+        "8192": {
+          "ours_hits": 278,
+          "simplessd_hits": 278,
+          "ours_hit_rate": 7.3e-05,
+          "simplessd_hit_rate": 7.3e-05,
+          "simplessd_lookups": 3790556,
+          "difference_hits": 0,
+          "match": true,
+          "simplessd_exit_code": 0,
+          "simplessd_run": "results/crosscheck/simplessd/real-websearch1-lru-c8192"
+        }
+      },
+      "lfu": {
+        "8192": {
+          "ours_hits": 278,
+          "simplessd_hits": 278,
+          "ours_hit_rate": 7.3e-05,
+          "simplessd_hit_rate": 7.3e-05,
+          "simplessd_lookups": 3790556,
+          "difference_hits": 0,
+          "match": true,
+          "simplessd_exit_code": 0,
+          "simplessd_run": "results/crosscheck/simplessd/real-websearch1-lfu-c8192"
+        }
+      }
+    },
+    {
+      "trace": "traces/real/websearch2",
+      "trace_sha256": {
+        "file": "1dfa9858798020464bedae0b89cbccea7c1598f245875daaa86363d3f9a865ad",
+        "profiled": "1dfa9858798020464bedae0b89cbccea7c1598f245875daaa86363d3f9a865ad",
+        "match": true
+      },
+      "read_requests": {
+        "ours": 999800,
+        "simplessd": 999800,
+        "match": true
+      },
+      "read_pages": {
+        "ours": 3745726,
+        "simplessd": 3745726,
+        "match": true
+      },
+      "simplessd_exit_code": 0,
+      "lru": {
+        "8192": {
+          "ours_hits": 0,
+          "simplessd_hits": 0,
+          "ours_hit_rate": 0.0,
+          "simplessd_hit_rate": 0.0,
+          "simplessd_lookups": 3745726,
+          "difference_hits": 0,
+          "match": true,
+          "simplessd_exit_code": 0,
+          "simplessd_run": "results/crosscheck/simplessd/real-websearch2-lru-c8192"
+        }
+      },
+      "lfu": {
+        "8192": {
+          "ours_hits": 0,
+          "simplessd_hits": 0,
+          "ours_hit_rate": 0.0,
+          "simplessd_hit_rate": 0.0,
+          "simplessd_lookups": 3745726,
+          "difference_hits": 0,
+          "match": true,
+          "simplessd_exit_code": 0,
+          "simplessd_run": "results/crosscheck/simplessd/real-websearch2-lfu-c8192"
+        }
+      }
+    },
+    {
+      "trace": "traces/real/websearch3",
+      "trace_sha256": {
+        "file": "c3199a93e56ecd6e3b805fabc0acfc5bc919e78324069030b42ae0d0fb2fb031",
+        "profiled": "c3199a93e56ecd6e3b805fabc0acfc5bc919e78324069030b42ae0d0fb2fb031",
+        "match": true
+      },
+      "read_requests": {
+        "ours": 999726,
+        "simplessd": 999726,
+        "match": true
+      },
+      "read_pages": {
+        "ours": 3844520,
+        "simplessd": 3844520,
+        "match": true
+      },
+      "simplessd_exit_code": 0,
+      "lru": {
+        "8192": {
+          "ours_hits": 0,
+          "simplessd_hits": 0,
+          "ours_hit_rate": 0.0,
+          "simplessd_hit_rate": 0.0,
+          "simplessd_lookups": 3844520,
+          "difference_hits": 0,
+          "match": true,
+          "simplessd_exit_code": 0,
+          "simplessd_run": "results/crosscheck/simplessd/real-websearch3-lru-c8192"
+        }
+      },
+      "lfu": {
+        "8192": {
+          "ours_hits": 0,
+          "simplessd_hits": 0,
+          "ours_hit_rate": 0.0,
+          "simplessd_hit_rate": 0.0,
+          "simplessd_lookups": 3844520,
+          "difference_hits": 0,
+          "match": true,
+          "simplessd_exit_code": 0,
+          "simplessd_run": "results/crosscheck/simplessd/real-websearch3-lfu-c8192"
+        }
+      }
+    }
+  ]
+}
