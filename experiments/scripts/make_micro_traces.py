@@ -105,6 +105,66 @@ def main() -> int:
         "leaftl": {"writes_dropped": ["==", 1]},  # the write to LPN 0 (KI-27)
     }
 
+    # 5. Read cost after one LeaFTL flush. Write 2048 consecutive LPNs (4096..6143, 32 x 256 KiB; LPN 0 is
+    #    avoided because of KI-27), then read LPNs 4096..4111 twice (two 64 KiB requests).
+    #    LeaFTL: the 2048th LPN fills the buffer: one flush. quick_sort sorts 2049 slots (KI-30): the hidden
+    #    slot holds 0, so the flush maps LPN 0 and 4096..6142 and leaves 6143 in the hidden slot. Each of the
+    #    8 translation pages (16..23) gets one accurate segment, the first in its group, so it is stored.
+    #    Read 1: LPN 4096 misses the CMT, reads translation page 16 (1 flash read), the model finds the
+    #    accurate segment (model hit), the segment is cached, the data page is read (1 flash read): 2 reads.
+    #    LPNs 4097..4111 hit the cached segment: 1 flash read each. Read 2: 16 hits, 1 flash read each.
+    #    Total: 1 miss, 31 hits, 33 flash reads, 31 of 32 served LPNs translation-free. (This assumes the
+    #    segment predicts the right physical page; a wrong prediction would add a flash read and show here.)
+    #    LearnedFTL: every write to a not-yet-mapped translation page is a write-path CMT miss that inserts
+    #    one entry (process_translation_page_write, no prefetch): 2048 misses, 2048 entries (capacity 8192).
+    #    All 32 read LPNs hit the CMT: 1 flash read each.
+    ops = [("W", 4096 + 64 * i, 64) for i in range(32)] + [("R", 4096, 16), ("R", 4096, 16)]
+    traces["flush-then-read"] = ops
+    expected["flush-then-read"] = {
+        "both": {"read_lpns": ["==", 32], "write_lpns": ["==", 2048], "mapped_read_lpns": ["==", 32],
+                 "unmapped_read_lpns": ["==", 0], "served_lpns": ["==", 32]},
+        "leaftl": {"buffer_flushes": ["==", 1], "writes_buffered": ["==", 2048], "writes_dropped": ["==", 0],
+                   "cmt_misses": ["==", 1], "cmt_hits": ["==", 31], "model_queries": ["==", 1],
+                   "model_hits": ["==", 1], "model_misses": ["==", 0], "served_cmt_hits": ["==", 31],
+                   "served_translation_free": ["==", 31], "served_reads_hist": ["==", [0, 31, 1, 0, 0]],
+                   "served_flash_reads": ["==", 33], "served_tp_reads": ["==", 1]},
+        "learnedftl": {"cmt_write_misses": ["==", 2048], "cmt_write_hits": ["==", 0], "cmt_hits": ["==", 32],
+                       "cmt_misses": ["==", 0], "served_cmt_hits": ["==", 32],
+                       "served_reads_hist": ["==", [0, 32, 0, 0, 0]], "served_flash_reads": ["==", 32]},
+    }
+
+    # 6. A LearnedFTL CMT miss, and two LPNs LeaFTL cannot find. Write 16384 consecutive LPNs (4096..20479,
+    #    256 x 256 KiB), then read LPN 4096 twice (two 4 KiB requests), then LPNs 6142..6143 (one 8 KiB request).
+    #    LearnedFTL: 16384 write-path misses insert 16384 entries into a CMT of 8192, so the 8192 oldest
+    #    (LPNs 4096..12287, translation pages 8..23) are evicted; a node's first (dirty) eviction writes its
+    #    translation page, so pages 8..23 are mapped. Read 1 of LPN 4096: CMT miss, translation page read,
+    #    data read = 2 flash reads. (The eviction it causes takes a dirty entry of page 24, which was never
+    #    written before: no extra read.) Read 2: CMT hit, 1 flash read. LPN 6142: miss, 2 flash reads; the
+    #    miss prefetches the rest of the request inside the translation page, LPN 6143: hit, 1 flash read.
+    #    Total: 2 misses, 2 hits, 6 flash reads, 2 translation-page reads.
+    #    LeaFTL: 8 flushes. Flush 1 is as in trace 5: LPN 4096 is read as there (2 flash reads, then 1).
+    #    LPN 6142 was mapped by flush 1, but the last LPN of a flush is never put in a segment (KI-9).
+    #    LPN 6143 was held back by flush 1 (KI-30) and mapped by flush 2 as a one-LPN segment for
+    #    translation page 23, whose top level then holds exactly one segment, so the new one is dropped
+    #    (KI-28). Both reads miss the CMT, read translation page 23 (1 flash read each), get a model miss
+    #    and return nothing although the data is mapped: 2 x invalid_but_mapped, 2 wasted flash reads.
+    ops = [("W", 4096 + 64 * i, 64) for i in range(256)] + [("R", 4096, 1), ("R", 4096, 1), ("R", 6142, 2)]
+    traces["evict-then-read"] = ops
+    expected["evict-then-read"] = {
+        "both": {"read_lpns": ["==", 4], "write_lpns": ["==", 16384]},
+        "leaftl": {"buffer_flushes": ["==", 8], "writes_buffered": ["==", 16384], "writes_dropped": ["==", 0],
+                   "cmt_misses": ["==", 3], "cmt_hits": ["==", 1], "model_queries": ["==", 3],
+                   "model_hits": ["==", 1], "model_misses": ["==", 2], "invalid_but_mapped": ["==", 2],
+                   "served_lpns": ["==", 2], "served_reads_hist": ["==", [0, 1, 1, 0, 0]],
+                   "served_flash_reads": ["==", 3], "unmapped_flash_reads": ["==", 2],
+                   "unmapped_read_lpns": ["==", 2], "crb_match_discarded": ["==", 0]},
+        "learnedftl": {"cmt_write_misses": ["==", 16384], "cmt_write_hits": ["==", 0],
+                       "cmt_misses": ["==", 2], "cmt_hits": ["==", 2], "served_lpns": ["==", 4],
+                       "served_cmt_hits": ["==", 2], "served_translation_free": ["==", 2],
+                       "served_reads_hist": ["==", [0, 2, 2, 0, 0]], "served_flash_reads": ["==", 6],
+                       "served_tp_reads": ["==", 2], "model_hits": ["==", 0], "unmapped_read_lpns": ["==", 0]},
+    }
+
     OUT.mkdir(parents=True, exist_ok=True)
     for name, ops in traces.items():
         (OUT / f"{name}.trace").write_text(trace_lines(ops))

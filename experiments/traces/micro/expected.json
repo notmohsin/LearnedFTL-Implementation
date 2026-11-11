@@ -176,5 +176,261 @@
         1
       ]
     }
+  },
+  "flush-then-read": {
+    "both": {
+      "read_lpns": [
+        "==",
+        32
+      ],
+      "write_lpns": [
+        "==",
+        2048
+      ],
+      "mapped_read_lpns": [
+        "==",
+        32
+      ],
+      "unmapped_read_lpns": [
+        "==",
+        0
+      ],
+      "served_lpns": [
+        "==",
+        32
+      ]
+    },
+    "leaftl": {
+      "buffer_flushes": [
+        "==",
+        1
+      ],
+      "writes_buffered": [
+        "==",
+        2048
+      ],
+      "writes_dropped": [
+        "==",
+        0
+      ],
+      "cmt_misses": [
+        "==",
+        1
+      ],
+      "cmt_hits": [
+        "==",
+        31
+      ],
+      "model_queries": [
+        "==",
+        1
+      ],
+      "model_hits": [
+        "==",
+        1
+      ],
+      "model_misses": [
+        "==",
+        0
+      ],
+      "served_cmt_hits": [
+        "==",
+        31
+      ],
+      "served_translation_free": [
+        "==",
+        31
+      ],
+      "served_reads_hist": [
+        "==",
+        [
+          0,
+          31,
+          1,
+          0,
+          0
+        ]
+      ],
+      "served_flash_reads": [
+        "==",
+        33
+      ],
+      "served_tp_reads": [
+        "==",
+        1
+      ]
+    },
+    "learnedftl": {
+      "cmt_write_misses": [
+        "==",
+        2048
+      ],
+      "cmt_write_hits": [
+        "==",
+        0
+      ],
+      "cmt_hits": [
+        "==",
+        32
+      ],
+      "cmt_misses": [
+        "==",
+        0
+      ],
+      "served_cmt_hits": [
+        "==",
+        32
+      ],
+      "served_reads_hist": [
+        "==",
+        [
+          0,
+          32,
+          0,
+          0,
+          0
+        ]
+      ],
+      "served_flash_reads": [
+        "==",
+        32
+      ]
+    }
+  },
+  "evict-then-read": {
+    "both": {
+      "read_lpns": [
+        "==",
+        4
+      ],
+      "write_lpns": [
+        "==",
+        16384
+      ]
+    },
+    "leaftl": {
+      "buffer_flushes": [
+        "==",
+        8
+      ],
+      "writes_buffered": [
+        "==",
+        16384
+      ],
+      "writes_dropped": [
+        "==",
+        0
+      ],
+      "cmt_misses": [
+        "==",
+        3
+      ],
+      "cmt_hits": [
+        "==",
+        1
+      ],
+      "model_queries": [
+        "==",
+        3
+      ],
+      "model_hits": [
+        "==",
+        1
+      ],
+      "model_misses": [
+        "==",
+        2
+      ],
+      "invalid_but_mapped": [
+        "==",
+        2
+      ],
+      "served_lpns": [
+        "==",
+        2
+      ],
+      "served_reads_hist": [
+        "==",
+        [
+          0,
+          1,
+          1,
+          0,
+          0
+        ]
+      ],
+      "served_flash_reads": [
+        "==",
+        3
+      ],
+      "unmapped_flash_reads": [
+        "==",
+        2
+      ],
+      "unmapped_read_lpns": [
+        "==",
+        2
+      ],
+      "crb_match_discarded": [
+        "==",
+        0
+      ]
+    },
+    "learnedftl": {
+      "cmt_write_misses": [
+        "==",
+        16384
+      ],
+      "cmt_write_hits": [
+        "==",
+        0
+      ],
+      "cmt_misses": [
+        "==",
+        2
+      ],
+      "cmt_hits": [
+        "==",
+        2
+      ],
+      "served_lpns": [
+        "==",
+        4
+      ],
+      "served_cmt_hits": [
+        "==",
+        2
+      ],
+      "served_translation_free": [
+        "==",
+        2
+      ],
+      "served_reads_hist": [
+        "==",
+        [
+          0,
+          2,
+          2,
+          0,
+          0
+        ]
+      ],
+      "served_flash_reads": [
+        "==",
+        6
+      ],
+      "served_tp_reads": [
+        "==",
+        2
+      ],
+      "model_hits": [
+        "==",
+        0
+      ],
+      "unmapped_read_lpns": [
+        "==",
+        0
+      ]
+    }
   }
 }
