@@ -16,7 +16,7 @@ experiments/
   configs/               one file per stage: which FTLs, traces, preconditions and repeats to run
   scripts/               everything that runs, checks and summarises experiments (table below)
   tools/                 helpers: cache simulator, GC-log shim, LeaFTL replica (KI-28)
-  crosscheck/simplessd/  checks our LRU/LFU numbers against the SimpleSSD simulator (run_crosscheck.py)
+  crosscheck/simplessd/  checks our LRU/LFU numbers against the CMT of our SimpleSSD fork, ~/SSD-Simulator (run_crosscheck.py)
   traces/                TRACES.md (profile of every trace), profiles.json, manifest.json
     full/                the 9 generated synthetic traces (10M requests each, zipf-80-20 100k; Git LFS)
     validation/          the first 100k requests of each (validation stage)
@@ -29,7 +29,7 @@ experiments/
                          request_costs.csv             flash reads/writes per request and per page, setup vs workload
                          request_costs_columns.csv     what every request_costs column means
                          ki28_attribution.csv          LeaFTL lost-read attribution (KI-28)
-                         simplessd_crosscheck.json     do our LRU/LFU hit counts match SimpleSSD's? (per trace)
+                         simplessd_crosscheck.json     do our LRU/LFU hit counts match the SimpleSSD fork's? (per trace)
     micro/ validation/ matrix/ real/                   one folder per run (not committed)
     _logs/               console output of each run_matrix.py run
     _superseded/         runs replaced by re-runs, kept for the record

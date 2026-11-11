@@ -5,11 +5,17 @@
 
 What is checked: experiments/traces/profiles.json holds, for every trace, the exact number of hits an LRU and an
 (in-cache) LFU cache of C entries get on the trace's read stream, keyed per 4 KiB page, every miss inserting
-(computed by experiments/tools/cachesim.c). This script replays the same read stream through SimpleSSD's own CMT,
-a completely separate implementation, and compares the hit counts.
+(computed by experiments/tools/cachesim.c). This script replays the same read stream through the CMT of
+~/SSD-Simulator and compares the hit counts. Stock SimpleSSD has no CMT: the one in ~/SSD-Simulator
+(simplessd/ftl/page_mapping.cc) was added in that fork by the same author as cachesim.c. It is a second, separately
+written implementation in a different code base, not a third-party one.
+
+The comparison count: each trace with reads gives two comparisons (LRU, LFU). A trace with no reads has no LRU/LFU
+numbers and gives one comparison of the zero read counts. With 20 traces with reads and 2 without, that is
+40 + 2 = 42.
 
 SimpleSSD is configured so that its CMT sees exactly that stream (sim.cfg.template / ssd.cfg.template, made from
-the configs in ~/SSD-Simulator/config; SimpleSSD itself is not modified):
+the configs in ~/SSD-Simulator/config; ~/SSD-Simulator itself is not modified by this script):
   - only the trace's read lines are replayed (the regex matches 'R' lines; other lines are skipped), one at a time
     (QueueDepth 1, synchronous timing);
   - one CMT entry = one 4 KiB page: PageSize 4096, no superpage, multi-plane operation off;
