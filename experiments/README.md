@@ -50,8 +50,10 @@ experiments/
 ## Reproduce
 
 Requirements: the guest image `~/images/femu-pristine.qcow2` (+ `.sha256`), `~/images/femu-seed.iso`, the SSH key
-`~/images/femu_id_ed25519`, and `ninja` on `PATH`. No root is needed; runs use KVM if `/dev/kvm` is usable and TCG
-otherwise (counters only under TCG; latency is never reported from TCG).
+`~/images/femu_id_ed25519`, and `ninja` on `PATH`. The top-level `README.md` shows how to make the image, the seed
+ISO and the key. You also need `git lfs pull` (for `traces/full/`), a C compiler, and Python 3 with `numpy` and
+`pandas` (used by `test_cachesim.py` and `profile_traces.py`). No root is needed; runs use KVM if `/dev/kvm` is
+usable and TCG otherwise (counters only under TCG; latency is never reported from TCG).
 
 ```bash
 # traces that are generated, not committed
@@ -61,8 +63,10 @@ mkdir -p experiments/traces/real/raw
 for f in WebSearch1 WebSearch2 WebSearch3 Financial1 Financial2; do
     curl -o experiments/traces/real/raw/$f.spc.bz2 https://skulddata.cs.umass.edu/traces/storage/$f.spc.bz2
     python3 experiments/scripts/normalize_trace.py experiments/traces/real/raw/$f.spc.bz2 \
-        experiments/traces/real/$(echo $f | tr A-Z a-z).trace --ops 1000000
-done   # each output's SHA-256 must match its committed .json sidecar
+        experiments/traces/real/$(echo $f | tr A-Z a-z).trace --ops 1000000 \
+        --source-url https://skulddata.cs.umass.edu/traces/storage/$f.spc.bz2
+done
+git diff --exit-code experiments/traces/real/   # normalize_trace.py rewrites each .json sidecar: no diff = same traces
 
 # one FEMU binary per FTL, built from a commit in its own worktree
 experiments/scripts/build_ftl.sh leaftl
