@@ -675,6 +675,7 @@ static void ssd_init_statistics(struct ssd *ssd)
     st->writes_buffered = 0;
     st->writes_absorbed = 0;
     st->writes_dropped = 0;
+    st->crb_match_discarded = 0;
     memset(&st->acct, 0, sizeof(st->acct));
     st->true_unmapped = 0;
     st->invalid_but_mapped = 0;
@@ -1555,26 +1556,29 @@ static int segment_search_simple_segment(simple_segment* sg, uint64_t lpn, uint6
     } else {
         cr_bm* tmp = lm->crb->crb_unit[seg_no];
         int i;
-        bool found = false;
+        int flag = 0;
         while (tmp) {
             for (i = 0; i < tmp->cnt; i++) {
                 if (tmp->record[i] == lpn) {
-                    found = true;
+                    flag = 1;
                     break;
                 }
             }
 
-            if (found)
+            if (flag)
                 break;
 
             tmp = tmp->next;
         }
         
-        if (found) {
+        if (flag) {
             simple_segment* crb_sm = tmp->to_sm;
             *ppn = crb_sm->k * off_lpn + crb_sm->inter;
-            lru_en->is_accurate = 0;
-            flag = 3;
+            lru_en = crb_sm;
+            /* Measurement only (KI-31): the inner `flag` above hides the
+             * function's `flag`, so this CRB match is discarded and the
+             * function returns 0. Counted, not fixed. */
+            lm->owner->stat.crb_match_discarded++;
         }
     }
 
@@ -1789,10 +1793,6 @@ static uint64_t all_seg_get_ppn(all_seg_mgmt* all_segs, segment_param* sp, uint6
         flag = level_seg_mgmt_search(sg, lpn, &ppn, sp, lm, lru_en);
         if (flag == 1) {
             lm->owner->stat.model_hit++;
-            return ppn;
-        }
-        if (flag == 3) {
-            lm->owner->stat.model_correction++;
             return ppn;
         }
         if (flag == 2) {
@@ -2746,12 +2746,13 @@ void count_segments(struct ssd* ssd) {
            ",\"unmapped_tp\":%" PRIu64 ",\"model_corrections\":%" PRIu64
            ",\"cmt_hit_invalid_gtd\":%" PRIu64 ",\"access_cnt\":%" PRIu64
            ",\"writes_buffered\":%" PRIu64 ",\"writes_absorbed\":%" PRIu64
-           ",\"writes_dropped\":%" PRIu64 "}\n",
+           ",\"writes_dropped\":%" PRIu64 ",\"crb_match_discarded\":%" PRIu64 "}\n",
            ssd->stat.pre_first_write, ssd->stat.invalid_read_cnt,
            ssd->stat.true_unmapped, ssd->stat.invalid_but_mapped,
            ssd->stat.unmapped_tp, (uint64_t)ssd->stat.model_correction,
            ssd->stat.cmt_hit_invalid_gtd, ssd->stat.access_cnt,
-           ssd->stat.writes_buffered, ssd->stat.writes_absorbed, ssd->stat.writes_dropped);
+           ssd->stat.writes_buffered, ssd->stat.writes_absorbed, ssd->stat.writes_dropped,
+           ssd->stat.crb_match_discarded);
 
     printf("read joule: %Lf\n", ssd->stat.read_joule);
     printf("write joule: %Lf\n", ssd->stat.write_joule);
@@ -2796,6 +2797,7 @@ void count_segments(struct ssd* ssd) {
     ssd->stat.writes_buffered = 0;
     ssd->stat.writes_absorbed = 0;
     ssd->stat.writes_dropped = 0;
+    ssd->stat.crb_match_discarded = 0;
     memset(&ssd->stat.acct, 0, sizeof(ssd->stat.acct));
     ssd->stat.true_unmapped = 0;
     ssd->stat.invalid_but_mapped = 0;

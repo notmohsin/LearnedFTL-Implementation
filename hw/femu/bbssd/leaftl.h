@@ -346,6 +346,9 @@ struct statistics {
     uint64_t writes_absorbed;
     uint64_t writes_dropped;
     uint64_t invalid_but_mapped;
+    /* CRB matches that segment_search_simple_segment finds and then
+     * discards (shadowed `flag`, KI-31) */
+    uint64_t crb_match_discarded;
 
     long double read_joule;
     long double write_joule;
