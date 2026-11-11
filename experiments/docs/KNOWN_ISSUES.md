@@ -152,7 +152,8 @@ Severity:
 ### KI-12: GC counted without a victim (LeaFTL)
 
 - **Where:** `do_gc` increments `gc_cnt` before discovering there is no victim line (`leaftl.c` around 1351, 1362-1364).
-- **Handling:** GC runs are counted additively at the point a victim is actually reclaimed (invariant 5).
+- **Handling:** GC runs are counted additively at the point a victim is actually reclaimed (`gc_runs`). This holds for
+  LeaFTL only; LearnedFTL's `gc_runs` counts calls of its four GC functions (see `METRICS.md`, device metrics).
 
 ### KI-13: 32-bit read counters printed with `%d` (LeaFTL)
 
@@ -342,7 +343,8 @@ are stable). None is fixed; each is measured and reported.
   many write pointers; once fewer than 4 lines are free (the authors' own "what's wrong?" message, printed before
   every GC), GC runs for almost every write, and victims are nearly fully valid, so each GC copies almost a whole
   line and frees almost nothing.
-- **Effect:** measured on `uniform-mixed`, 100k ops after `fill`: 46,578 GC runs, 5.96M block erases and 1.53 billion
+- **Effect:** measured on `uniform-mixed`, 100k ops after `fill`: 46,578 GC calls (`gc_runs`, which for LearnedFTL
+  counts batch calls and per-line calls together), 5.96M block erases and 1.53 billion
   GC page copies for 286k host-written LPNs (WAF 5,338), at ~15 requests/s of wall-clock time (the FTL thread is
   CPU-bound; KVM would not help). The constant model retraining during GC also makes almost every read a correct model
   prediction (translation-free ratio 0.997), which is a side effect of the thrashing, not a property of the cache.

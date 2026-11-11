@@ -68,7 +68,9 @@ MAPPING_METRICS = [
     ("lost_data_read_share", "fraction",
      "Read LPNs whose data had been written but which the FTL did not return / read LPNs of written data (KNOWN, LeaFTL KI-5)."),
     ("gap_to_belady", "fraction",
-     "LeaFTL only: Belady-OPT hit rate at 8192 entries on the trace's read stream keyed per 256-LPN translation page, minus cmt_hit_rate_mapped. Headroom for a better replacement policy. Blank for LearnedFTL, whose CMT also fills on writes and prefetches, so demand-fill bounds do not bound it."),
+     "LeaFTL only: Belady-OPT hit rate at 8192 entries on the trace's read stream keyed per 256-LPN translation page, minus cmt_hit_rate_mapped. The Belady rate covers all read LPNs; cmt_hit_rate_mapped covers only the reads LeaFTL served, and a lost read is always a CMT miss, so this understates the gap (it can be negative). Use gap_to_belady_all_lookups when lost reads matter. Blank for LearnedFTL, whose CMT also fills on writes and prefetches, so demand-fill bounds do not bound it."),
+    ("gap_to_belady_all_lookups", "fraction",
+     "LeaFTL only: the same Belady-OPT hit rate minus cmt_hit_rate_native (hits over all CMT lookups, including the reads LeaFTL then failed to return). Both rates cover nearly the same reads (all read LPNs; the native rate leaves out write-buffer hits). Includes the effect of LeaFTL's lost reads and of caching only accurate segments, not only of its replacement policy. Blank for LearnedFTL."),
 ]
 DEVICE_METRICS = [
     ("nand_reads_user", "pages", "User-data flash reads in the workload interval, incl. mispredicted reads."),
@@ -76,7 +78,7 @@ DEVICE_METRICS = [
     ("nand_reads_gc", "pages", "Flash reads of user data migrated by GC."),
     ("nand_programs", "pages", "NAND programs: user data + translation pages + GC-migrated data (see KNOWN_ISSUES for uncharged cases)."),
     ("waf", "ratio", "nand_programs / host-written LPNs in the workload interval."),
-    ("gc_runs", "count", "GC invocations that reclaimed a victim during the workload interval (delta of the since-boot counter)."),
+    ("gc_runs", "count", "GC calls during the workload interval (delta of the since-boot counter). Not comparable across FTLs. LeaFTL: one per reclaimed victim line. LearnedFTL: one per call of each of its four GC functions, so a batch call that reclaims several lines counts once (batch_line_do_gc) or once plus once per line (batch_gtd_do_gc); use nand_erases to compare GC work."),
     ("nand_erases", "blocks", "Block erases in the workload interval."),
     ("energy_mj", "mJ", "read/write/erase energy from the authors' per-op constants (3.5/16.7/132 uJ), workload interval."),
     ("latency_p50_us", "us", "Per-request latency P50. Blank: TCG runs, latency needs KVM on exclusive cores (KI-19)."),
@@ -118,10 +120,16 @@ REQUEST_COST_COLUMNS = [
                                             "page, so pages of one request that follow its first page mostly hit."),
     ("bound_belady_hit_rate_8192", "fraction", "Belady-OPT (a cache that knows the future) on the same stream and keying: "
                                                "the best any replacement policy can do with 8,192 entries filled on read "
-                                               "misses. A true upper bound for LeaFTL only: LearnedFTL also fills its "
-                                               "cache on writes and prefetches the rest of each request, so it can exceed it."),
-    ("gap_to_belady", "fraction", "LeaFTL only: bound_belady_hit_rate_8192 - cmt_hit_rate_mapped, the headroom for a "
-                                  "better replacement policy. Blank for LearnedFTL (no valid bound)."),
+                                               "misses, over all read pages. It bounds LeaFTL's hit rate over all lookups "
+                                               "(cmt_hit_rate), not cmt_hit_rate_mapped, which covers served reads only. "
+                                               "LearnedFTL also fills its cache on writes and prefetches the rest of each "
+                                               "request, so it can exceed it."),
+    ("gap_to_belady", "fraction", "LeaFTL only: bound_belady_hit_rate_8192 - cmt_hit_rate_mapped. Understates the gap, "
+                                  "because lost reads (always cache misses) are left out of cmt_hit_rate_mapped; it can "
+                                  "be negative. Blank for LearnedFTL (no valid bound)."),
+    ("gap_to_belady_all_lookups", "fraction", "LeaFTL only: bound_belady_hit_rate_8192 - cmt_hit_rate, both over (nearly) "
+                                              "all read pages. Includes the effect of LeaFTL's lost reads and of caching "
+                                              "only accurate segments. Blank for LearnedFTL."),
     ("nand_reads_user", "pages", "Flash reads of user data (incl. reads of a mispredicted page)."),
     ("nand_reads_translation", "pages", "Flash reads of translation pages, all causes."),
     ("nand_reads_gc", "pages", "Flash reads of valid data copied by garbage collection."),
@@ -217,7 +225,8 @@ def request_costs(runs: list[dict], rows: list[dict]) -> list[dict]:
                            ("bound_lru_hit_rate_8192", lambda row: row["_belady"]["lru_hit_rate"] if row["_belady"] else None),
                            ("bound_belady_hit_rate_8192",
                             lambda row: row["_belady"]["belady_hit_rate"] if row["_belady"] else None),
-                           ("gap_to_belady", lambda row: row["gap_to_belady"])):
+                           ("gap_to_belady", lambda row: row["gap_to_belady"]),
+                           ("gap_to_belady_all_lookups", lambda row: row["gap_to_belady_all_lookups"])):
             values = [pick(row) for _, row in valid if pick(row) is not None]
             r[name] = statistics.fmean(values) if values else None
         lost = [row["lost_data_read_share"] for _, row in valid if row["lost_data_read_share"] is not None]
@@ -245,10 +254,10 @@ def cost_notes(r: dict) -> str:
         out.append("translation-page writes not charged (KI-25); wrong model guesses cost no flash read (KI-20)")
         out.append("blank write_pages_absorbed/dropped: LearnedFTL has no such write buffer")
         out.append("LRU/Belady values are references, not bounds (cache filled on writes and by request prefetch); "
-                   "blank gap_to_belady by design")
+                   "blank gap_to_belady columns by design")
     # why fields are blank: each would be 0 / 0, or does not apply
     if not r["read_pages"]:
-        out.append("blank read columns, hit rates, bounds, gap_to_belady and lost_data_read_share: the trace has no reads")
+        out.append("blank read columns, hit rates, bounds, gap_to_belady columns and lost_data_read_share: the trace has no reads")
     else:
         if r["cmt_hits"] + r["cmt_misses"] == 0:
             out.append("blank cmt_hit_rate: no CMT lookups, because every read was of a never-written page, which "
@@ -260,7 +269,7 @@ def cost_notes(r: dict) -> str:
             out.append("blank cmt_hit_rate_mapped" + (" and gap_to_belady" if r["ftl"] == "leaftl" else "")
                        + ": no served reads of written data")
         elif r["ftl"] == "leaftl" and r["gap_to_belady"] is None:
-            out.append("blank gap_to_belady: no Belady value for this trace's read stream")
+            out.append("blank gap_to_belady columns: no Belady value for this trace's read stream")
     if not r["write_pages"]:
         out.append("blank write columns: the trace has no writes")
     return "; ".join(out)
@@ -348,6 +357,8 @@ def run_row(run: dict, profiles: dict) -> dict:
     # LearnedFTL also fills on writes and prefetches, so no demand-fill bound applies
     row["gap_to_belady"] = (bel["belady_hit_rate"] - metrics["cmt_hit_rate_mapped"]) \
         if ftl == "leaftl" and bel and metrics.get("cmt_hit_rate_mapped") is not None else None
+    row["gap_to_belady_all_lookups"] = (bel["belady_hit_rate"] - metrics["cmt_hit_rate_native"]) \
+        if ftl == "leaftl" and bel and metrics.get("cmt_hit_rate_native") is not None else None
     for name in ("nand_reads_user", "nand_reads_translation", "nand_reads_gc", "nand_programs", "waf", "nand_erases"):
         row[name] = metrics.get(name)
     row["gc_runs"] = rec["gc_runs"] - base["gc_runs"]

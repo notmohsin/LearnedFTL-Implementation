@@ -63,7 +63,9 @@ For each read LPN:
    - hit but LPN unmapped → hit undone, `model_out_range++` (KI-15) → bucket **unmapped**.
 3. Miss: if `bitmaps[lpn]` and the GTD entry's model is usable → `model_predict`:
    - correct → `model_hit_num++` → 1 flash read (data), no TP read;
-   - not → `model_miss_num++`, continue as a CMT miss. Correctness is decided by comparing the prediction
+   - not → `model_miss_num++`, continue as a CMT miss. (Our change to an authors' counter: their code increments
+     `model_hit_num` whenever `bitmaps[lpn]` is set, before the prediction is tried, and has no `model_miss_num`.
+     Commit `2298bfac2` moved the increment so it counts correct predictions only. No decision reads this counter.) Correctness is decided by comparing the prediction
      with the true page map, which costs no flash read in this code (KI-20).
 4. CMT miss → `cmt_miss_cnt++`, read the TP (prefetch to end of request within the TP), then the data
    → 2 flash reads. If the LPN is unmapped the miss is undone (`cmt_miss_cnt--`, `access_cnt--`) → bucket **unmapped**.
@@ -101,7 +103,8 @@ Each read LPN ends in one bucket:
 | **Unmapped-read share** | Unmapped read LPNs / all read LPNs. Under `fill`/`steady` this is 0 for LearnedFTL and equals LeaFTL's lost-data share. |
 | **Stale-read share** | Mapped reads served from an already-invalidated page (LeaFTL write-buffer window, KI-23) / mapped. |
 | **Lost-data read share** | (Unmapped − never-written) read LPNs / read LPNs of written data: data the FTL failed to return (KI-27, KI-28; after GC also KI-24). |
-| **Gap to Belady** | Belady-OPT hit rate at 8192 entries on the trace's read stream (FTL-native keying) − CMT hit rate (mapped). |
+| **Gap to Belady** | Belady-OPT hit rate at 8192 entries on the trace's read stream (FTL-native keying) − CMT hit rate (mapped). The Belady rate covers all read LPNs and the mapped hit rate only the served ones; lost reads are always CMT misses, so this understates the gap. |
+| **Gap to Belady, all lookups** | The same Belady rate − CMT hit rate (native), so both cover (nearly) all read LPNs. It includes the effect of LeaFTL's lost reads and of caching only accurate segments. |
 
 Per-FTL metrics, reported but **not compared across FTLs**:
 
@@ -118,7 +121,7 @@ Device metrics:
 | NAND reads | `nand_reads_user` (incl. mispredicted reads), `nand_reads_translation` (read, write and GC paths), `nand_reads_gc` (migrated data). |
 | NAND programs | `nand_writes_user + nand_writes_translation + nand_writes_gc`; equals the authors' `wa_cnt`/`write_num` (invariant 5). LeaFTL never programs GC-migrated data (KI-22) and LearnedFTL never charges translation writes (KI-25). |
 | WAF | NAND programs / host-written LPNs in the workload interval. |
-| GC runs, erases | `gc_runs` (victim reclaimed, delta), `nand_erases`. |
+| GC runs, erases | `gc_runs` (delta), `nand_erases`. `gc_runs` is not comparable across FTLs: LeaFTL counts one per reclaimed victim line; LearnedFTL counts one per call of each of its four GC functions (`gtd_do_gc`, `batch_gtd_do_gc`, `batch_line_do_gc`, `line_do_gc`), so a batch that reclaims several lines counts once, or once plus once per line. Compare GC work with `nand_erases`. |
 | Energy | 3.5 / 16.7 / 132 (authors' units) per read / program / erase. |
 | Latency, throughput | KVM on exclusive cores only (KI-19); blank for every TCG run. |
 
