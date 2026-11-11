@@ -450,17 +450,20 @@ Main condition (`warm`, 1M requests, LeaFTL / LearnedFTL):
 How to read it:
 
 - LearnedFTL needs fewer double reads than LeaFTL in 19 of 20 `warm` comparisons (the exception is `zipf-80-20` at
-  100k, where LeaFTL's reads are mostly triple reads instead), consistent with the LearnedFTL paper's trend. Its
-  flash reads per read are 1.06-1.38 against LeaFTL's 1.74-2.76.
+  100k, where LeaFTL's reads are mostly triple reads instead), consistent with the LearnedFTL paper's trend. In the
+  1M-request rows above its flash reads per read are 1.06-1.38 against LeaFTL's 1.74-2.76 (LeaFTL reaches 2.89 in
+  the 100k `warm` rows).
 - LeaFTL's numbers cover only the reads it served: it fails to return 8-63% of reads of written data (KI-27, KI-28).
   Any comparison must quote this alongside.
   Root cause (KI-28), proven with an exact offline replica of LeaFTL's mapping logic (`experiments/tools/leaftl_replica.py`,
   0 mismatches on 3,040 counters over 80 runs): new segments are silently dropped when a group's top level holds
   exactly one segment, and `compact()` deletes levels that still hold the only mapping. With both switched off in the
   replica the lost-data share is at most 0.0002 in every run (`experiments/results/ki28_attribution.csv`).
-- LeaFTL's gap to Belady-OPT is 0.6 on uniform traces, ~0.25 on WebSearch, and ~0.03 on the skewed zipf traces:
+- LeaFTL's gap to Belady-OPT is 0.54-0.62 on uniform traces, ~0.25 on WebSearch, and 0.03-0.04 on the two zipf
+  traces with alpha 1.2 (0.27 on the zipf trace with alpha 0.8):
   this is the headroom a better replacement policy could target for a TP-keyed cache.
-- `fill` rows are GC stress only: LeaFTL's translation writes explode (WAF 20-91, KI-21) and LearnedFTL thrashes
+- `fill` rows are GC stress only: LeaFTL's translation writes explode (WAF 19-91 on four of the eight traces with
+  writes, 0.5-3.8 on the other four; KI-21) and LearnedFTL thrashes
   (WAF up to 5,338, KI-29). Neither is a cache comparison.
 - LearnedFTL's advantage is flattered by two accounting gaps (KI-20 free misprediction checks, KI-25 uncharged
   translation writes); `flash_reads_per_mapped_read_mispred_charged` and the NAND write split show their size.
