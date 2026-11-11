@@ -12,7 +12,7 @@ experiments/
   docs/                  BASELINE_PLAN.md  the plan, its status and every deviation
                          METRICS.md        what each number means, per FTL
                          INVARIANTS.md     the 12 checks every run must pass
-                         KNOWN_ISSUES.md   bugs in the authors' code (KI-1..KI-30) and how each is handled
+                         KNOWN_ISSUES.md   bugs in the authors' code (KI-1..KI-31) and how each is handled
   configs/               one file per stage: which FTLs, traces, preconditions and repeats to run
   scripts/               everything that runs, checks and summarises experiments (table below)
   tools/                 helpers: cache simulator, GC-log shim, LeaFTL replica (KI-28)
@@ -22,7 +22,7 @@ experiments/
     validation/          the first 100k requests of each (validation stage)
     matrix/              the first 1M requests of each (matrix stage; regenerated, not committed)
     real/                UMass traces, first 1M requests, normalised (+ raw/ downloads; .json sidecars committed)
-    micro/               4 tiny hand-checked traces with expected.json
+    micro/               6 tiny hand-checked traces with expected.json
   results/               baseline_summary.csv          one row per FTL x workload x length x precondition
                          baseline_summary_columns.csv  what every column means
                          baseline_runs.csv             one row per run

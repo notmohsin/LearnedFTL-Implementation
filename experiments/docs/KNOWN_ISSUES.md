@@ -123,7 +123,8 @@ Severity:
   the accurate path of the lookup. The CMT "refresh" branch in `ssd_read` (`!is_same_segment(...)`) is effectively
   dead because the hit path copies the cached segment into `lru_en` unchanged.
 - **Effect:** translation pages whose segments are approximate are never cached, so every read of them misses.
-- **Handling:** documented. Visible as `cmt_misses` with `model_corrections`.
+- **Handling:** documented. Visible as `cmt_misses`. With the authors' lookup an approximate segment is never
+  resolved at all (KI-31), so `model_corrections` is always 0.
 
 ### KI-9: Last LPN of each flush never segmented (LeaFTL)
 
@@ -364,3 +365,21 @@ are stable). None is fixed; each is measured and reported.
   first flush) is mapped again instead. `leaftl_replica.py` models the slot this way and reproduces FEMU's counters
   exactly, which confirms it.
 - **Handling:** documented; its effect on lost reads is measured under KI-28 (`--fix sort`).
+
+### KI-31: A match in the conflict-resolution buffer is discarded (LeaFTL)
+
+- **Where:** `segment_search_simple_segment` (`leaftl.c:1538-1586`). For an approximate segment the function scans
+  the group's conflict-resolution buffers (CRBs). The `else` branch declares a second `int flag = 0` (`:1559`), which
+  hides the function's own `flag` (`:1540`). On a match the code computes the PPN and sets the inner `flag`, but the
+  function returns the outer `flag`, which is still 0. `lru_en = crb_sm` (`:1577`) only changes the local pointer, so
+  the caller's CMT entry is not filled either.
+- **Effect:** `all_seg_get_ppn` (`:1783`) treats the match as "not in this level" and goes to the next level. If no
+  lower level has an accurate segment for the LPN, the lookup ends as a model miss and the read returns no data.
+  Only LPNs in accurate (contiguous) segments can be resolved. Every write that lands in an approximate segment is
+  unreadable through the model, which is the largest part of LeaFTL's lost-data share on random-write traces
+  (measured under KI-28, `--fix crb`).
+- **History:** commit `2298bfac2` (ours) returned the match to the caller by mistake. That changed FTL behaviour, so
+  commit `609139db0` restored the authors' code, and all LeaFTL runs were repeated (2026-11-11).
+- **Handling:** counted as `crb_match_discarded` in the FEMU record (measurement only). `model_corrections` is still
+  printed and is always 0. The lost reads are part of `invalid_but_mapped` and `lost_data_read_share` (KNOWN,
+  invariant 10). Not fixed (authors' code unchanged).

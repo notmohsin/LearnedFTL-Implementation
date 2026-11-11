@@ -46,7 +46,9 @@ For each read LPN, in order:
    - miss → `cmt_miss_cnt++`, `read_cnt=1`, then `process_translation_page_read`:
      - TP unmapped → return without reading or predicting (KI-3) → bucket **cmt_miss_unmapped_tp**;
      - TP mapped → one translation-page flash read, then a model query:
-       `model_queries++` and exactly one of `model_hit`, `model_correction`, `model_miss` (`leaftl.c:1744-1762`)
+       `model_queries++` and exactly one of `model_hit`, `model_miss` (`all_seg_get_ppn`, `leaftl.c:1783-1808`).
+       `model_correction` is always 0: a match in a conflict-resolution buffer is discarded (KI-31) and counted
+       as `crb_match_discarded`
        → bucket **cmt_miss_model**.
 5. `vppn == INVALID_VAL` → `access_cnt--`, `invalid_read_cnt++` (our addition) → LPN treated as invalid.
 6. Otherwise the true map (`get_maptbl_ent`) decides: if the LPN is mapped, the data page is read (+1 flash read),
@@ -102,9 +104,9 @@ Each read LPN ends in one bucket:
 | **CMT hit rate (mapped)** | Served LPNs whose CMT lookup hit / served. Same definition for both FTLs, but a LeaFTL entry covers a translation page and a LearnedFTL entry one LPN. |
 | **Unmapped-read share** | Unmapped read LPNs / all read LPNs. Under `fill`/`steady` this is 0 for LearnedFTL and equals LeaFTL's lost-data share. |
 | **Stale-read share** | Mapped reads served from an already-invalidated page (LeaFTL write-buffer window, KI-23) / mapped. |
-| **Lost-data read share** | (Unmapped − never-written) read LPNs / read LPNs of written data: data the FTL failed to return (KI-27, KI-28; after GC also KI-24). |
-| **Gap to Belady** | Belady-OPT hit rate at 8192 entries on the trace's read stream (FTL-native keying) − CMT hit rate (mapped). The Belady rate covers all read LPNs and the mapped hit rate only the served ones; lost reads are always CMT misses, so this understates the gap. |
-| **Gap to Belady, all lookups** | The same Belady rate − CMT hit rate (native), so both cover (nearly) all read LPNs. It includes the effect of LeaFTL's lost reads and of caching only accurate segments. |
+| **Lost-data read share** | (Unmapped − never-written) read LPNs / read LPNs of written data: data the FTL failed to return (KI-27, KI-28, KI-31; after GC also KI-24). |
+| **Gap to Belady** | Belady-OPT hit rate at 8192 entries on the trace's read stream (FTL-native keying) − CMT hit rate (mapped). The Belady rate covers all read LPNs and the mapped hit rate only the served ones; lost reads are always CMT misses, so this understates the gap. In the measured runs it is about 0 or negative for LeaFTL: do not use it alone. |
+| **Gap to Belady, all lookups** | The same Belady rate − CMT hit rate (native), so both cover (nearly) all read LPNs. It includes the effect of LeaFTL's lost reads and of caching only accurate segments. In the measured `warm` runs it is within 0.06 of the lost-data share, so it measures failed lookups, not replacement-policy headroom. |
 
 Per-FTL metrics, reported but **not compared across FTLs**:
 
@@ -157,4 +159,5 @@ They are computed by `experiments/tools/cachesim.c`, which is checked against br
 
 All four assume every miss inserts the key (demand fill). Neither FTL does exactly that (section 2), so these
 are reference points rather than strict upper bounds on the native CMT hit rate. The gap between a real
-FTL's measured hit rate and Belady-OPT at the same capacity and keying is the headroom a smarter policy could target.
+FTL's measured hit rate and Belady-OPT at the same capacity and keying is the headroom a smarter policy could target,
+but only if the FTL's misses are cache misses. For LeaFTL as ported they are mostly failed lookups (KI-28, KI-31).

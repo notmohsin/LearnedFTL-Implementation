@@ -119,8 +119,9 @@ which are therefore KNOWN for LeaFTL and reported as counts (`inv7_block_mismatc
 
 Measured against `maptbl`, the ground truth both FTLs program from:
 
-- LeaFTL (KNOWN): `model_corrections`, `model_misses`, `cmt_hit_invalid_gtd`, `invalid_but_mapped` (written data the
-  FTL could not resolve), `served_stale_page` (reads served from an invalidated page, KI-23), `readcnt_mismatch`.
+- LeaFTL (KNOWN): `model_corrections` (always 0 with the authors' lookup, KI-31), `model_misses`,
+  `cmt_hit_invalid_gtd`, `invalid_but_mapped` (written data the FTL could not resolve), `served_stale_page` (reads
+  served from an invalidated page, KI-23), `readcnt_mismatch`.
 - LearnedFTL: `model_misses` (wrong predictions, caught at no flash cost, KI-20) is KNOWN; `served_stale_page == 0`
   is HARD, because LearnedFTL updates its map at write time.
 
