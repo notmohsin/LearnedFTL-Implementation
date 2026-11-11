@@ -1,10 +1,13 @@
 {
-  "what": "LRU and LFU hit counts of an N-entry cache on each trace's read stream, keyed per 4 KiB page: ours (experiments/traces/profiles.json, computed by experiments/tools/cachesim.c) vs SimpleSSD's CMT.",
+  "what": "LRU and LFU hit counts of an N-entry cache on each trace's read stream, keyed per 4 KiB page: ours (experiments/traces/profiles.json, computed by experiments/tools/cachesim.c) vs the CMT of the ~/SSD-Simulator fork of SimpleSSD (added in that fork by the same author; stock SimpleSSD has none). A trace with no reads gives one comparison of the zero read counts instead of two hit-count comparisons.",
   "match_rule": "exact: same hit count, SimpleSSD looked up every read page (hits + misses = read pages), CMT capacity as requested, run exited with code 0, and the trace file's SHA-256 equals the one in profiles.json (so both sides read the same file)",
   "summary": {
     "comparisons": 42,
     "matching": 42,
     "all_match": true,
+    "hit_count_comparisons": 40,
+    "hit_count_comparisons_with_zero_hits": 8,
+    "zero_read_checks": 2,
     "traces": 22,
     "policies": [
       "lru",

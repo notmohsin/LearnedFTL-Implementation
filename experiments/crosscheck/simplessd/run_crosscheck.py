@@ -158,11 +158,17 @@ def main() -> int:
                    if f.suffix in (".cc", ".hh", ".c", ".h", ".cpp") and f.stat().st_mtime > built)
     report = {
         "what": "LRU and LFU hit counts of an N-entry cache on each trace's read stream, keyed per 4 KiB page: ours "
-                "(experiments/traces/profiles.json, computed by experiments/tools/cachesim.c) vs SimpleSSD's CMT.",
+                "(experiments/traces/profiles.json, computed by experiments/tools/cachesim.c) vs the CMT of the ~/SSD-Simulator "
+                "fork of SimpleSSD (added in that fork by the same author; stock SimpleSSD has none). A trace with no "
+                "reads gives one comparison of the zero read counts instead of two hit-count comparisons.",
         "match_rule": "exact: same hit count, SimpleSSD looked up every read page (hits + misses = read pages), "
                       "CMT capacity as requested, run exited with code 0, and the trace file's SHA-256 equals the "
                       "one in profiles.json (so both sides read the same file)",
         "summary": {"comparisons": comparisons, "matching": matching, "all_match": comparisons == matching,
+                    "hit_count_comparisons": sum(len(r[p]) for r in rows for p in POLICIES if p in r),
+                    "hit_count_comparisons_with_zero_hits": sum(1 for r in rows for p in POLICIES if p in r
+                                                                for v in r[p].values() if v["ours_hits"] == 0),
+                    "zero_read_checks": sum(1 for r in rows if "note" in r),
                     "traces": len(traces), "policies": list(POLICIES), "capacities": capacities},
         "simplessd": {"repo": str(args.simplessd), "commit": commit, "binary": str(binary),
                       "binary_sha256": sha256(binary),
