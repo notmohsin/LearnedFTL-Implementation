@@ -581,8 +581,10 @@ def main() -> int:
 
     columns = dictionary()
     names = [c["column"] for c in columns]
-    missing = [k for k in summary[0] if k not in names]
-    unused = [n for n in names if n not in summary[0]]
+    # Micro-traces have no profile, so their rows lack the trace_* and bound_* columns: check the union of all rows.
+    present = {k for s in summary for k in s}
+    missing = sorted(k for k in present if k not in names)
+    unused = [n for n in names if n not in present]
     if missing or unused:  # every summary column must be documented, and vice versa
         sys.exit(f"data dictionary out of sync: undocumented={missing} unused={unused}")
 
