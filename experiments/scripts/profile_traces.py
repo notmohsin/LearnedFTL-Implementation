@@ -114,7 +114,8 @@ def lfs_oids() -> dict[str, str]:
 def load_manifest() -> dict[str, dict[str, str]]:
     path = EXPERIMENTS_DIR / "traces" / "manifest.csv"
     if not path.exists():
-        return {}
+        # without it the generated traces silently lose their provenance and the Belady cross-check
+        sys.exit(f"{path} is missing; restore it from git (it is written by generate_workloads.py)")
     with path.open(newline="", encoding="utf-8") as handle:
         return {row["workload"]: row for row in csv.DictReader(handle)}
 

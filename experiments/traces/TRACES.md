@@ -105,8 +105,8 @@ Keyings used for cache bounds:
 | Operations | 10,000,000 (4,999,884 R / 5,000,116 W) |
 | Read % by requests / bytes | 50.00% / 50.00% |
 | Mean request size | 23.00 KiB |
-| Request sizes (R) | 16KiB: 1,250,680, 4KiB: 1,249,446, 64KiB: 1,250,059, 8KiB: 1,249,699 |
-| Request sizes (W) | 16KiB: 1,250,027, 4KiB: 1,250,208, 64KiB: 1,250,424, 8KiB: 1,249,457 |
+| Request sizes (R) | 4KiB: 1,249,446, 8KiB: 1,249,699, 16KiB: 1,250,680, 64KiB: 1,250,059 |
+| Request sizes (W) | 4KiB: 1,250,208, 8KiB: 1,249,457, 16KiB: 1,250,027, 64KiB: 1,250,424 |
 | Page aligned | yes |
 | Address range | 0 – 26,843,545,600 bytes |
 | Footprint | 24.993 GiB (6,551,658 LPNs: 6,442,286 read, 6,443,898 written) |
@@ -143,18 +143,6 @@ Keyings used for cache bounds:
 
 **Cache bounds on the read stream** (hit rates; every miss inserts)
 
-`lpn` - logical page (LearnedFTL CMT entry granularity)
-
-| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
-|---:|---:|---:|---:|---:|
-| 1,024 | 0.01% | 0.02% | 0.02% | 1.47% |
-| 2,048 | 0.02% | 0.03% | 0.03% | 2.11% |
-| 4,096 | 0.05% | 0.06% | 0.06% | 2.99% |
-| 8,192 (CMT) | 0.09% | 0.13% | 0.13% | 4.24% |
-| 16,384 | 0.19% | 0.25% | 0.26% | 5.97% |
-| 32,768 | 0.38% | 0.50% | 0.53% | 8.40% |
-| 65,536 | 0.75% | 0.99% | 1.07% | 11.74% |
-
 `tp256` - translation page, 256 LPNs/page (LeaFTL CMT key)
 
 | Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
@@ -179,11 +167,23 @@ Keyings used for cache bounds:
 | 32,768 | 99.96% | 99.96% | 99.96% | 99.96% |
 | 65,536 | 99.96% | 99.96% | 99.96% | 99.96% |
 
+`lpn` - logical page (LearnedFTL CMT entry granularity)
+
+| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
+|---:|---:|---:|---:|---:|
+| 1,024 | 0.01% | 0.02% | 0.02% | 1.47% |
+| 2,048 | 0.02% | 0.03% | 0.03% | 2.11% |
+| 4,096 | 0.05% | 0.06% | 0.06% | 2.99% |
+| 8,192 (CMT) | 0.09% | 0.13% | 0.13% | 4.24% |
+| 16,384 | 0.19% | 0.25% | 0.26% | 5.97% |
+| 32,768 | 0.38% | 0.50% | 0.53% | 8.40% |
+| 65,536 | 0.75% | 0.99% | 1.07% | 11.74% |
+
 | Keying | References | Distinct keys | Compulsory miss rate | Stack distance p50 / p90 / p99 |
 |---|---:|---:|---:|---:|
-| `lpn` | 28,752,508 | 6,442,286 | 22.41% | 2,687,993 / 5,204,298 / 6,148,741 |
 | `tp256` | 28,752,508 | 25,600 | 0.09% | 0 / 5 / 23,040 |
 | `tp512` | 28,752,508 | 12,800 | 0.04% | 0 / 3 / 11,416 |
+| `lpn` | 28,752,508 | 6,442,286 | 22.41% | 2,687,993 / 5,204,298 / 6,148,741 |
 
 ## traces/full/seq-mixed
 
@@ -214,8 +214,8 @@ Keyings used for cache bounds:
 | Operations | 10,000,000 (4,999,782 R / 5,000,218 W) |
 | Read % by requests / bytes | 50.00% / 50.04% |
 | Mean request size | 23.00 KiB |
-| Request sizes (R) | 16KiB: 1,249,990, 4KiB: 1,248,527, 64KiB: 1,251,530, 8KiB: 1,249,735 |
-| Request sizes (W) | 16KiB: 1,250,603, 4KiB: 1,251,549, 64KiB: 1,248,081, 8KiB: 1,249,985 |
+| Request sizes (R) | 4KiB: 1,248,527, 8KiB: 1,249,735, 16KiB: 1,249,990, 64KiB: 1,251,530 |
+| Request sizes (W) | 4KiB: 1,251,549, 8KiB: 1,249,985, 16KiB: 1,250,603, 64KiB: 1,248,081 |
 | Page aligned | yes |
 | Address range | 0 – 26,843,545,600 bytes |
 | Footprint | 24.984 GiB (6,549,448 LPNs: 6,364,180 read, 6,365,921 written) |
@@ -252,18 +252,6 @@ Keyings used for cache bounds:
 
 **Cache bounds on the read stream** (hit rates; every miss inserts)
 
-`lpn` - logical page (LearnedFTL CMT entry granularity)
-
-| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
-|---:|---:|---:|---:|---:|
-| 1,024 | 0.00% | 0.00% | 0.01% | 0.09% |
-| 2,048 | 0.00% | 0.00% | 0.02% | 0.17% |
-| 4,096 | 0.00% | 0.00% | 0.04% | 0.34% |
-| 8,192 (CMT) | 0.00% | 0.00% | 0.09% | 0.68% |
-| 16,384 | 0.00% | 0.00% | 0.21% | 1.37% |
-| 32,768 | 0.00% | 0.00% | 0.51% | 2.73% |
-| 65,536 | 0.00% | 0.00% | 1.21% | 5.47% |
-
 `tp256` - translation page, 256 LPNs/page (LeaFTL CMT key)
 
 | Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
@@ -288,11 +276,23 @@ Keyings used for cache bounds:
 | 32,768 | 99.96% | 99.96% | 99.96% | 99.96% |
 | 65,536 | 99.96% | 99.96% | 99.96% | 99.96% |
 
+`lpn` - logical page (LearnedFTL CMT entry granularity)
+
+| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
+|---:|---:|---:|---:|---:|
+| 1,024 | 0.00% | 0.00% | 0.01% | 0.09% |
+| 2,048 | 0.00% | 0.00% | 0.02% | 0.17% |
+| 4,096 | 0.00% | 0.00% | 0.04% | 0.34% |
+| 8,192 (CMT) | 0.00% | 0.00% | 0.09% | 0.68% |
+| 16,384 | 0.00% | 0.00% | 0.21% | 1.37% |
+| 32,768 | 0.00% | 0.00% | 0.51% | 2.73% |
+| 65,536 | 0.00% | 0.00% | 1.21% | 5.47% |
+
 | Keying | References | Distinct keys | Compulsory miss rate | Stack distance p50 / p90 / p99 |
 |---|---:|---:|---:|---:|
-| `lpn` | 28,772,437 | 6,364,180 | 22.12% | 2,756,789 / 5,006,002 / 6,038,287 |
 | `tp256` | 28,772,437 | 25,600 | 0.09% | 0 / 0 / 25,599 |
 | `tp512` | 28,772,437 | 12,800 | 0.04% | 0 / 0 / 12,799 |
+| `lpn` | 28,772,437 | 6,364,180 | 22.12% | 2,756,789 / 5,006,002 / 6,038,287 |
 
 ## traces/full/uniform-mixed
 
@@ -323,8 +323,8 @@ Keyings used for cache bounds:
 | Operations | 10,000,000 (4,998,288 R / 5,001,712 W) |
 | Read % by requests / bytes | 49.98% / 49.97% |
 | Mean request size | 22.98 KiB |
-| Request sizes (R) | 16KiB: 1,249,781, 4KiB: 1,250,693, 64KiB: 1,247,673, 8KiB: 1,250,141 |
-| Request sizes (W) | 16KiB: 1,249,553, 4KiB: 1,251,920, 64KiB: 1,249,417, 8KiB: 1,250,822 |
+| Request sizes (R) | 4KiB: 1,250,693, 8KiB: 1,250,141, 16KiB: 1,249,781, 64KiB: 1,247,673 |
+| Request sizes (W) | 4KiB: 1,251,920, 8KiB: 1,250,822, 16KiB: 1,249,553, 64KiB: 1,249,417 |
 | Page aligned | yes |
 | Address range | 0 – 26,843,545,600 bytes |
 | Footprint | 24.996 GiB (6,552,544 LPNs: 6,470,885 read, 6,471,855 written) |
@@ -361,18 +361,6 @@ Keyings used for cache bounds:
 
 **Cache bounds on the read stream** (hit rates; every miss inserts)
 
-`lpn` - logical page (LearnedFTL CMT entry granularity)
-
-| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
-|---:|---:|---:|---:|---:|
-| 1,024 | 0.02% | 0.02% | 0.02% | 1.70% |
-| 2,048 | 0.03% | 0.03% | 0.03% | 2.42% |
-| 4,096 | 0.06% | 0.06% | 0.06% | 3.45% |
-| 8,192 (CMT) | 0.12% | 0.13% | 0.12% | 4.88% |
-| 16,384 | 0.25% | 0.25% | 0.25% | 6.89% |
-| 32,768 | 0.50% | 0.50% | 0.50% | 9.68% |
-| 65,536 | 1.00% | 1.00% | 1.00% | 13.55% |
-
 `tp256` - translation page, 256 LPNs/page (LeaFTL CMT key)
 
 | Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
@@ -397,11 +385,23 @@ Keyings used for cache bounds:
 | 32,768 | 99.96% | 99.96% | 99.96% | 99.96% |
 | 65,536 | 99.96% | 99.96% | 99.96% | 99.96% |
 
+`lpn` - logical page (LearnedFTL CMT entry granularity)
+
+| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
+|---:|---:|---:|---:|---:|
+| 1,024 | 0.02% | 0.02% | 0.02% | 1.70% |
+| 2,048 | 0.03% | 0.03% | 0.03% | 2.42% |
+| 4,096 | 0.06% | 0.06% | 0.06% | 3.45% |
+| 8,192 (CMT) | 0.12% | 0.13% | 0.12% | 4.88% |
+| 16,384 | 0.25% | 0.25% | 0.25% | 6.89% |
+| 32,768 | 0.50% | 0.50% | 0.50% | 9.68% |
+| 65,536 | 1.00% | 1.00% | 1.00% | 13.55% |
+
 | Keying | References | Distinct keys | Compulsory miss rate | Stack distance p50 / p90 / p99 |
 |---|---:|---:|---:|---:|
-| `lpn` | 28,712,867 | 6,470,885 | 22.54% | 2,682,568 / 5,308,532 / 6,215,595 |
 | `tp256` | 28,712,867 | 25,600 | 0.09% | 0 / 11,051 / 24,128 |
 | `tp512` | 28,712,867 | 12,800 | 0.04% | 0 / 5,490 / 12,065 |
+| `lpn` | 28,712,867 | 6,470,885 | 22.54% | 2,682,568 / 5,308,532 / 6,215,595 |
 
 ## traces/full/uniform-read
 
@@ -432,7 +432,7 @@ Keyings used for cache bounds:
 | Operations | 10,000,000 (10,000,000 R / 0 W) |
 | Read % by requests / bytes | 100.00% / 100.00% |
 | Mean request size | 23.00 KiB |
-| Request sizes (R) | 16KiB: 2,502,060, 4KiB: 2,499,796, 64KiB: 2,500,575, 8KiB: 2,497,569 |
+| Request sizes (R) | 4KiB: 2,499,796, 8KiB: 2,497,569, 16KiB: 2,502,060, 64KiB: 2,500,575 |
 | Request sizes (W) | none |
 | Page aligned | yes |
 | Address range | 0 – 26,843,545,600 bytes |
@@ -470,18 +470,6 @@ Keyings used for cache bounds:
 
 **Cache bounds on the read stream** (hit rates; every miss inserts)
 
-`lpn` - logical page (LearnedFTL CMT entry granularity)
-
-| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
-|---:|---:|---:|---:|---:|
-| 1,024 | 0.02% | 0.02% | 0.02% | 1.70% |
-| 2,048 | 0.03% | 0.03% | 0.03% | 2.43% |
-| 4,096 | 0.06% | 0.06% | 0.06% | 3.45% |
-| 8,192 (CMT) | 0.12% | 0.13% | 0.12% | 4.89% |
-| 16,384 | 0.25% | 0.25% | 0.25% | 6.92% |
-| 32,768 | 0.50% | 0.50% | 0.50% | 9.73% |
-| 65,536 | 1.00% | 1.00% | 1.00% | 13.65% |
-
 `tp256` - translation page, 256 LPNs/page (LeaFTL CMT key)
 
 | Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
@@ -506,11 +494,23 @@ Keyings used for cache bounds:
 | 32,768 | 99.98% | 99.98% | 99.98% | 99.98% |
 | 65,536 | 99.98% | 99.98% | 99.98% | 99.98% |
 
+`lpn` - logical page (LearnedFTL CMT entry granularity)
+
+| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
+|---:|---:|---:|---:|---:|
+| 1,024 | 0.02% | 0.02% | 0.02% | 1.70% |
+| 2,048 | 0.03% | 0.03% | 0.03% | 2.43% |
+| 4,096 | 0.06% | 0.06% | 0.06% | 3.45% |
+| 8,192 (CMT) | 0.12% | 0.13% | 0.12% | 4.89% |
+| 16,384 | 0.25% | 0.25% | 0.25% | 6.92% |
+| 32,768 | 0.50% | 0.50% | 0.50% | 9.73% |
+| 65,536 | 1.00% | 1.00% | 1.00% | 13.65% |
+
 | Keying | References | Distinct keys | Compulsory miss rate | Stack distance p50 / p90 / p99 |
 |---|---:|---:|---:|---:|
-| `lpn` | 57,512,374 | 6,552,605 | 11.39% | 2,996,150 / 5,670,609 / 6,422,392 |
 | `tp256` | 57,512,374 | 25,600 | 0.04% | 0 / 11,090 / 24,139 |
 | `tp512` | 57,512,374 | 12,800 | 0.02% | 0 / 5,494 / 12,067 |
+| `lpn` | 57,512,374 | 6,552,605 | 11.39% | 2,996,150 / 5,670,609 / 6,422,392 |
 
 ## traces/full/uniform-write
 
@@ -542,7 +542,7 @@ Keyings used for cache bounds:
 | Read % by requests / bytes | 0.00% / 0.00% |
 | Mean request size | 23.01 KiB |
 | Request sizes (R) | none |
-| Request sizes (W) | 16KiB: 2,500,280, 4KiB: 2,499,931, 64KiB: 2,501,058, 8KiB: 2,498,731 |
+| Request sizes (W) | 4KiB: 2,499,931, 8KiB: 2,498,731, 16KiB: 2,500,280, 64KiB: 2,501,058 |
 | Page aligned | yes |
 | Address range | 4,096 – 26,843,545,600 bytes |
 | Footprint | 24.996 GiB (6,552,536 LPNs: 0 read, 6,552,536 written) |
@@ -644,18 +644,6 @@ No reads in this trace, so there are no cache bounds.
 
 **Cache bounds on the read stream** (hit rates; every miss inserts)
 
-`lpn` - logical page (LearnedFTL CMT entry granularity)
-
-| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
-|---:|---:|---:|---:|---:|
-| 1,024 | 61.55% | 64.85% | 66.36% | 69.27% |
-| 2,048 | 64.81% | 66.60% | 67.35% | 69.90% |
-| 4,096 | 67.37% | 68.10% | 68.23% | 69.90% |
-| 8,192 (CMT) | 69.20% | 69.33% | 69.33% | 69.90% |
-| 16,384 | 69.90% | 69.90% | 69.90% | 69.90% |
-| 32,768 | 69.90% | 69.90% | 69.90% | 69.90% |
-| 65,536 | 69.90% | 69.90% | 69.90% | 69.90% |
-
 `tp256` - translation page, 256 LPNs/page (LeaFTL CMT key)
 
 | Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
@@ -680,11 +668,23 @@ No reads in this trace, so there are no cache bounds.
 | 32,768 | 98.98% | 98.98% | 98.98% | 98.98% |
 | 65,536 | 98.98% | 98.98% | 98.98% | 98.98% |
 
+`lpn` - logical page (LearnedFTL CMT entry granularity)
+
+| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
+|---:|---:|---:|---:|---:|
+| 1,024 | 61.55% | 64.85% | 66.36% | 69.27% |
+| 2,048 | 64.81% | 66.60% | 67.35% | 69.90% |
+| 4,096 | 67.37% | 68.10% | 68.23% | 69.90% |
+| 8,192 (CMT) | 69.20% | 69.33% | 69.33% | 69.90% |
+| 16,384 | 69.90% | 69.90% | 69.90% | 69.90% |
+| 32,768 | 69.90% | 69.90% | 69.90% | 69.90% |
+| 65,536 | 69.90% | 69.90% | 69.90% | 69.90% |
+
 | Keying | References | Distinct keys | Compulsory miss rate | Stack distance p50 / p90 / p99 |
 |---|---:|---:|---:|---:|
-| `lpn` | 50,078 | 15,074 | 30.10% | 30 / 1,329 / 8,175 |
 | `tp256` | 50,078 | 1,024 | 2.04% | 1 / 530 / 954 |
 | `tp512` | 50,078 | 512 | 1.02% | 1 / 276 / 481 |
+| `lpn` | 50,078 | 15,074 | 30.10% | 30 / 1,329 / 8,175 |
 
 ## traces/full/zipf-hot10-access90-a1.2
 
@@ -715,8 +715,8 @@ No reads in this trace, so there are no cache bounds.
 | Operations | 10,000,000 (4,998,507 R / 5,001,493 W) |
 | Read % by requests / bytes | 49.98% / 50.00% |
 | Mean request size | 23.00 KiB |
-| Request sizes (R) | 16KiB: 1,247,931, 4KiB: 1,251,213, 64KiB: 1,250,229, 8KiB: 1,249,134 |
-| Request sizes (W) | 16KiB: 1,250,472, 4KiB: 1,251,447, 64KiB: 1,249,412, 8KiB: 1,250,162 |
+| Request sizes (R) | 4KiB: 1,251,213, 8KiB: 1,249,134, 16KiB: 1,247,931, 64KiB: 1,250,229 |
+| Request sizes (W) | 4KiB: 1,251,447, 8KiB: 1,250,162, 16KiB: 1,250,472, 64KiB: 1,249,412 |
 | Page aligned | yes |
 | Address range | 0 – 26,843,545,600 bytes |
 | Footprint | 16.194 GiB (4,245,150 LPNs: 2,736,259 read, 2,750,219 written) |
@@ -753,18 +753,6 @@ No reads in this trace, so there are no cache bounds.
 
 **Cache bounds on the read stream** (hit rates; every miss inserts)
 
-`lpn` - logical page (LearnedFTL CMT entry granularity)
-
-| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
-|---:|---:|---:|---:|---:|
-| 1,024 | 67.20% | 73.56% | 74.44% | 76.17% |
-| 2,048 | 70.87% | 76.32% | 77.23% | 78.78% |
-| 4,096 | 74.04% | 78.79% | 79.63% | 81.02% |
-| 8,192 (CMT) | 76.81% | 81.03% | 81.69% | 82.97% |
-| 16,384 | 79.22% | 82.80% | 83.46% | 84.66% |
-| 32,768 | 81.32% | 84.27% | 84.94% | 86.14% |
-| 65,536 | 83.16% | 85.44% | 86.12% | 87.44% |
-
 `tp256` - translation page, 256 LPNs/page (LeaFTL CMT key)
 
 | Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
@@ -789,11 +777,23 @@ No reads in this trace, so there are no cache bounds.
 | 32,768 | 99.96% | 99.96% | 99.96% | 99.96% |
 | 65,536 | 99.96% | 99.96% | 99.96% | 99.96% |
 
+`lpn` - logical page (LearnedFTL CMT entry granularity)
+
+| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
+|---:|---:|---:|---:|---:|
+| 1,024 | 67.20% | 73.56% | 74.44% | 76.17% |
+| 2,048 | 70.87% | 76.32% | 77.23% | 78.78% |
+| 4,096 | 74.04% | 78.79% | 79.63% | 81.02% |
+| 8,192 (CMT) | 76.81% | 81.03% | 81.69% | 82.97% |
+| 16,384 | 79.22% | 82.80% | 83.46% | 84.66% |
+| 32,768 | 81.32% | 84.27% | 84.94% | 86.14% |
+| 65,536 | 83.16% | 85.44% | 86.12% | 87.44% |
+
 | Keying | References | Distinct keys | Compulsory miss rate | Stack distance p50 / p90 / p99 |
 |---|---:|---:|---:|---:|
-| `lpn` | 28,744,869 | 2,736,259 | 9.52% | 75 / 34,097 / 1,377,435 |
 | `tp256` | 28,744,869 | 25,600 | 0.09% | 0 / 0 / 12,084 |
 | `tp512` | 28,744,869 | 12,800 | 0.04% | 0 / 0 / 6,199 |
+| `lpn` | 28,744,869 | 2,736,259 | 9.52% | 75 / 34,097 / 1,377,435 |
 
 ## traces/full/zipf-hot20-access80-a0.8
 
@@ -824,8 +824,8 @@ No reads in this trace, so there are no cache bounds.
 | Operations | 10,000,000 (4,997,222 R / 5,002,778 W) |
 | Read % by requests / bytes | 49.97% / 49.95% |
 | Mean request size | 23.00 KiB |
-| Request sizes (R) | 16KiB: 1,250,203, 4KiB: 1,249,658, 64KiB: 1,248,082, 8KiB: 1,249,279 |
-| Request sizes (W) | 16KiB: 1,250,289, 4KiB: 1,250,360, 64KiB: 1,251,536, 8KiB: 1,250,593 |
+| Request sizes (R) | 4KiB: 1,249,658, 8KiB: 1,249,279, 16KiB: 1,250,203, 64KiB: 1,248,082 |
+| Request sizes (W) | 4KiB: 1,250,360, 8KiB: 1,250,593, 16KiB: 1,250,289, 64KiB: 1,251,536 |
 | Page aligned | yes |
 | Address range | 0 – 26,843,545,600 bytes |
 | Footprint | 22.757 GiB (5,965,496 LPNs: 4,789,855 read, 4,794,725 written) |
@@ -862,18 +862,6 @@ No reads in this trace, so there are no cache bounds.
 
 **Cache bounds on the read stream** (hit rates; every miss inserts)
 
-`lpn` - logical page (LearnedFTL CMT entry granularity)
-
-| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
-|---:|---:|---:|---:|---:|
-| 1,024 | 6.58% | 13.93% | 15.68% | 19.03% |
-| 2,048 | 8.93% | 16.59% | 18.69% | 22.59% |
-| 4,096 | 11.57% | 19.98% | 22.11% | 26.65% |
-| 8,192 (CMT) | 14.72% | 23.56% | 26.01% | 31.26% |
-| 16,384 | 18.52% | 27.73% | 30.46% | 36.49% |
-| 32,768 | 23.11% | 32.44% | 35.49% | 42.38% |
-| 65,536 | 28.68% | 37.91% | 41.16% | 48.98% |
-
 `tp256` - translation page, 256 LPNs/page (LeaFTL CMT key)
 
 | Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
@@ -898,11 +886,23 @@ No reads in this trace, so there are no cache bounds.
 | 32,768 | 99.96% | 99.96% | 99.96% | 99.96% |
 | 65,536 | 99.96% | 99.96% | 99.96% | 99.96% |
 
+`lpn` - logical page (LearnedFTL CMT entry granularity)
+
+| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
+|---:|---:|---:|---:|---:|
+| 1,024 | 6.58% | 13.93% | 15.68% | 19.03% |
+| 2,048 | 8.93% | 16.59% | 18.69% | 22.59% |
+| 4,096 | 11.57% | 19.98% | 22.11% | 26.65% |
+| 8,192 (CMT) | 14.72% | 23.56% | 26.01% | 31.26% |
+| 16,384 | 18.52% | 27.73% | 30.46% | 36.49% |
+| 32,768 | 23.11% | 32.44% | 35.49% | 42.38% |
+| 65,536 | 28.68% | 37.91% | 41.16% | 48.98% |
+
 | Keying | References | Distinct keys | Compulsory miss rate | Stack distance p50 / p90 / p99 |
 |---|---:|---:|---:|---:|
-| `lpn` | 28,718,340 | 4,789,855 | 16.68% | 225,368 / 2,013,237 / 3,855,814 |
 | `tp256` | 28,718,340 | 25,600 | 0.09% | 0 / 978 / 19,597 |
 | `tp512` | 28,718,340 | 12,800 | 0.04% | 0 / 478 / 9,847 |
+| `lpn` | 28,718,340 | 4,789,855 | 16.68% | 225,368 / 2,013,237 / 3,855,814 |
 
 ## traces/full/zipf-hot20-access80-a1.2
 
@@ -933,8 +933,8 @@ No reads in this trace, so there are no cache bounds.
 | Operations | 10,000,000 (5,004,697 R / 4,995,303 W) |
 | Read % by requests / bytes | 50.05% / 50.03% |
 | Mean request size | 23.00 KiB |
-| Request sizes (R) | 16KiB: 1,250,665, 4KiB: 1,252,603, 64KiB: 1,250,380, 8KiB: 1,251,049 |
-| Request sizes (W) | 16KiB: 1,248,340, 4KiB: 1,249,151, 64KiB: 1,249,042, 8KiB: 1,248,770 |
+| Request sizes (R) | 4KiB: 1,252,603, 8KiB: 1,251,049, 16KiB: 1,250,665, 64KiB: 1,250,380 |
+| Request sizes (W) | 4KiB: 1,249,151, 8KiB: 1,248,770, 16KiB: 1,248,340, 64KiB: 1,249,042 |
 | Page aligned | yes |
 | Address range | 0 – 26,843,545,600 bytes |
 | Footprint | 20.988 GiB (5,501,780 LPNs: 4,105,269 read, 4,104,549 written) |
@@ -971,18 +971,6 @@ No reads in this trace, so there are no cache bounds.
 
 **Cache bounds on the read stream** (hit rates; every miss inserts)
 
-`lpn` - logical page (LearnedFTL CMT entry granularity)
-
-| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
-|---:|---:|---:|---:|---:|
-| 1,024 | 57.76% | 64.89% | 65.61% | 67.14% |
-| 2,048 | 61.05% | 67.34% | 68.05% | 69.44% |
-| 4,096 | 63.91% | 69.45% | 70.16% | 71.44% |
-| 8,192 (CMT) | 66.40% | 71.27% | 71.96% | 73.20% |
-| 16,384 | 68.58% | 72.74% | 73.51% | 74.81% |
-| 32,768 | 70.52% | 73.87% | 74.77% | 76.35% |
-| 65,536 | 72.26% | 74.83% | 75.73% | 77.92% |
-
 `tp256` - translation page, 256 LPNs/page (LeaFTL CMT key)
 
 | Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
@@ -1007,11 +995,23 @@ No reads in this trace, so there are no cache bounds.
 | 32,768 | 99.96% | 99.96% | 99.96% | 99.96% |
 | 65,536 | 99.96% | 99.96% | 99.96% | 99.96% |
 
+`lpn` - logical page (LearnedFTL CMT entry granularity)
+
+| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
+|---:|---:|---:|---:|---:|
+| 1,024 | 57.76% | 64.89% | 65.61% | 67.14% |
+| 2,048 | 61.05% | 67.34% | 68.05% | 69.44% |
+| 4,096 | 63.91% | 69.45% | 70.16% | 71.44% |
+| 8,192 (CMT) | 66.40% | 71.27% | 71.96% | 73.20% |
+| 16,384 | 68.58% | 72.74% | 73.51% | 74.81% |
+| 32,768 | 70.52% | 73.87% | 74.77% | 76.35% |
+| 65,536 | 72.26% | 74.83% | 75.73% | 77.92% |
+
 | Keying | References | Distinct keys | Compulsory miss rate | Stack distance p50 / p90 / p99 |
 |---|---:|---:|---:|---:|
-| `lpn` | 28,763,441 | 4,105,269 | 14.27% | 112 / 485,375 / 3,012,862 |
 | `tp256` | 28,763,441 | 25,600 | 0.09% | 0 / 1 / 17,993 |
 | `tp512` | 28,763,441 | 12,800 | 0.04% | 0 / 1 / 9,059 |
+| `lpn` | 28,763,441 | 4,105,269 | 14.27% | 112 / 485,375 / 3,012,862 |
 
 ## traces/validation/mixed-50-seq-50-random
 
@@ -1020,7 +1020,7 @@ No reads in this trace, so there are no cache bounds.
 - file: `experiments/traces/validation/mixed-50-seq-50-random.trace`
 - generator: `experiments/scripts/prepare_validation_traces.py`
 - is_exact_prefix: `True`
-- parent: `experiments/traces/mixed-50-seq-50-random.trace`
+- parent: `experiments/traces/full/mixed-50-seq-50-random.trace`
 - prefix_operations: `100000`
 - sha256: `f795103442279ad0890e353d3732df09d8985f6ec5ca5356d5b465a1c9028a28`
 - sha256_matches_parent_prefix: `True`
@@ -1033,8 +1033,8 @@ No reads in this trace, so there are no cache bounds.
 | Operations | 100,000 (50,142 R / 49,858 W) |
 | Read % by requests / bytes | 50.14% / 50.04% |
 | Mean request size | 23.06 KiB |
-| Request sizes (R) | 16KiB: 12,449, 4KiB: 12,568, 64KiB: 12,559, 8KiB: 12,566 |
-| Request sizes (W) | 16KiB: 12,360, 4KiB: 12,297, 64KiB: 12,562, 8KiB: 12,639 |
+| Request sizes (R) | 4KiB: 12,568, 8KiB: 12,566, 16KiB: 12,449, 64KiB: 12,559 |
+| Request sizes (W) | 4KiB: 12,297, 8KiB: 12,639, 16KiB: 12,360, 64KiB: 12,562 |
 | Page aligned | yes |
 | Address range | 0 – 26,843,041,792 bytes |
 | Footprint | 2.126 GiB (557,318 LPNs: 283,566 read, 283,289 written) |
@@ -1071,18 +1071,6 @@ No reads in this trace, so there are no cache bounds.
 
 **Cache bounds on the read stream** (hit rates; every miss inserts)
 
-`lpn` - logical page (LearnedFTL CMT entry granularity)
-
-| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
-|---:|---:|---:|---:|---:|
-| 1,024 | 0.01% | 0.01% | 0.02% | 1.21% |
-| 2,048 | 0.02% | 0.02% | 0.02% | 1.57% |
-| 4,096 | 0.05% | 0.05% | 0.05% | 1.69% |
-| 8,192 (CMT) | 0.08% | 0.08% | 0.09% | 1.69% |
-| 16,384 | 0.19% | 0.19% | 0.18% | 1.69% |
-| 32,768 | 0.37% | 0.37% | 0.37% | 1.69% |
-| 65,536 | 0.70% | 0.71% | 0.71% | 1.69% |
-
 `tp256` - translation page, 256 LPNs/page (LeaFTL CMT key)
 
 | Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
@@ -1107,11 +1095,23 @@ No reads in this trace, so there are no cache bounds.
 | 32,768 | 96.10% | 96.10% | 96.10% | 96.10% |
 | 65,536 | 96.10% | 96.10% | 96.10% | 96.10% |
 
+`lpn` - logical page (LearnedFTL CMT entry granularity)
+
+| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
+|---:|---:|---:|---:|---:|
+| 1,024 | 0.01% | 0.01% | 0.02% | 1.21% |
+| 2,048 | 0.02% | 0.02% | 0.02% | 1.57% |
+| 4,096 | 0.05% | 0.05% | 0.05% | 1.69% |
+| 8,192 (CMT) | 0.08% | 0.08% | 0.09% | 1.69% |
+| 16,384 | 0.19% | 0.19% | 0.18% | 1.69% |
+| 32,768 | 0.37% | 0.37% | 0.37% | 1.69% |
+| 65,536 | 0.70% | 0.71% | 0.71% | 1.69% |
+
 | Keying | References | Distinct keys | Compulsory miss rate | Stack distance p50 / p90 / p99 |
 |---|---:|---:|---:|---:|
-| `lpn` | 288,440 | 283,566 | 98.31% | 80,789 / 193,669 / 253,947 |
 | `tp256` | 288,440 | 17,253 | 5.98% | 0 / 0 / 9,673 |
 | `tp512` | 288,440 | 11,249 | 3.90% | 0 / 0 / 7,450 |
+| `lpn` | 288,440 | 283,566 | 98.31% | 80,789 / 193,669 / 253,947 |
 
 ## traces/validation/seq-mixed
 
@@ -1120,7 +1120,7 @@ No reads in this trace, so there are no cache bounds.
 - file: `experiments/traces/validation/seq-mixed.trace`
 - generator: `experiments/scripts/prepare_validation_traces.py`
 - is_exact_prefix: `True`
-- parent: `experiments/traces/seq-mixed.trace`
+- parent: `experiments/traces/full/seq-mixed.trace`
 - prefix_operations: `100000`
 - sha256: `4c3671b126f9cf60497b5c0240639a9e7d932da8178f67c8bb3c581187772f70`
 - sha256_matches_parent_prefix: `True`
@@ -1133,8 +1133,8 @@ No reads in this trace, so there are no cache bounds.
 | Operations | 100,000 (50,273 R / 49,727 W) |
 | Read % by requests / bytes | 50.27% / 50.67% |
 | Mean request size | 23.14 KiB |
-| Request sizes (R) | 16KiB: 12,389, 4KiB: 12,556, 64KiB: 12,879, 8KiB: 12,449 |
-| Request sizes (W) | 16KiB: 12,505, 4KiB: 12,454, 64KiB: 12,381, 8KiB: 12,387 |
+| Request sizes (R) | 4KiB: 12,556, 8KiB: 12,449, 16KiB: 12,389, 64KiB: 12,879 |
+| Request sizes (W) | 4KiB: 12,454, 8KiB: 12,387, 16KiB: 12,505, 64KiB: 12,381 |
 | Page aligned | yes |
 | Address range | 0 – 6,553,550,848 bytes |
 | Footprint | 2.207 GiB (578,418 LPNs: 293,074 read, 285,344 written) |
@@ -1171,18 +1171,6 @@ No reads in this trace, so there are no cache bounds.
 
 **Cache bounds on the read stream** (hit rates; every miss inserts)
 
-`lpn` - logical page (LearnedFTL CMT entry granularity)
-
-| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
-|---:|---:|---:|---:|---:|
-| 1,024 | 0.00% | 0.00% | 0.00% | 0.00% |
-| 2,048 | 0.00% | 0.00% | 0.00% | 0.00% |
-| 4,096 | 0.00% | 0.00% | 0.00% | 0.00% |
-| 8,192 (CMT) | 0.00% | 0.00% | 0.00% | 0.00% |
-| 16,384 | 0.00% | 0.00% | 0.00% | 0.00% |
-| 32,768 | 0.00% | 0.00% | 0.00% | 0.00% |
-| 65,536 | 0.00% | 0.00% | 0.00% | 0.00% |
-
 `tp256` - translation page, 256 LPNs/page (LeaFTL CMT key)
 
 | Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
@@ -1207,11 +1195,23 @@ No reads in this trace, so there are no cache bounds.
 | 32,768 | 98.93% | 98.93% | 98.93% | 98.93% |
 | 65,536 | 98.93% | 98.93% | 98.93% | 98.93% |
 
+`lpn` - logical page (LearnedFTL CMT entry granularity)
+
+| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
+|---:|---:|---:|---:|---:|
+| 1,024 | 0.00% | 0.00% | 0.00% | 0.00% |
+| 2,048 | 0.00% | 0.00% | 0.00% | 0.00% |
+| 4,096 | 0.00% | 0.00% | 0.00% | 0.00% |
+| 8,192 (CMT) | 0.00% | 0.00% | 0.00% | 0.00% |
+| 16,384 | 0.00% | 0.00% | 0.00% | 0.00% |
+| 32,768 | 0.00% | 0.00% | 0.00% | 0.00% |
+| 65,536 | 0.00% | 0.00% | 0.00% | 0.00% |
+
 | Keying | References | Distinct keys | Compulsory miss rate | Stack distance p50 / p90 / p99 |
 |---|---:|---:|---:|---:|
-| `lpn` | 293,074 | 293,074 | 100.00% | n/a |
 | `tp256` | 293,074 | 6,250 | 2.13% | 0 / 0 / 0 |
 | `tp512` | 293,074 | 3,125 | 1.07% | 0 / 0 / 0 |
+| `lpn` | 293,074 | 293,074 | 100.00% | n/a |
 
 ## traces/validation/uniform-mixed
 
@@ -1220,7 +1220,7 @@ No reads in this trace, so there are no cache bounds.
 - file: `experiments/traces/validation/uniform-mixed.trace`
 - generator: `experiments/scripts/prepare_validation_traces.py`
 - is_exact_prefix: `True`
-- parent: `experiments/traces/uniform-mixed.trace`
+- parent: `experiments/traces/full/uniform-mixed.trace`
 - prefix_operations: `100000`
 - sha256: `4d67a21e94987bc47dbfe590dc8039661ddcba1b5ed9365aa5a3552aa17d50ed`
 - sha256_matches_parent_prefix: `True`
@@ -1233,8 +1233,8 @@ No reads in this trace, so there are no cache bounds.
 | Operations | 100,000 (50,177 R / 49,823 W) |
 | Read % by requests / bytes | 50.18% / 50.34% |
 | Mean request size | 23.03 KiB |
-| Request sizes (R) | 16KiB: 12,534, 4KiB: 12,569, 64KiB: 12,644, 8KiB: 12,430 |
-| Request sizes (W) | 16KiB: 12,600, 4KiB: 12,439, 64KiB: 12,393, 8KiB: 12,391 |
+| Request sizes (R) | 4KiB: 12,569, 8KiB: 12,430, 16KiB: 12,534, 64KiB: 12,644 |
+| Request sizes (W) | 4KiB: 12,439, 8KiB: 12,391, 16KiB: 12,600, 64KiB: 12,393 |
 | Page aligned | yes |
 | Address range | 696,320 – 26,843,242,496 bytes |
 | Footprint | 2.102 GiB (550,940 LPNs: 283,265 read, 279,883 written) |
@@ -1271,18 +1271,6 @@ No reads in this trace, so there are no cache bounds.
 
 **Cache bounds on the read stream** (hit rates; every miss inserts)
 
-`lpn` - logical page (LearnedFTL CMT entry granularity)
-
-| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
-|---:|---:|---:|---:|---:|
-| 1,024 | 0.00% | 0.00% | 0.01% | 1.39% |
-| 2,048 | 0.02% | 0.02% | 0.03% | 1.80% |
-| 4,096 | 0.04% | 0.05% | 0.05% | 2.28% |
-| 8,192 (CMT) | 0.10% | 0.10% | 0.09% | 2.28% |
-| 16,384 | 0.22% | 0.22% | 0.20% | 2.28% |
-| 32,768 | 0.45% | 0.45% | 0.45% | 2.28% |
-| 65,536 | 0.90% | 0.89% | 0.89% | 2.28% |
-
 `tp256` - translation page, 256 LPNs/page (LeaFTL CMT key)
 
 | Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
@@ -1307,11 +1295,23 @@ No reads in this trace, so there are no cache bounds.
 | 32,768 | 95.67% | 95.67% | 95.67% | 95.67% |
 | 65,536 | 95.67% | 95.67% | 95.67% | 95.67% |
 
+`lpn` - logical page (LearnedFTL CMT entry granularity)
+
+| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
+|---:|---:|---:|---:|---:|
+| 1,024 | 0.00% | 0.00% | 0.01% | 1.39% |
+| 2,048 | 0.02% | 0.02% | 0.03% | 1.80% |
+| 4,096 | 0.04% | 0.05% | 0.05% | 2.28% |
+| 8,192 (CMT) | 0.10% | 0.10% | 0.09% | 2.28% |
+| 16,384 | 0.22% | 0.22% | 0.20% | 2.28% |
+| 32,768 | 0.45% | 0.45% | 0.45% | 2.28% |
+| 65,536 | 0.90% | 0.89% | 0.89% | 2.28% |
+
 | Keying | References | Distinct keys | Compulsory miss rate | Stack distance p50 / p90 / p99 |
 |---|---:|---:|---:|---:|
-| `lpn` | 289,869 | 283,265 | 97.72% | 87,935 / 200,332 / 253,434 |
 | `tp256` | 289,869 | 22,060 | 7.61% | 0 / 1,139 / 17,007 |
 | `tp512` | 289,869 | 12,553 | 4.33% | 0 / 2,688 / 10,671 |
+| `lpn` | 289,869 | 283,265 | 97.72% | 87,935 / 200,332 / 253,434 |
 
 ## traces/validation/uniform-read
 
@@ -1320,7 +1320,7 @@ No reads in this trace, so there are no cache bounds.
 - file: `experiments/traces/validation/uniform-read.trace`
 - generator: `experiments/scripts/prepare_validation_traces.py`
 - is_exact_prefix: `True`
-- parent: `experiments/traces/uniform-read.trace`
+- parent: `experiments/traces/full/uniform-read.trace`
 - prefix_operations: `100000`
 - sha256: `1580eea5c6dbd890de4b0192703485cc806c8308a6a11b593c1a77701bb33c32`
 - sha256_matches_parent_prefix: `True`
@@ -1333,7 +1333,7 @@ No reads in this trace, so there are no cache bounds.
 | Operations | 100,000 (100,000 R / 0 W) |
 | Read % by requests / bytes | 100.00% / 100.00% |
 | Mean request size | 23.12 KiB |
-| Request sizes (R) | 16KiB: 25,045, 4KiB: 24,891, 64KiB: 25,199, 8KiB: 24,865 |
+| Request sizes (R) | 4KiB: 24,891, 8KiB: 24,865, 16KiB: 25,045, 64KiB: 25,199 |
 | Request sizes (W) | none |
 | Page aligned | yes |
 | Address range | 339,968 – 26,843,533,312 bytes |
@@ -1371,18 +1371,6 @@ No reads in this trace, so there are no cache bounds.
 
 **Cache bounds on the read stream** (hit rates; every miss inserts)
 
-`lpn` - logical page (LearnedFTL CMT entry granularity)
-
-| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
-|---:|---:|---:|---:|---:|
-| 1,024 | 0.02% | 0.02% | 0.02% | 1.57% |
-| 2,048 | 0.03% | 0.03% | 0.03% | 2.12% |
-| 4,096 | 0.07% | 0.06% | 0.06% | 2.89% |
-| 8,192 (CMT) | 0.13% | 0.13% | 0.12% | 3.60% |
-| 16,384 | 0.27% | 0.27% | 0.25% | 4.34% |
-| 32,768 | 0.49% | 0.49% | 0.50% | 4.34% |
-| 65,536 | 0.94% | 0.95% | 0.96% | 4.34% |
-
 `tp256` - translation page, 256 LPNs/page (LeaFTL CMT key)
 
 | Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
@@ -1407,11 +1395,23 @@ No reads in this trace, so there are no cache bounds.
 | 32,768 | 97.79% | 97.79% | 97.79% | 97.79% |
 | 65,536 | 97.79% | 97.79% | 97.79% | 97.79% |
 
+`lpn` - logical page (LearnedFTL CMT entry granularity)
+
+| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
+|---:|---:|---:|---:|---:|
+| 1,024 | 0.02% | 0.02% | 0.02% | 1.57% |
+| 2,048 | 0.03% | 0.03% | 0.03% | 2.12% |
+| 4,096 | 0.07% | 0.06% | 0.06% | 2.89% |
+| 8,192 (CMT) | 0.13% | 0.13% | 0.12% | 3.60% |
+| 16,384 | 0.27% | 0.27% | 0.25% | 4.34% |
+| 32,768 | 0.49% | 0.49% | 0.50% | 4.34% |
+| 65,536 | 0.94% | 0.95% | 0.96% | 4.34% |
+
 | Keying | References | Distinct keys | Compulsory miss rate | Stack distance p50 / p90 / p99 |
 |---|---:|---:|---:|---:|
-| `lpn` | 577,985 | 552,880 | 95.66% | 161,805 / 377,120 / 496,762 |
 | `tp256` | 577,985 | 25,098 | 4.34% | 0 / 5,629 / 21,376 |
 | `tp512` | 577,985 | 12,794 | 2.21% | 0 / 4,111 / 11,550 |
+| `lpn` | 577,985 | 552,880 | 95.66% | 161,805 / 377,120 / 496,762 |
 
 ## traces/validation/uniform-write
 
@@ -1420,7 +1420,7 @@ No reads in this trace, so there are no cache bounds.
 - file: `experiments/traces/validation/uniform-write.trace`
 - generator: `experiments/scripts/prepare_validation_traces.py`
 - is_exact_prefix: `True`
-- parent: `experiments/traces/uniform-write.trace`
+- parent: `experiments/traces/full/uniform-write.trace`
 - prefix_operations: `100000`
 - sha256: `48fb6b403678a925fbaa91102c76547c25efee4a80818cdf3633b736d85ffd11`
 - sha256_matches_parent_prefix: `True`
@@ -1434,7 +1434,7 @@ No reads in this trace, so there are no cache bounds.
 | Read % by requests / bytes | 0.00% / 0.00% |
 | Mean request size | 23.06 KiB |
 | Request sizes (R) | none |
-| Request sizes (W) | 16KiB: 24,786, 4KiB: 25,057, 64KiB: 25,142, 8KiB: 25,015 |
+| Request sizes (W) | 4KiB: 25,057, 8KiB: 25,015, 16KiB: 24,786, 64KiB: 25,142 |
 | Page aligned | yes |
 | Address range | 430,080 – 26,843,181,056 bytes |
 | Footprint | 2.104 GiB (551,608 LPNs: 0 read, 551,608 written) |
@@ -1478,7 +1478,7 @@ No reads in this trace, so there are no cache bounds.
 - file: `experiments/traces/validation/zipf-80-20.trace`
 - generator: `experiments/scripts/prepare_validation_traces.py`
 - is_exact_prefix: `True`
-- parent: `experiments/traces/zipf-80-20.trace`
+- parent: `experiments/traces/full/zipf-80-20.trace`
 - prefix_operations: `100000`
 - sha256: `59f778196cebfd6f1ad0e659f9a41154230e3199874a759676be56125ea6adef`
 - sha256_matches_parent_prefix: `True`
@@ -1529,18 +1529,6 @@ No reads in this trace, so there are no cache bounds.
 
 **Cache bounds on the read stream** (hit rates; every miss inserts)
 
-`lpn` - logical page (LearnedFTL CMT entry granularity)
-
-| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
-|---:|---:|---:|---:|---:|
-| 1,024 | 61.55% | 64.85% | 66.36% | 69.27% |
-| 2,048 | 64.81% | 66.60% | 67.35% | 69.90% |
-| 4,096 | 67.37% | 68.10% | 68.23% | 69.90% |
-| 8,192 (CMT) | 69.20% | 69.33% | 69.33% | 69.90% |
-| 16,384 | 69.90% | 69.90% | 69.90% | 69.90% |
-| 32,768 | 69.90% | 69.90% | 69.90% | 69.90% |
-| 65,536 | 69.90% | 69.90% | 69.90% | 69.90% |
-
 `tp256` - translation page, 256 LPNs/page (LeaFTL CMT key)
 
 | Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
@@ -1565,11 +1553,23 @@ No reads in this trace, so there are no cache bounds.
 | 32,768 | 98.98% | 98.98% | 98.98% | 98.98% |
 | 65,536 | 98.98% | 98.98% | 98.98% | 98.98% |
 
+`lpn` - logical page (LearnedFTL CMT entry granularity)
+
+| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
+|---:|---:|---:|---:|---:|
+| 1,024 | 61.55% | 64.85% | 66.36% | 69.27% |
+| 2,048 | 64.81% | 66.60% | 67.35% | 69.90% |
+| 4,096 | 67.37% | 68.10% | 68.23% | 69.90% |
+| 8,192 (CMT) | 69.20% | 69.33% | 69.33% | 69.90% |
+| 16,384 | 69.90% | 69.90% | 69.90% | 69.90% |
+| 32,768 | 69.90% | 69.90% | 69.90% | 69.90% |
+| 65,536 | 69.90% | 69.90% | 69.90% | 69.90% |
+
 | Keying | References | Distinct keys | Compulsory miss rate | Stack distance p50 / p90 / p99 |
 |---|---:|---:|---:|---:|
-| `lpn` | 50,078 | 15,074 | 30.10% | 30 / 1,329 / 8,175 |
 | `tp256` | 50,078 | 1,024 | 2.04% | 1 / 530 / 954 |
 | `tp512` | 50,078 | 512 | 1.02% | 1 / 276 / 481 |
+| `lpn` | 50,078 | 15,074 | 30.10% | 30 / 1,329 / 8,175 |
 
 ## traces/validation/zipf-hot10-access90-a1.2
 
@@ -1578,7 +1578,7 @@ No reads in this trace, so there are no cache bounds.
 - file: `experiments/traces/validation/zipf-hot10-access90-a1.2.trace`
 - generator: `experiments/scripts/prepare_validation_traces.py`
 - is_exact_prefix: `True`
-- parent: `experiments/traces/zipf-hot10-access90-a1.2.trace`
+- parent: `experiments/traces/full/zipf-hot10-access90-a1.2.trace`
 - prefix_operations: `100000`
 - sha256: `aa36dda89769f40a98b70d36f52f835c22674e1a9d9e6d22e1764fcf9a928f6a`
 - sha256_matches_parent_prefix: `True`
@@ -1591,8 +1591,8 @@ No reads in this trace, so there are no cache bounds.
 | Operations | 100,000 (49,875 R / 50,125 W) |
 | Read % by requests / bytes | 49.88% / 49.99% |
 | Mean request size | 23.04 KiB |
-| Request sizes (R) | 16KiB: 12,393, 4KiB: 12,321, 64KiB: 12,551, 8KiB: 12,610 |
-| Request sizes (W) | 16KiB: 12,477, 4KiB: 12,515, 64KiB: 12,523, 8KiB: 12,610 |
+| Request sizes (R) | 4KiB: 12,321, 8KiB: 12,610, 16KiB: 12,393, 64KiB: 12,551 |
+| Request sizes (W) | 4KiB: 12,515, 8KiB: 12,610, 16KiB: 12,477, 64KiB: 12,523 |
 | Page aligned | yes |
 | Address range | 0 – 26,825,158,656 bytes |
 | Footprint | 0.405 GiB (106,057 LPNs: 58,510 read, 57,602 written) |
@@ -1629,18 +1629,6 @@ No reads in this trace, so there are no cache bounds.
 
 **Cache bounds on the read stream** (hit rates; every miss inserts)
 
-`lpn` - logical page (LearnedFTL CMT entry granularity)
-
-| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
-|---:|---:|---:|---:|---:|
-| 1,024 | 66.66% | 71.99% | 73.22% | 75.29% |
-| 2,048 | 70.14% | 74.05% | 75.36% | 77.53% |
-| 4,096 | 73.23% | 75.72% | 76.89% | 79.14% |
-| 8,192 (CMT) | 75.75% | 77.17% | 77.85% | 79.68% |
-| 16,384 | 77.84% | 78.39% | 78.52% | 79.68% |
-| 32,768 | 79.23% | 79.32% | 79.32% | 79.68% |
-| 65,536 | 79.68% | 79.68% | 79.68% | 79.68% |
-
 `tp256` - translation page, 256 LPNs/page (LeaFTL CMT key)
 
 | Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
@@ -1665,11 +1653,23 @@ No reads in this trace, so there are no cache bounds.
 | 32,768 | 98.23% | 98.23% | 98.23% | 98.23% |
 | 65,536 | 98.23% | 98.23% | 98.23% | 98.23% |
 
+`lpn` - logical page (LearnedFTL CMT entry granularity)
+
+| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
+|---:|---:|---:|---:|---:|
+| 1,024 | 66.66% | 71.99% | 73.22% | 75.29% |
+| 2,048 | 70.14% | 74.05% | 75.36% | 77.53% |
+| 4,096 | 73.23% | 75.72% | 76.89% | 79.14% |
+| 8,192 (CMT) | 75.75% | 77.17% | 77.85% | 79.68% |
+| 16,384 | 77.84% | 78.39% | 78.52% | 79.68% |
+| 32,768 | 79.23% | 79.32% | 79.32% | 79.68% |
+| 65,536 | 79.68% | 79.68% | 79.68% | 79.68% |
+
 | Keying | References | Distinct keys | Compulsory miss rate | Stack distance p50 / p90 / p99 |
 |---|---:|---:|---:|---:|
-| `lpn` | 287,929 | 58,510 | 20.32% | 58 / 2,845 / 26,088 |
 | `tp256` | 287,929 | 6,035 | 2.10% | 0 / 0 / 248 |
 | `tp512` | 287,929 | 5,083 | 1.77% | 0 / 0 / 251 |
+| `lpn` | 287,929 | 58,510 | 20.32% | 58 / 2,845 / 26,088 |
 
 ## traces/validation/zipf-hot20-access80-a0.8
 
@@ -1678,7 +1678,7 @@ No reads in this trace, so there are no cache bounds.
 - file: `experiments/traces/validation/zipf-hot20-access80-a0.8.trace`
 - generator: `experiments/scripts/prepare_validation_traces.py`
 - is_exact_prefix: `True`
-- parent: `experiments/traces/zipf-hot20-access80-a0.8.trace`
+- parent: `experiments/traces/full/zipf-hot20-access80-a0.8.trace`
 - prefix_operations: `100000`
 - sha256: `6cf1ff42309a54932a6a100e23ee3c0897e7a20903c040f3d32b352eaef98dc7`
 - sha256_matches_parent_prefix: `True`
@@ -1691,8 +1691,8 @@ No reads in this trace, so there are no cache bounds.
 | Operations | 100,000 (50,100 R / 49,900 W) |
 | Read % by requests / bytes | 50.10% / 50.17% |
 | Mean request size | 22.96 KiB |
-| Request sizes (R) | 16KiB: 12,576, 4KiB: 12,592, 64KiB: 12,513, 8KiB: 12,419 |
-| Request sizes (W) | 16KiB: 12,292, 4KiB: 12,463, 64KiB: 12,433, 8KiB: 12,712 |
+| Request sizes (R) | 4KiB: 12,592, 8KiB: 12,419, 16KiB: 12,576, 64KiB: 12,513 |
+| Request sizes (W) | 4KiB: 12,463, 8KiB: 12,712, 16KiB: 12,292, 64KiB: 12,433 |
 | Page aligned | yes |
 | Address range | 0 – 26,842,505,216 bytes |
 | Footprint | 1.354 GiB (354,895 LPNs: 198,443 read, 194,156 written) |
@@ -1729,18 +1729,6 @@ No reads in this trace, so there are no cache bounds.
 
 **Cache bounds on the read stream** (hit rates; every miss inserts)
 
-`lpn` - logical page (LearnedFTL CMT entry granularity)
-
-| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
-|---:|---:|---:|---:|---:|
-| 1,024 | 6.36% | 11.96% | 14.46% | 18.45% |
-| 2,048 | 8.65% | 13.80% | 16.74% | 21.63% |
-| 4,096 | 11.23% | 16.02% | 19.04% | 24.99% |
-| 8,192 (CMT) | 14.22% | 18.42% | 21.14% | 28.31% |
-| 16,384 | 18.01% | 21.18% | 23.16% | 31.08% |
-| 32,768 | 21.87% | 23.95% | 24.95% | 31.08% |
-| 65,536 | 26.37% | 27.34% | 27.46% | 31.08% |
-
 `tp256` - translation page, 256 LPNs/page (LeaFTL CMT key)
 
 | Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
@@ -1765,11 +1753,23 @@ No reads in this trace, so there are no cache bounds.
 | 32,768 | 96.89% | 96.89% | 96.89% | 96.89% |
 | 65,536 | 96.89% | 96.89% | 96.89% | 96.89% |
 
+`lpn` - logical page (LearnedFTL CMT entry granularity)
+
+| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
+|---:|---:|---:|---:|---:|
+| 1,024 | 6.36% | 11.96% | 14.46% | 18.45% |
+| 2,048 | 8.65% | 13.80% | 16.74% | 21.63% |
+| 4,096 | 11.23% | 16.02% | 19.04% | 24.99% |
+| 8,192 (CMT) | 14.22% | 18.42% | 21.14% | 28.31% |
+| 16,384 | 18.01% | 21.18% | 23.16% | 31.08% |
+| 32,768 | 21.87% | 23.95% | 24.95% | 31.08% |
+| 65,536 | 26.37% | 27.34% | 27.46% | 31.08% |
+
 | Keying | References | Distinct keys | Compulsory miss rate | Stack distance p50 / p90 / p99 |
 |---|---:|---:|---:|---:|
-| `lpn` | 287,942 | 198,443 | 68.92% | 10,637 / 85,208 / 155,513 |
 | `tp256` | 287,942 | 12,755 | 4.43% | 0 / 95 / 6,275 |
 | `tp512` | 287,942 | 8,946 | 3.11% | 0 / 105 / 4,474 |
+| `lpn` | 287,942 | 198,443 | 68.92% | 10,637 / 85,208 / 155,513 |
 
 ## traces/validation/zipf-hot20-access80-a1.2
 
@@ -1778,7 +1778,7 @@ No reads in this trace, so there are no cache bounds.
 - file: `experiments/traces/validation/zipf-hot20-access80-a1.2.trace`
 - generator: `experiments/scripts/prepare_validation_traces.py`
 - is_exact_prefix: `True`
-- parent: `experiments/traces/zipf-hot20-access80-a1.2.trace`
+- parent: `experiments/traces/full/zipf-hot20-access80-a1.2.trace`
 - prefix_operations: `100000`
 - sha256: `283f2f014dba1d579b824ea72b1bc9881bfa0c6c6293bce1c0c6ad215a9669fc`
 - sha256_matches_parent_prefix: `True`
@@ -1791,8 +1791,8 @@ No reads in this trace, so there are no cache bounds.
 | Operations | 100,000 (50,141 R / 49,859 W) |
 | Read % by requests / bytes | 50.14% / 49.99% |
 | Mean request size | 22.98 KiB |
-| Request sizes (R) | 16KiB: 12,642, 4KiB: 12,501, 64KiB: 12,434, 8KiB: 12,564 |
-| Request sizes (W) | 16KiB: 12,403, 4KiB: 12,444, 64KiB: 12,514, 8KiB: 12,498 |
+| Request sizes (R) | 4KiB: 12,501, 8KiB: 12,564, 16KiB: 12,642, 64KiB: 12,434 |
+| Request sizes (W) | 4KiB: 12,444, 8KiB: 12,498, 16KiB: 12,403, 64KiB: 12,514 |
 | Page aligned | yes |
 | Address range | 0 – 26,843,041,792 bytes |
 | Footprint | 0.615 GiB (161,267 LPNs: 84,944 read, 86,226 written) |
@@ -1829,18 +1829,6 @@ No reads in this trace, so there are no cache bounds.
 
 **Cache bounds on the read stream** (hit rates; every miss inserts)
 
-`lpn` - logical page (LearnedFTL CMT entry granularity)
-
-| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
-|---:|---:|---:|---:|---:|
-| 1,024 | 57.41% | 63.17% | 64.59% | 66.62% |
-| 2,048 | 60.70% | 64.79% | 66.46% | 68.61% |
-| 4,096 | 63.57% | 66.39% | 67.85% | 69.98% |
-| 8,192 (CMT) | 65.91% | 67.74% | 68.53% | 70.42% |
-| 16,384 | 67.93% | 68.90% | 69.08% | 70.42% |
-| 32,768 | 69.50% | 69.75% | 69.77% | 70.42% |
-| 65,536 | 70.33% | 70.34% | 70.34% | 70.42% |
-
 `tp256` - translation page, 256 LPNs/page (LeaFTL CMT key)
 
 | Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
@@ -1865,11 +1853,23 @@ No reads in this trace, so there are no cache bounds.
 | 32,768 | 97.33% | 97.33% | 97.33% | 97.33% |
 | 65,536 | 97.33% | 97.33% | 97.33% | 97.33% |
 
+`lpn` - logical page (LearnedFTL CMT entry granularity)
+
+| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
+|---:|---:|---:|---:|---:|
+| 1,024 | 57.41% | 63.17% | 64.59% | 66.62% |
+| 2,048 | 60.70% | 64.79% | 66.46% | 68.61% |
+| 4,096 | 63.57% | 66.39% | 67.85% | 69.98% |
+| 8,192 (CMT) | 65.91% | 67.74% | 68.53% | 70.42% |
+| 16,384 | 67.93% | 68.90% | 69.08% | 70.42% |
+| 32,768 | 69.50% | 69.75% | 69.77% | 70.42% |
+| 65,536 | 70.33% | 70.34% | 70.34% | 70.42% |
+
 | Keying | References | Distinct keys | Compulsory miss rate | Stack distance p50 / p90 / p99 |
 |---|---:|---:|---:|---:|
-| `lpn` | 287,141 | 84,944 | 29.58% | 65 / 3,897 / 37,543 |
 | `tp256` | 287,141 | 9,692 | 3.38% | 0 / 0 / 1,168 |
 | `tp512` | 287,141 | 7,671 | 2.67% | 0 / 0 / 1,933 |
+| `lpn` | 287,141 | 84,944 | 29.58% | 65 / 3,897 / 37,543 |
 
 ## traces/matrix/mixed-50-seq-50-random
 
@@ -1878,7 +1878,7 @@ No reads in this trace, so there are no cache bounds.
 - file: `experiments/traces/matrix/mixed-50-seq-50-random.trace`
 - generator: `experiments/scripts/prepare_validation_traces.py`
 - is_exact_prefix: `True`
-- parent: `experiments/traces/mixed-50-seq-50-random.trace`
+- parent: `experiments/traces/full/mixed-50-seq-50-random.trace`
 - prefix_operations: `1000000`
 - sha256: `8c6095748dea305b1fa96b1c8bedd0eac1c760e2e32dec31b56fa805b7556abb`
 - sha256_matches_parent_prefix: `True`
@@ -1891,8 +1891,8 @@ No reads in this trace, so there are no cache bounds.
 | Operations | 1,000,000 (499,061 R / 500,939 W) |
 | Read % by requests / bytes | 49.91% / 49.86% |
 | Mean request size | 22.98 KiB |
-| Request sizes (R) | 16KiB: 124,851, 4KiB: 125,001, 64KiB: 124,410, 8KiB: 124,799 |
-| Request sizes (W) | 16KiB: 125,215, 4KiB: 124,936, 64KiB: 125,236, 8KiB: 125,552 |
+| Request sizes (R) | 4KiB: 125,001, 8KiB: 124,799, 16KiB: 124,851, 64KiB: 124,410 |
+| Request sizes (W) | 4KiB: 124,936, 8KiB: 125,552, 16KiB: 125,215, 64KiB: 125,236 |
 | Page aligned | yes |
 | Address range | 0 – 26,843,496,448 bytes |
 | Footprint | 15.319 GiB (4,015,753 LPNs: 2,386,171 read, 2,397,289 written) |
@@ -1929,18 +1929,6 @@ No reads in this trace, so there are no cache bounds.
 
 **Cache bounds on the read stream** (hit rates; every miss inserts)
 
-`lpn` - logical page (LearnedFTL CMT entry granularity)
-
-| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
-|---:|---:|---:|---:|---:|
-| 1,024 | 0.01% | 0.01% | 0.01% | 1.44% |
-| 2,048 | 0.02% | 0.02% | 0.02% | 2.05% |
-| 4,096 | 0.05% | 0.04% | 0.05% | 2.86% |
-| 8,192 (CMT) | 0.10% | 0.10% | 0.09% | 3.98% |
-| 16,384 | 0.19% | 0.19% | 0.18% | 5.47% |
-| 32,768 | 0.37% | 0.38% | 0.37% | 7.41% |
-| 65,536 | 0.74% | 0.76% | 0.74% | 9.86% |
-
 `tp256` - translation page, 256 LPNs/page (LeaFTL CMT key)
 
 | Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
@@ -1965,11 +1953,23 @@ No reads in this trace, so there are no cache bounds.
 | 32,768 | 99.55% | 99.55% | 99.55% | 99.55% |
 | 65,536 | 99.55% | 99.55% | 99.55% | 99.55% |
 
+`lpn` - logical page (LearnedFTL CMT entry granularity)
+
+| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
+|---:|---:|---:|---:|---:|
+| 1,024 | 0.01% | 0.01% | 0.01% | 1.44% |
+| 2,048 | 0.02% | 0.02% | 0.02% | 2.05% |
+| 4,096 | 0.05% | 0.04% | 0.05% | 2.86% |
+| 8,192 (CMT) | 0.10% | 0.10% | 0.09% | 3.98% |
+| 16,384 | 0.19% | 0.19% | 0.18% | 5.47% |
+| 32,768 | 0.37% | 0.38% | 0.37% | 7.41% |
+| 65,536 | 0.74% | 0.76% | 0.74% | 9.86% |
+
 | Keying | References | Distinct keys | Compulsory miss rate | Stack distance p50 / p90 / p99 |
 |---|---:|---:|---:|---:|
-| `lpn` | 2,864,563 | 2,386,171 | 83.30% | 854,601 / 2,054,553 / 2,151,748 |
 | `tp256` | 2,864,563 | 25,600 | 0.89% | 0 / 3 / 22,244 |
 | `tp512` | 2,864,563 | 12,800 | 0.45% | 0 / 2 / 11,212 |
+| `lpn` | 2,864,563 | 2,386,171 | 83.30% | 854,601 / 2,054,553 / 2,151,748 |
 
 ## traces/matrix/seq-mixed
 
@@ -1978,7 +1978,7 @@ No reads in this trace, so there are no cache bounds.
 - file: `experiments/traces/matrix/seq-mixed.trace`
 - generator: `experiments/scripts/prepare_validation_traces.py`
 - is_exact_prefix: `True`
-- parent: `experiments/traces/seq-mixed.trace`
+- parent: `experiments/traces/full/seq-mixed.trace`
 - prefix_operations: `1000000`
 - sha256: `e1542935abea82ac2fad146a6ab9fc215d6c396ba98131d21e4460258bd3c778`
 - sha256_matches_parent_prefix: `True`
@@ -1991,8 +1991,8 @@ No reads in this trace, so there are no cache bounds.
 | Operations | 1,000,000 (500,796 R / 499,204 W) |
 | Read % by requests / bytes | 50.08% / 50.15% |
 | Mean request size | 22.98 KiB |
-| Request sizes (R) | 16KiB: 125,380, 4KiB: 125,378, 64KiB: 125,267, 8KiB: 124,771 |
-| Request sizes (W) | 16KiB: 125,535, 4KiB: 124,949, 64KiB: 124,213, 8KiB: 124,507 |
+| Request sizes (R) | 4KiB: 125,378, 8KiB: 124,771, 16KiB: 125,380, 64KiB: 125,267 |
+| Request sizes (W) | 4KiB: 124,949, 8KiB: 124,507, 16KiB: 125,535, 64KiB: 124,213 |
 | Page aligned | yes |
 | Address range | 0 – 26,843,488,256 bytes |
 | Footprint | 14.922 GiB (3,911,616 LPNs: 2,377,100 read, 2,368,886 written) |
@@ -2029,18 +2029,6 @@ No reads in this trace, so there are no cache bounds.
 
 **Cache bounds on the read stream** (hit rates; every miss inserts)
 
-`lpn` - logical page (LearnedFTL CMT entry granularity)
-
-| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
-|---:|---:|---:|---:|---:|
-| 1,024 | 0.00% | 0.00% | 0.00% | 0.07% |
-| 2,048 | 0.00% | 0.00% | 0.00% | 0.14% |
-| 4,096 | 0.00% | 0.00% | 0.00% | 0.28% |
-| 8,192 (CMT) | 0.00% | 0.00% | 0.00% | 0.57% |
-| 16,384 | 0.00% | 0.00% | 0.00% | 1.14% |
-| 32,768 | 0.00% | 0.00% | 0.00% | 2.27% |
-| 65,536 | 0.00% | 0.00% | 0.00% | 4.55% |
-
 `tp256` - translation page, 256 LPNs/page (LeaFTL CMT key)
 
 | Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
@@ -2065,11 +2053,23 @@ No reads in this trace, so there are no cache bounds.
 | 32,768 | 99.56% | 99.56% | 99.56% | 99.56% |
 | 65,536 | 99.56% | 99.56% | 99.56% | 99.56% |
 
+`lpn` - logical page (LearnedFTL CMT entry granularity)
+
+| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
+|---:|---:|---:|---:|---:|
+| 1,024 | 0.00% | 0.00% | 0.00% | 0.07% |
+| 2,048 | 0.00% | 0.00% | 0.00% | 0.14% |
+| 4,096 | 0.00% | 0.00% | 0.00% | 0.28% |
+| 8,192 (CMT) | 0.00% | 0.00% | 0.00% | 0.57% |
+| 16,384 | 0.00% | 0.00% | 0.00% | 1.14% |
+| 32,768 | 0.00% | 0.00% | 0.00% | 2.27% |
+| 65,536 | 0.00% | 0.00% | 0.00% | 4.55% |
+
 | Keying | References | Distinct keys | Compulsory miss rate | Stack distance p50 / p90 / p99 |
 |---|---:|---:|---:|---:|
-| `lpn` | 2,880,712 | 2,377,100 | 82.52% | 1,177,917 / 2,065,993 / 2,071,266 |
 | `tp256` | 2,880,712 | 25,600 | 0.89% | 0 / 0 / 25,599 |
 | `tp512` | 2,880,712 | 12,800 | 0.44% | 0 / 0 / 0 |
+| `lpn` | 2,880,712 | 2,377,100 | 82.52% | 1,177,917 / 2,065,993 / 2,071,266 |
 
 ## traces/matrix/uniform-mixed
 
@@ -2078,7 +2078,7 @@ No reads in this trace, so there are no cache bounds.
 - file: `experiments/traces/matrix/uniform-mixed.trace`
 - generator: `experiments/scripts/prepare_validation_traces.py`
 - is_exact_prefix: `True`
-- parent: `experiments/traces/uniform-mixed.trace`
+- parent: `experiments/traces/full/uniform-mixed.trace`
 - prefix_operations: `1000000`
 - sha256: `0d78ebad8db9c237c1f534ccb5c9eaab4735632b500128aa27e781e1967ebfdc`
 - sha256_matches_parent_prefix: `True`
@@ -2091,8 +2091,8 @@ No reads in this trace, so there are no cache bounds.
 | Operations | 1,000,000 (499,827 R / 500,173 W) |
 | Read % by requests / bytes | 49.98% / 49.97% |
 | Mean request size | 23.01 KiB |
-| Request sizes (R) | 16KiB: 125,257, 4KiB: 124,663, 64KiB: 124,959, 8KiB: 124,948 |
-| Request sizes (W) | 16KiB: 124,936, 4KiB: 124,968, 64KiB: 125,200, 8KiB: 125,069 |
+| Request sizes (R) | 4KiB: 124,663, 8KiB: 124,948, 16KiB: 125,257, 64KiB: 124,959 |
+| Request sizes (W) | 4KiB: 124,968, 8KiB: 125,069, 16KiB: 124,936, 64KiB: 125,200 |
 | Page aligned | yes |
 | Address range | 8,192 – 26,843,545,600 bytes |
 | Footprint | 14.604 GiB (3,828,397 LPNs: 2,325,163 read, 2,329,050 written) |
@@ -2129,18 +2129,6 @@ No reads in this trace, so there are no cache bounds.
 
 **Cache bounds on the read stream** (hit rates; every miss inserts)
 
-`lpn` - logical page (LearnedFTL CMT entry granularity)
-
-| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
-|---:|---:|---:|---:|---:|
-| 1,024 | 0.01% | 0.02% | 0.02% | 1.67% |
-| 2,048 | 0.03% | 0.03% | 0.03% | 2.37% |
-| 4,096 | 0.06% | 0.06% | 0.06% | 3.31% |
-| 8,192 (CMT) | 0.11% | 0.11% | 0.12% | 4.65% |
-| 16,384 | 0.24% | 0.24% | 0.24% | 6.42% |
-| 32,768 | 0.49% | 0.48% | 0.48% | 8.70% |
-| 65,536 | 1.00% | 0.98% | 0.98% | 11.55% |
-
 `tp256` - translation page, 256 LPNs/page (LeaFTL CMT key)
 
 | Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
@@ -2165,11 +2153,23 @@ No reads in this trace, so there are no cache bounds.
 | 32,768 | 99.55% | 99.55% | 99.55% | 99.55% |
 | 65,536 | 99.55% | 99.55% | 99.55% | 99.55% |
 
+`lpn` - logical page (LearnedFTL CMT entry granularity)
+
+| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
+|---:|---:|---:|---:|---:|
+| 1,024 | 0.01% | 0.02% | 0.02% | 1.67% |
+| 2,048 | 0.03% | 0.03% | 0.03% | 2.37% |
+| 4,096 | 0.06% | 0.06% | 0.06% | 3.31% |
+| 8,192 (CMT) | 0.11% | 0.11% | 0.12% | 4.65% |
+| 16,384 | 0.24% | 0.24% | 0.24% | 6.42% |
+| 32,768 | 0.49% | 0.48% | 0.48% | 8.70% |
+| 65,536 | 1.00% | 0.98% | 0.98% | 11.55% |
+
 | Keying | References | Distinct keys | Compulsory miss rate | Stack distance p50 / p90 / p99 |
 |---|---:|---:|---:|---:|
-| `lpn` | 2,874,931 | 2,325,163 | 80.88% | 717,677 / 1,627,735 / 2,104,311 |
 | `tp256` | 2,874,931 | 25,600 | 0.89% | 0 / 10,105 / 23,824 |
 | `tp512` | 2,874,931 | 12,800 | 0.45% | 0 / 5,239 / 12,002 |
+| `lpn` | 2,874,931 | 2,325,163 | 80.88% | 717,677 / 1,627,735 / 2,104,311 |
 
 ## traces/matrix/uniform-read
 
@@ -2178,7 +2178,7 @@ No reads in this trace, so there are no cache bounds.
 - file: `experiments/traces/matrix/uniform-read.trace`
 - generator: `experiments/scripts/prepare_validation_traces.py`
 - is_exact_prefix: `True`
-- parent: `experiments/traces/uniform-read.trace`
+- parent: `experiments/traces/full/uniform-read.trace`
 - prefix_operations: `1000000`
 - sha256: `5bcc0a7dc6f52394c91234dd2669d5e28baa3c3a6bd8caa2e23252c7f59a782f`
 - sha256_matches_parent_prefix: `True`
@@ -2191,7 +2191,7 @@ No reads in this trace, so there are no cache bounds.
 | Operations | 1,000,000 (1,000,000 R / 0 W) |
 | Read % by requests / bytes | 100.00% / 100.00% |
 | Mean request size | 23.03 KiB |
-| Request sizes (R) | 16KiB: 250,379, 4KiB: 249,898, 64KiB: 250,407, 8KiB: 249,316 |
+| Request sizes (R) | 4KiB: 249,898, 8KiB: 249,316, 16KiB: 250,379, 64KiB: 250,407 |
 | Request sizes (W) | none |
 | Page aligned | yes |
 | Address range | 4,096 – 26,843,533,312 bytes |
@@ -2229,18 +2229,6 @@ No reads in this trace, so there are no cache bounds.
 
 **Cache bounds on the read stream** (hit rates; every miss inserts)
 
-`lpn` - logical page (LearnedFTL CMT entry granularity)
-
-| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
-|---:|---:|---:|---:|---:|
-| 1,024 | 0.02% | 0.02% | 0.02% | 1.68% |
-| 2,048 | 0.03% | 0.03% | 0.03% | 2.40% |
-| 4,096 | 0.06% | 0.06% | 0.06% | 3.41% |
-| 8,192 (CMT) | 0.12% | 0.13% | 0.13% | 4.78% |
-| 16,384 | 0.25% | 0.25% | 0.25% | 6.70% |
-| 32,768 | 0.50% | 0.50% | 0.49% | 9.28% |
-| 65,536 | 0.99% | 1.00% | 1.00% | 12.68% |
-
 `tp256` - translation page, 256 LPNs/page (LeaFTL CMT key)
 
 | Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
@@ -2265,11 +2253,23 @@ No reads in this trace, so there are no cache bounds.
 | 32,768 | 99.78% | 99.78% | 99.78% | 99.78% |
 | 65,536 | 99.78% | 99.78% | 99.78% | 99.78% |
 
+`lpn` - logical page (LearnedFTL CMT entry granularity)
+
+| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
+|---:|---:|---:|---:|---:|
+| 1,024 | 0.02% | 0.02% | 0.02% | 1.68% |
+| 2,048 | 0.03% | 0.03% | 0.03% | 2.40% |
+| 4,096 | 0.06% | 0.06% | 0.06% | 3.41% |
+| 8,192 (CMT) | 0.12% | 0.13% | 0.13% | 4.78% |
+| 16,384 | 0.25% | 0.25% | 0.25% | 6.70% |
+| 32,768 | 0.50% | 0.50% | 0.49% | 9.28% |
+| 65,536 | 0.99% | 1.00% | 1.00% | 12.68% |
+
 | Keying | References | Distinct keys | Compulsory miss rate | Stack distance p50 / p90 / p99 |
 |---|---:|---:|---:|---:|
-| `lpn` | 5,756,558 | 3,827,774 | 66.49% | 1,236,933 / 2,740,076 / 3,499,802 |
 | `tp256` | 5,756,558 | 25,600 | 0.44% | 0 / 10,625 / 24,011 |
 | `tp512` | 5,756,558 | 12,800 | 0.22% | 0 / 5,377 / 12,034 |
+| `lpn` | 5,756,558 | 3,827,774 | 66.49% | 1,236,933 / 2,740,076 / 3,499,802 |
 
 ## traces/matrix/uniform-write
 
@@ -2278,7 +2278,7 @@ No reads in this trace, so there are no cache bounds.
 - file: `experiments/traces/matrix/uniform-write.trace`
 - generator: `experiments/scripts/prepare_validation_traces.py`
 - is_exact_prefix: `True`
-- parent: `experiments/traces/uniform-write.trace`
+- parent: `experiments/traces/full/uniform-write.trace`
 - prefix_operations: `1000000`
 - sha256: `8a7aaa2dad6eb61d74afa474dcfeddf047ca91ca57db8cc5bc718babf532fe2b`
 - sha256_matches_parent_prefix: `True`
@@ -2292,7 +2292,7 @@ No reads in this trace, so there are no cache bounds.
 | Read % by requests / bytes | 0.00% / 0.00% |
 | Mean request size | 23.01 KiB |
 | Request sizes (R) | none |
-| Request sizes (W) | 16KiB: 250,087, 4KiB: 249,680, 64KiB: 250,110, 8KiB: 250,123 |
+| Request sizes (W) | 4KiB: 249,680, 8KiB: 250,123, 16KiB: 250,087, 64KiB: 250,110 |
 | Page aligned | yes |
 | Address range | 4,096 – 26,843,512,832 bytes |
 | Footprint | 14.600 GiB (3,827,408 LPNs: 0 read, 3,827,408 written) |
@@ -2336,7 +2336,7 @@ No reads in this trace, so there are no cache bounds.
 - file: `experiments/traces/matrix/zipf-hot10-access90-a1.2.trace`
 - generator: `experiments/scripts/prepare_validation_traces.py`
 - is_exact_prefix: `True`
-- parent: `experiments/traces/zipf-hot10-access90-a1.2.trace`
+- parent: `experiments/traces/full/zipf-hot10-access90-a1.2.trace`
 - prefix_operations: `1000000`
 - sha256: `87ecde93af96cf272c471dfcfff5a5bf5a2aa96b2438d6e760bc80ba15de27e9`
 - sha256_matches_parent_prefix: `True`
@@ -2349,8 +2349,8 @@ No reads in this trace, so there are no cache bounds.
 | Operations | 1,000,000 (499,909 R / 500,091 W) |
 | Read % by requests / bytes | 49.99% / 50.00% |
 | Mean request size | 23.00 KiB |
-| Request sizes (R) | 16KiB: 125,019, 4KiB: 124,836, 64KiB: 124,986, 8KiB: 125,068 |
-| Request sizes (W) | 16KiB: 125,145, 4KiB: 125,308, 64KiB: 124,949, 8KiB: 124,689 |
+| Request sizes (R) | 4KiB: 124,836, 8KiB: 125,068, 16KiB: 125,019, 64KiB: 124,986 |
+| Request sizes (W) | 4KiB: 125,308, 8KiB: 124,689, 16KiB: 125,145, 64KiB: 124,949 |
 | Page aligned | yes |
 | Address range | 0 – 26,843,512,832 bytes |
 | Footprint | 2.904 GiB (761,155 LPNs: 419,813 read, 420,356 written) |
@@ -2387,18 +2387,6 @@ No reads in this trace, so there are no cache bounds.
 
 **Cache bounds on the read stream** (hit rates; every miss inserts)
 
-`lpn` - logical page (LearnedFTL CMT entry granularity)
-
-| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
-|---:|---:|---:|---:|---:|
-| 1,024 | 67.21% | 73.42% | 74.38% | 76.16% |
-| 2,048 | 70.89% | 76.11% | 77.10% | 78.73% |
-| 4,096 | 74.05% | 78.37% | 79.30% | 80.90% |
-| 8,192 (CMT) | 76.78% | 80.27% | 81.16% | 82.71% |
-| 16,384 | 79.15% | 81.65% | 82.56% | 84.15% |
-| 32,768 | 81.17% | 82.81% | 83.52% | 85.12% |
-| 65,536 | 82.87% | 83.77% | 84.10% | 85.40% |
-
 `tp256` - translation page, 256 LPNs/page (LeaFTL CMT key)
 
 | Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
@@ -2423,11 +2411,23 @@ No reads in this trace, so there are no cache bounds.
 | 32,768 | 99.56% | 99.56% | 99.56% | 99.56% |
 | 65,536 | 99.56% | 99.56% | 99.56% | 99.56% |
 
+`lpn` - logical page (LearnedFTL CMT entry granularity)
+
+| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
+|---:|---:|---:|---:|---:|
+| 1,024 | 67.21% | 73.42% | 74.38% | 76.16% |
+| 2,048 | 70.89% | 76.11% | 77.10% | 78.73% |
+| 4,096 | 74.05% | 78.37% | 79.30% | 80.90% |
+| 8,192 (CMT) | 76.78% | 80.27% | 81.16% | 82.71% |
+| 16,384 | 79.15% | 81.65% | 82.56% | 84.15% |
+| 32,768 | 81.17% | 82.81% | 83.52% | 85.12% |
+| 65,536 | 82.87% | 83.77% | 84.10% | 85.40% |
+
 | Keying | References | Distinct keys | Compulsory miss rate | Stack distance p50 / p90 / p99 |
 |---|---:|---:|---:|---:|
-| `lpn` | 2,874,824 | 419,813 | 14.60% | 65 / 8,354 / 157,536 |
 | `tp256` | 2,874,824 | 23,051 | 0.80% | 0 / 0 / 4,750 |
 | `tp512` | 2,874,824 | 12,644 | 0.44% | 0 / 0 / 4,106 |
+| `lpn` | 2,874,824 | 419,813 | 14.60% | 65 / 8,354 / 157,536 |
 
 ## traces/matrix/zipf-hot20-access80-a0.8
 
@@ -2436,7 +2436,7 @@ No reads in this trace, so there are no cache bounds.
 - file: `experiments/traces/matrix/zipf-hot20-access80-a0.8.trace`
 - generator: `experiments/scripts/prepare_validation_traces.py`
 - is_exact_prefix: `True`
-- parent: `experiments/traces/zipf-hot20-access80-a0.8.trace`
+- parent: `experiments/traces/full/zipf-hot20-access80-a0.8.trace`
 - prefix_operations: `1000000`
 - sha256: `8fb3804a021907834966f78d0e21f647d10439ac4e5957642eff5b12fb98729f`
 - sha256_matches_parent_prefix: `True`
@@ -2449,8 +2449,8 @@ No reads in this trace, so there are no cache bounds.
 | Operations | 1,000,000 (499,452 R / 500,548 W) |
 | Read % by requests / bytes | 49.95% / 49.94% |
 | Mean request size | 22.99 KiB |
-| Request sizes (R) | 16KiB: 125,085, 4KiB: 124,734, 64KiB: 124,724, 8KiB: 124,909 |
-| Request sizes (W) | 16KiB: 125,448, 4KiB: 124,930, 64KiB: 125,057, 8KiB: 125,113 |
+| Request sizes (R) | 4KiB: 124,734, 8KiB: 124,909, 16KiB: 125,085, 64KiB: 124,724 |
+| Request sizes (W) | 4KiB: 124,930, 8KiB: 125,113, 16KiB: 125,448, 64KiB: 125,057 |
 | Page aligned | yes |
 | Address range | 0 – 26,843,529,216 bytes |
 | Footprint | 7.678 GiB (2,012,865 LPNs: 1,256,636 read, 1,256,909 written) |
@@ -2487,18 +2487,6 @@ No reads in this trace, so there are no cache bounds.
 
 **Cache bounds on the read stream** (hit rates; every miss inserts)
 
-`lpn` - logical page (LearnedFTL CMT entry granularity)
-
-| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
-|---:|---:|---:|---:|---:|
-| 1,024 | 6.61% | 13.74% | 15.65% | 19.10% |
-| 2,048 | 9.01% | 16.32% | 18.60% | 22.64% |
-| 4,096 | 11.63% | 19.50% | 21.84% | 26.62% |
-| 8,192 (CMT) | 14.83% | 22.75% | 25.39% | 31.10% |
-| 16,384 | 18.63% | 26.44% | 29.23% | 36.03% |
-| 32,768 | 23.13% | 30.38% | 33.34% | 41.41% |
-| 65,536 | 28.60% | 34.85% | 37.63% | 47.03% |
-
 `tp256` - translation page, 256 LPNs/page (LeaFTL CMT key)
 
 | Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
@@ -2523,11 +2511,23 @@ No reads in this trace, so there are no cache bounds.
 | 32,768 | 99.55% | 99.55% | 99.55% | 99.55% |
 | 65,536 | 99.55% | 99.55% | 99.55% | 99.55% |
 
+`lpn` - logical page (LearnedFTL CMT entry granularity)
+
+| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
+|---:|---:|---:|---:|---:|
+| 1,024 | 6.61% | 13.74% | 15.65% | 19.10% |
+| 2,048 | 9.01% | 16.32% | 18.60% | 22.64% |
+| 4,096 | 11.63% | 19.50% | 21.84% | 26.62% |
+| 8,192 (CMT) | 14.83% | 22.75% | 25.39% | 31.10% |
+| 16,384 | 18.63% | 26.44% | 29.23% | 36.03% |
+| 32,768 | 23.13% | 30.38% | 33.34% | 41.41% |
+| 65,536 | 28.60% | 34.85% | 37.63% | 47.03% |
+
 | Keying | References | Distinct keys | Compulsory miss rate | Stack distance p50 / p90 / p99 |
 |---|---:|---:|---:|---:|
-| `lpn` | 2,870,476 | 1,256,636 | 43.78% | 61,890 / 545,154 / 1,005,591 |
 | `tp256` | 2,870,476 | 25,447 | 0.89% | 0 / 697 / 16,795 |
 | `tp512` | 2,870,476 | 12,799 | 0.45% | 0 / 401 / 9,180 |
+| `lpn` | 2,870,476 | 1,256,636 | 43.78% | 61,890 / 545,154 / 1,005,591 |
 
 ## traces/matrix/zipf-hot20-access80-a1.2
 
@@ -2536,7 +2536,7 @@ No reads in this trace, so there are no cache bounds.
 - file: `experiments/traces/matrix/zipf-hot20-access80-a1.2.trace`
 - generator: `experiments/scripts/prepare_validation_traces.py`
 - is_exact_prefix: `True`
-- parent: `experiments/traces/zipf-hot20-access80-a1.2.trace`
+- parent: `experiments/traces/full/zipf-hot20-access80-a1.2.trace`
 - prefix_operations: `1000000`
 - sha256: `fcca5d72410c5d3171b091fd2ecdc2adf77fceab8c68bdb454894dc7cd17f756`
 - sha256_matches_parent_prefix: `True`
@@ -2549,8 +2549,8 @@ No reads in this trace, so there are no cache bounds.
 | Operations | 1,000,000 (501,066 R / 498,934 W) |
 | Read % by requests / bytes | 50.11% / 50.06% |
 | Mean request size | 22.96 KiB |
-| Request sizes (R) | 16KiB: 125,313, 4KiB: 125,415, 64KiB: 124,763, 8KiB: 125,575 |
-| Request sizes (W) | 16KiB: 124,564, 4KiB: 124,511, 64KiB: 124,620, 8KiB: 125,239 |
+| Request sizes (R) | 4KiB: 125,415, 8KiB: 125,575, 16KiB: 125,313, 64KiB: 124,763 |
+| Request sizes (W) | 4KiB: 124,511, 8KiB: 125,239, 16KiB: 124,564, 64KiB: 124,620 |
 | Page aligned | yes |
 | Address range | 0 – 26,843,516,928 bytes |
 | Footprint | 4.858 GiB (1,273,490 LPNs: 696,009 read, 694,821 written) |
@@ -2587,18 +2587,6 @@ No reads in this trace, so there are no cache bounds.
 
 **Cache bounds on the read stream** (hit rates; every miss inserts)
 
-`lpn` - logical page (LearnedFTL CMT entry granularity)
-
-| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
-|---:|---:|---:|---:|---:|
-| 1,024 | 57.55% | 64.49% | 65.26% | 66.88% |
-| 2,048 | 60.79% | 66.75% | 67.62% | 69.16% |
-| 4,096 | 63.64% | 68.59% | 69.61% | 71.10% |
-| 8,192 (CMT) | 66.13% | 70.01% | 71.23% | 72.77% |
-| 16,384 | 68.31% | 71.23% | 72.41% | 74.14% |
-| 32,768 | 70.20% | 72.22% | 73.12% | 75.19% |
-| 65,536 | 71.89% | 73.12% | 73.63% | 75.78% |
-
 `tp256` - translation page, 256 LPNs/page (LeaFTL CMT key)
 
 | Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
@@ -2623,11 +2611,23 @@ No reads in this trace, so there are no cache bounds.
 | 32,768 | 99.56% | 99.56% | 99.56% | 99.56% |
 | 65,536 | 99.56% | 99.56% | 99.56% | 99.56% |
 
+`lpn` - logical page (LearnedFTL CMT entry granularity)
+
+| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
+|---:|---:|---:|---:|---:|
+| 1,024 | 57.55% | 64.49% | 65.26% | 66.88% |
+| 2,048 | 60.79% | 66.75% | 67.62% | 69.16% |
+| 4,096 | 63.64% | 68.59% | 69.61% | 71.10% |
+| 8,192 (CMT) | 66.13% | 70.01% | 71.23% | 72.77% |
+| 16,384 | 68.31% | 71.23% | 72.41% | 74.14% |
+| 32,768 | 70.20% | 72.22% | 73.12% | 75.19% |
+| 65,536 | 71.89% | 73.12% | 73.63% | 75.78% |
+
 | Keying | References | Distinct keys | Compulsory miss rate | Stack distance p50 / p90 / p99 |
 |---|---:|---:|---:|---:|
-| `lpn` | 2,874,025 | 696,009 | 24.22% | 79 / 15,779 / 325,753 |
 | `tp256` | 2,874,025 | 24,688 | 0.86% | 0 / 1 / 14,481 |
 | `tp512` | 2,874,025 | 12,687 | 0.44% | 0 / 1 / 8,241 |
+| `lpn` | 2,874,025 | 696,009 | 24.22% | 79 / 15,779 / 325,753 |
 
 ## traces/real/financial1
 
@@ -2652,8 +2652,8 @@ No reads in this trace, so there are no cache bounds.
 | Operations | 1,000,000 (212,681 R / 787,319 W) |
 | Read % by requests / bytes | 21.27% / 18.24% |
 | Mean request size | 7.58 KiB |
-| Request sizes (R) | 12KiB: 25,809, 16KiB: 324, 20KiB: 150, 24KiB: 136, 28KiB: 25, 32KiB: 244, 36KiB: 1,116, 4KiB: 116,889, 56KiB: 3, 64KiB: 2, 68KiB: 6, 8KiB: 67,977 |
-| Request sizes (W) | 104KiB: 1, 12KiB: 30,828, 1508KiB: 1, 1564KiB: 1, 16KiB: 7,299, 180KiB: 1, 1988KiB: 1, 20KiB: 8,431, 24KiB: 7,701, 28KiB: 1,011, 2924KiB: 1, 3152KiB: 1, 32KiB: 794, 36KiB: 2,159, 40KiB: 26, 44KiB: 33, 48KiB: 227, 4KiB: 401,785, 512KiB: 1, 52KiB: 6,280, 56KiB: 19, 60KiB: 21, 612KiB: 1, 64KiB: 3,607, 68KiB: 8,205, 8KiB: 308,883, 92KiB: 1 |
+| Request sizes (R) | 4KiB: 116,889, 8KiB: 67,977, 12KiB: 25,809, 16KiB: 324, 20KiB: 150, 24KiB: 136, 28KiB: 25, 32KiB: 244, 36KiB: 1,116, 56KiB: 3, 64KiB: 2, 68KiB: 6 |
+| Request sizes (W) | 4KiB: 401,785, 8KiB: 308,883, 12KiB: 30,828, 16KiB: 7,299, 20KiB: 8,431, 24KiB: 7,701, 28KiB: 1,011, 32KiB: 794, 36KiB: 2,159, 40KiB: 26, 44KiB: 33, 48KiB: 227, 52KiB: 6,280, 56KiB: 19, 60KiB: 21, 64KiB: 3,607, 68KiB: 8,205, 92KiB: 1, 104KiB: 1, 180KiB: 1, 512KiB: 1, 612KiB: 1, 1508KiB: 1, 1564KiB: 1, 1988KiB: 1, 2924KiB: 1, 3152KiB: 1 |
 | Page aligned | yes |
 | Address range | 0 – 2,711,457,792 bytes |
 | Footprint | 1.747 GiB (457,930 LPNs: 108,295 read, 416,831 written) |
@@ -2686,21 +2686,9 @@ No reads in this trace, so there are no cache bounds.
 | `write_lpns` | 1,548,376 |
 | `never_written_read_lpns_precondition_none` | 193,922 |
 | `never_written_read_lpns_precondition_fill` | 0 |
-| `request_size_histogram_lpns` | 1: 518,674, 17-32: 8,213, 2: 376,860, 3-4: 64,260, 33-64: 1, 5-8: 18,492, 9-16: 13,493, >64: 7 |
+| `request_size_histogram_lpns` | 1: 518,674, 2: 376,860, 3-4: 64,260, 5-8: 18,492, 9-16: 13,493, 17-32: 8,213, 33-64: 1, >64: 7 |
 
 **Cache bounds on the read stream** (hit rates; every miss inserts)
-
-`lpn` - logical page (LearnedFTL CMT entry granularity)
-
-| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
-|---:|---:|---:|---:|---:|
-| 1,024 | 54.58% | 13.98% | 27.05% | 61.11% |
-| 2,048 | 56.15% | 16.24% | 33.98% | 62.93% |
-| 4,096 | 57.73% | 23.09% | 38.49% | 65.22% |
-| 8,192 (CMT) | 59.55% | 29.77% | 43.25% | 67.63% |
-| 16,384 | 63.33% | 36.60% | 48.26% | 68.65% |
-| 32,768 | 67.59% | 47.73% | 56.02% | 68.65% |
-| 65,536 | 68.62% | 64.29% | 65.58% | 68.65% |
 
 `tp256` - translation page, 256 LPNs/page (LeaFTL CMT key)
 
@@ -2726,11 +2714,23 @@ No reads in this trace, so there are no cache bounds.
 | 32,768 | 99.82% | 99.82% | 99.82% | 99.82% |
 | 65,536 | 99.82% | 99.82% | 99.82% | 99.82% |
 
+`lpn` - logical page (LearnedFTL CMT entry granularity)
+
+| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
+|---:|---:|---:|---:|---:|
+| 1,024 | 54.58% | 13.98% | 27.05% | 61.11% |
+| 2,048 | 56.15% | 16.24% | 33.98% | 62.93% |
+| 4,096 | 57.73% | 23.09% | 38.49% | 65.22% |
+| 8,192 (CMT) | 59.55% | 29.77% | 43.25% | 67.63% |
+| 16,384 | 63.33% | 36.60% | 48.26% | 68.65% |
+| 32,768 | 67.59% | 47.73% | 56.02% | 68.65% |
+| 65,536 | 68.62% | 64.29% | 65.58% | 68.65% |
+
 | Keying | References | Distinct keys | Compulsory miss rate | Stack distance p50 / p90 / p99 |
 |---|---:|---:|---:|---:|
-| `lpn` | 345,479 | 108,295 | 31.35% | 36 / 14,102 / 40,347 |
 | `tp256` | 345,479 | 979 | 0.28% | 1 / 14 / 152 |
 | `tp512` | 345,479 | 609 | 0.18% | 1 / 13 / 98 |
+| `lpn` | 345,479 | 108,295 | 31.35% | 36 / 14,102 / 40,347 |
 
 ## traces/real/financial2
 
@@ -2755,8 +2755,8 @@ No reads in this trace, so there are no cache bounds.
 | Operations | 1,000,000 (818,059 R / 181,941 W) |
 | Read % by requests / bytes | 81.81% / 79.93% |
 | Mean request size | 5.74 KiB |
-| Request sizes (R) | 12KiB: 13,359, 16KiB: 3,425, 20KiB: 5,217, 24KiB: 979, 28KiB: 802, 32KiB: 3,214, 36KiB: 4,636, 40KiB: 11, 44KiB: 23, 48KiB: 5, 4KiB: 584,281, 52KiB: 1, 56KiB: 6, 60KiB: 1, 68KiB: 1, 8KiB: 202,098 |
-| Request sizes (W) | 12KiB: 8,440, 16KiB: 6,023, 20KiB: 420, 24KiB: 37, 260KiB: 318, 28KiB: 18, 32KiB: 342, 36KiB: 2,307, 40KiB: 7, 48KiB: 2, 4KiB: 137,655, 52KiB: 78, 56KiB: 60, 60KiB: 2, 64KiB: 2, 68KiB: 5, 8KiB: 26,225 |
+| Request sizes (R) | 4KiB: 584,281, 8KiB: 202,098, 12KiB: 13,359, 16KiB: 3,425, 20KiB: 5,217, 24KiB: 979, 28KiB: 802, 32KiB: 3,214, 36KiB: 4,636, 40KiB: 11, 44KiB: 23, 48KiB: 5, 52KiB: 1, 56KiB: 6, 60KiB: 1, 68KiB: 1 |
+| Request sizes (W) | 4KiB: 137,655, 8KiB: 26,225, 12KiB: 8,440, 16KiB: 6,023, 20KiB: 420, 24KiB: 37, 28KiB: 18, 32KiB: 342, 36KiB: 2,307, 40KiB: 7, 48KiB: 2, 52KiB: 78, 56KiB: 60, 60KiB: 2, 64KiB: 2, 68KiB: 5, 260KiB: 318 |
 | Page aligned | yes |
 | Address range | 0 – 4,557,484,032 bytes |
 | Footprint | 0.408 GiB (106,948 LPNs: 76,714 read, 61,079 written) |
@@ -2789,21 +2789,9 @@ No reads in this trace, so there are no cache bounds.
 | `write_lpns` | 288,229 |
 | `never_written_read_lpns_precondition_none` | 846,017 |
 | `never_written_read_lpns_precondition_fill` | 0 |
-| `request_size_histogram_lpns` | 1: 721,936, 17-32: 6, 2: 228,323, 3-4: 31,247, 5-8: 11,029, 9-16: 7,141, >64: 318 |
+| `request_size_histogram_lpns` | 1: 721,936, 2: 228,323, 3-4: 31,247, 5-8: 11,029, 9-16: 7,141, 17-32: 6, >64: 318 |
 
 **Cache bounds on the read stream** (hit rates; every miss inserts)
-
-`lpn` - logical page (LearnedFTL CMT entry granularity)
-
-| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
-|---:|---:|---:|---:|---:|
-| 1,024 | 54.96% | 31.32% | 42.07% | 71.54% |
-| 2,048 | 64.15% | 41.01% | 52.28% | 78.43% |
-| 4,096 | 73.51% | 53.72% | 64.94% | 84.34% |
-| 8,192 (CMT) | 81.35% | 65.18% | 75.86% | 88.95% |
-| 16,384 | 86.95% | 76.78% | 84.45% | 91.85% |
-| 32,768 | 90.90% | 87.70% | 90.35% | 93.32% |
-| 65,536 | 93.26% | 93.25% | 93.25% | 93.32% |
 
 `tp256` - translation page, 256 LPNs/page (LeaFTL CMT key)
 
@@ -2829,11 +2817,23 @@ No reads in this trace, so there are no cache bounds.
 | 32,768 | 99.82% | 99.82% | 99.82% | 99.82% |
 | 65,536 | 99.82% | 99.82% | 99.82% | 99.82% |
 
+`lpn` - logical page (LearnedFTL CMT entry granularity)
+
+| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
+|---:|---:|---:|---:|---:|
+| 1,024 | 54.96% | 31.32% | 42.07% | 71.54% |
+| 2,048 | 64.15% | 41.01% | 52.28% | 78.43% |
+| 4,096 | 73.51% | 53.72% | 64.94% | 84.34% |
+| 8,192 (CMT) | 81.35% | 65.18% | 75.86% | 88.95% |
+| 16,384 | 86.95% | 76.78% | 84.45% | 91.85% |
+| 32,768 | 90.90% | 87.70% | 90.35% | 93.32% |
+| 65,536 | 93.26% | 93.25% | 93.25% | 93.32% |
+
 | Keying | References | Distinct keys | Compulsory miss rate | Stack distance p50 / p90 / p99 |
 |---|---:|---:|---:|---:|
-| `lpn` | 1,147,815 | 76,714 | 6.68% | 477 / 10,948 / 44,760 |
 | `tp256` | 1,147,815 | 3,494 | 0.30% | 4 / 183 / 1,574 |
 | `tp512` | 1,147,815 | 2,115 | 0.18% | 3 / 126 / 956 |
+| `lpn` | 1,147,815 | 76,714 | 6.68% | 477 / 10,948 / 44,760 |
 
 ## traces/real/websearch1
 
@@ -2858,8 +2858,8 @@ No reads in this trace, so there are no cache bounds.
 | Operations | 1,000,000 (999,800 R / 200 W) |
 | Read % by requests / bytes | 99.98% / 99.99% |
 | Mean request size | 15.16 KiB |
-| Request sizes (R) | 1112KiB: 2, 16KiB: 108,806, 24KiB: 89,976, 32KiB: 202,152, 4KiB: 24, 8KiB: 598,840 |
-| Request sizes (W) | 16KiB: 2, 64KiB: 2, 8KiB: 196 |
+| Request sizes (R) | 4KiB: 24, 8KiB: 598,840, 16KiB: 108,806, 24KiB: 89,976, 32KiB: 202,152, 1112KiB: 2 |
+| Request sizes (W) | 8KiB: 196, 16KiB: 2, 64KiB: 2 |
 | Page aligned | yes |
 | Address range | 155,648 – 17,379,344,384 bytes |
 | Footprint | 5.982 GiB (1,568,247 LPNs: 1,568,227 read, 42 written) |
@@ -2896,18 +2896,6 @@ No reads in this trace, so there are no cache bounds.
 
 **Cache bounds on the read stream** (hit rates; every miss inserts)
 
-`lpn` - logical page (LearnedFTL CMT entry granularity)
-
-| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
-|---:|---:|---:|---:|---:|
-| 1,024 | 0.01% | 0.01% | 0.01% | 0.36% |
-| 2,048 | 0.01% | 0.01% | 0.01% | 0.67% |
-| 4,096 | 0.01% | 0.01% | 0.01% | 1.19% |
-| 8,192 (CMT) | 0.01% | 0.01% | 0.02% | 2.06% |
-| 16,384 | 0.01% | 0.01% | 0.07% | 3.78% |
-| 32,768 | 0.01% | 0.01% | 0.24% | 6.86% |
-| 65,536 | 0.01% | 0.01% | 0.62% | 12.21% |
-
 `tp256` - translation page, 256 LPNs/page (LeaFTL CMT key)
 
 | Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
@@ -2932,11 +2920,23 @@ No reads in this trace, so there are no cache bounds.
 | 32,768 | 99.78% | 99.78% | 99.78% | 99.78% |
 | 65,536 | 99.78% | 99.78% | 99.78% | 99.78% |
 
+`lpn` - logical page (LearnedFTL CMT entry granularity)
+
+| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
+|---:|---:|---:|---:|---:|
+| 1,024 | 0.01% | 0.01% | 0.01% | 0.36% |
+| 2,048 | 0.01% | 0.01% | 0.01% | 0.67% |
+| 4,096 | 0.01% | 0.01% | 0.01% | 1.19% |
+| 8,192 (CMT) | 0.01% | 0.01% | 0.02% | 2.06% |
+| 16,384 | 0.01% | 0.01% | 0.07% | 3.78% |
+| 32,768 | 0.01% | 0.01% | 0.24% | 6.86% |
+| 65,536 | 0.01% | 0.01% | 0.62% | 12.21% |
+
 | Keying | References | Distinct keys | Compulsory miss rate | Stack distance p50 / p90 / p99 |
 |---|---:|---:|---:|---:|
-| `lpn` | 3,790,556 | 1,568,227 | 41.37% | 750,219 / 1,167,747 / 1,424,791 |
 | `tp256` | 3,790,556 | 15,347 | 0.40% | 0 / 229 / 9,828 |
 | `tp512` | 3,790,556 | 8,287 | 0.22% | 0 / 135 / 4,959 |
+| `lpn` | 3,790,556 | 1,568,227 | 41.37% | 750,219 / 1,167,747 / 1,424,791 |
 
 ## traces/real/websearch2
 
@@ -2961,8 +2961,8 @@ No reads in this trace, so there are no cache bounds.
 | Operations | 1,000,000 (999,800 R / 200 W) |
 | Read % by requests / bytes | 99.98% / 99.99% |
 | Mean request size | 14.98 KiB |
-| Request sizes (R) | 16KiB: 107,858, 24KiB: 87,635, 32KiB: 196,645, 8KiB: 607,662 |
-| Request sizes (W) | 16KiB: 3, 8KiB: 197 |
+| Request sizes (R) | 8KiB: 607,662, 16KiB: 107,858, 24KiB: 87,635, 32KiB: 196,645 |
+| Request sizes (W) | 8KiB: 197, 16KiB: 3 |
 | Page aligned | yes |
 | Address range | 2,023,424 – 17,206,681,600 bytes |
 | Footprint | 5.932 GiB (1,554,972 LPNs: 1,554,966 read, 12 written) |
@@ -2999,18 +2999,6 @@ No reads in this trace, so there are no cache bounds.
 
 **Cache bounds on the read stream** (hit rates; every miss inserts)
 
-`lpn` - logical page (LearnedFTL CMT entry granularity)
-
-| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
-|---:|---:|---:|---:|---:|
-| 1,024 | 0.00% | 0.00% | 0.00% | 0.37% |
-| 2,048 | 0.00% | 0.00% | 0.00% | 0.66% |
-| 4,096 | 0.00% | 0.00% | 0.01% | 1.17% |
-| 8,192 (CMT) | 0.00% | 0.00% | 0.02% | 2.11% |
-| 16,384 | 0.00% | 0.00% | 0.07% | 3.85% |
-| 32,768 | 0.00% | 0.00% | 0.31% | 7.05% |
-| 65,536 | 0.00% | 0.00% | 0.85% | 12.39% |
-
 `tp256` - translation page, 256 LPNs/page (LeaFTL CMT key)
 
 | Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
@@ -3035,11 +3023,23 @@ No reads in this trace, so there are no cache bounds.
 | 32,768 | 99.78% | 99.78% | 99.78% | 99.78% |
 | 65,536 | 99.78% | 99.78% | 99.78% | 99.78% |
 
+`lpn` - logical page (LearnedFTL CMT entry granularity)
+
+| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
+|---:|---:|---:|---:|---:|
+| 1,024 | 0.00% | 0.00% | 0.00% | 0.37% |
+| 2,048 | 0.00% | 0.00% | 0.00% | 0.66% |
+| 4,096 | 0.00% | 0.00% | 0.01% | 1.17% |
+| 8,192 (CMT) | 0.00% | 0.00% | 0.02% | 2.11% |
+| 16,384 | 0.00% | 0.00% | 0.07% | 3.85% |
+| 32,768 | 0.00% | 0.00% | 0.31% | 7.05% |
+| 65,536 | 0.00% | 0.00% | 0.85% | 12.39% |
+
 | Keying | References | Distinct keys | Compulsory miss rate | Stack distance p50 / p90 / p99 |
 |---|---:|---:|---:|---:|
-| `lpn` | 3,745,726 | 1,554,966 | 41.51% | 743,483 / 1,159,655 / 1,420,423 |
 | `tp256` | 3,745,726 | 15,249 | 0.41% | 0 / 311 / 9,942 |
 | `tp512` | 3,745,726 | 8,203 | 0.22% | 0 / 157 / 5,040 |
+| `lpn` | 3,745,726 | 1,554,966 | 41.51% | 743,483 / 1,159,655 / 1,420,423 |
 
 ## traces/real/websearch3
 
@@ -3064,8 +3064,8 @@ No reads in this trace, so there are no cache bounds.
 | Operations | 1,000,000 (999,726 R / 274 W) |
 | Read % by requests / bytes | 99.97% / 99.99% |
 | Mean request size | 15.38 KiB |
-| Request sizes (R) | 16KiB: 112,507, 24KiB: 93,114, 32KiB: 207,933, 8KiB: 586,172 |
-| Request sizes (W) | 16KiB: 2, 8KiB: 272 |
+| Request sizes (R) | 8KiB: 586,172, 16KiB: 112,507, 24KiB: 93,114, 32KiB: 207,933 |
+| Request sizes (W) | 8KiB: 272, 16KiB: 2 |
 | Page aligned | yes |
 | Address range | 581,632 – 16,908,443,648 bytes |
 | Footprint | 6.002 GiB (1,573,398 LPNs: 1,573,394 read, 8 written) |
@@ -3102,18 +3102,6 @@ No reads in this trace, so there are no cache bounds.
 
 **Cache bounds on the read stream** (hit rates; every miss inserts)
 
-`lpn` - logical page (LearnedFTL CMT entry granularity)
-
-| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
-|---:|---:|---:|---:|---:|
-| 1,024 | 0.00% | 0.00% | 0.00% | 0.36% |
-| 2,048 | 0.00% | 0.00% | 0.00% | 0.66% |
-| 4,096 | 0.00% | 0.00% | 0.01% | 1.18% |
-| 8,192 (CMT) | 0.00% | 0.00% | 0.02% | 2.08% |
-| 16,384 | 0.00% | 0.00% | 0.05% | 3.79% |
-| 32,768 | 0.00% | 0.00% | 0.20% | 6.88% |
-| 65,536 | 0.00% | 0.00% | 0.58% | 12.12% |
-
 `tp256` - translation page, 256 LPNs/page (LeaFTL CMT key)
 
 | Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
@@ -3138,8 +3126,20 @@ No reads in this trace, so there are no cache bounds.
 | 32,768 | 99.79% | 99.79% | 99.79% | 99.79% |
 | 65,536 | 99.79% | 99.79% | 99.79% | 99.79% |
 
+`lpn` - logical page (LearnedFTL CMT entry granularity)
+
+| Capacity | LRU | LFU | Perfect LFU | Belady-OPT |
+|---:|---:|---:|---:|---:|
+| 1,024 | 0.00% | 0.00% | 0.00% | 0.36% |
+| 2,048 | 0.00% | 0.00% | 0.00% | 0.66% |
+| 4,096 | 0.00% | 0.00% | 0.01% | 1.18% |
+| 8,192 (CMT) | 0.00% | 0.00% | 0.02% | 2.08% |
+| 16,384 | 0.00% | 0.00% | 0.05% | 3.79% |
+| 32,768 | 0.00% | 0.00% | 0.20% | 6.88% |
+| 65,536 | 0.00% | 0.00% | 0.58% | 12.12% |
+
 | Keying | References | Distinct keys | Compulsory miss rate | Stack distance p50 / p90 / p99 |
 |---|---:|---:|---:|---:|
-| `lpn` | 3,844,520 | 1,573,394 | 40.93% | 743,987 / 1,161,679 / 1,429,795 |
 | `tp256` | 3,844,520 | 15,144 | 0.39% | 0 / 148 / 9,668 |
 | `tp512` | 3,844,520 | 8,062 | 0.21% | 0 / 80 / 4,881 |
+| `lpn` | 3,844,520 | 1,573,394 | 40.93% | 743,987 / 1,161,679 / 1,429,795 |
