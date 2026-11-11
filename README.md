@@ -4,25 +4,32 @@ This repository measures how learned address-mapping models change mapping-cache
 
 - **Measurement instrumentation** in both FTLs. It adds request-flow counters, an exhaustive per-LPN read partition with built-in invariant checks, one shared JSON stats schema, and an optional per-request log.
 - **An experiment toolkit**: deterministic synthetic traces, trace profiling with exact cache bounds (LRU, LFU, Belady-OPT), and replay and stats scripts.
-- **Written analysis** of the authors' code: exact metric definitions, and 20 documented behaviours that affect measurements.
+- **Written analysis** of the authors' code: exact metric definitions, and 31 documented behaviours that affect measurements.
+- **Validated baselines**: a one-command run pipeline, a validator with 12 invariants, and generated result CSVs. Start at [experiments/README.md](experiments/README.md).
 - **A run path for machines without root or KVM**: QEMU's software emulator (TCG), a cloud-init guest image, and a preload shim for a hard-coded log path.
 
-> **Ground rule:** the authors' FTL decision logic and constants are unchanged. Every change in `hw/femu/bbssd/` only counts or prints. Bugs in the authors' code are documented and measured, never fixed. See [KNOWN_ISSUES.md](experiments/docs/KNOWN_ISSUES.md).
+> **Ground rule:** the authors' FTL decision logic and constants are unchanged. Every change in `hw/femu/bbssd/` only counts or prints. Bugs in the authors' code are documented and measured, never fixed. See [KNOWN_ISSUES.md](experiments/docs/KNOWN_ISSUES.md). Two declared exceptions, neither of which changes an FTL decision: LearnedFTL's `model_hit_num` now counts correct predictions only ([METRICS.md](experiments/docs/METRICS.md) section 3), and FEMU continues when it cannot pin its memory (`hw/femu/backend/dram.c`).
 
-## Status (2026-11-09)
+## Status (2026-11-11)
 
 | | |
 |---|---|
-| ✅ Done | Metric definitions and known-issues analysis. Trace suite plus generated profiles and cache bounds. Instrumentation in LeaFTL and LearnedFTL (committed in `8f16a9016`; both FTLs build). |
-| ⏳ Next | Running the invariant checks against real runs. Offline validator (`validate_run.py`). One build per FTL (`build_ftl.sh`). Deterministic `O_DIRECT` replay. `fill` / `steady` preconditioning. |
+| ✅ Done | Metric definitions and 31 known issues. Trace suite with profiles and cache bounds. Instrumentation in both FTLs. One build per FTL, deterministic `O_DIRECT` replay, a validator with 12 invariants, and generated CSVs. |
+| ✅ Measured | 190 runs, all valid: 12 micro, 144 validation (100k requests), 24 matrix (1M requests), 10 real (UMass). Counters only (TCG). |
 | ⛔ Blocked | Latency and throughput. They need KVM, and this host has no KVM access. Counter-based results don't depend on time and are unaffected. |
 
-**There are no baseline numbers yet.** The rows in `experiments/results/runs.csv` come from early smoke tests and are known to be invalid (see below). The full roadmap and milestones are in [BASELINE_PLAN.md](experiments/docs/BASELINE_PLAN.md).
+Headline results (`warm` precondition, 1M requests; details in [BASELINE_PLAN.md](experiments/docs/BASELINE_PLAN.md)):
+
+- LearnedFTL needs 1.06 to 1.38 flash reads per read. LeaFTL needs 1.49 to 2.75, counted over the reads it served.
+- LeaFTL, as ported by the LearnedFTL authors, does not return 10% to 88% of the reads of written data (KI-27, KI-28, KI-31). Always quote this next to any LeaFTL number.
+- LeaFTL's distance to the Belady-OPT cache bound comes from these failed lookups, not from cache misses. The runs do not show headroom for a better cache replacement policy on this LeaFTL port.
+
+The numbers are in `experiments/results/baseline_summary.csv`; `baseline_summary_columns.csv` explains every column.
 
 ## Three things to know before trusting any number
 
 1. **Raw CMT hit rates can't be compared across the two FTLs.** A LeaFTL CMT entry is a learned segment that covers up to 256 LPNs. A LearnedFTL entry is a single LPN→PPN mapping. Cross-FTL comparison uses the *translation-free read ratio* and the *double-read ratio* instead. See [METRICS.md](experiments/docs/METRICS.md).
-2. **Reads of unwritten space distort LeaFTL's hit rate.** LeaFTL counts those reads as CMT misses, but LearnedFTL excludes them. The old 0.03% LeaFTL hit rate on `seq-mixed` came from this: that trace never reads data it wrote. Baselines therefore need `fill` preconditioning (KI-3).
+2. **Reads of unwritten space distort LeaFTL's hit rate.** LeaFTL counts those reads as CMT misses, but LearnedFTL excludes them. The old 0.03% LeaFTL hit rate on `seq-mixed` came from this: that trace never reads data it wrote. Baselines therefore precondition the device: the main condition, `warm`, writes every page the trace touches once before the trace starts (KI-3).
 3. **LearnedFTL checks model predictions against the true page map at no flash cost.** Its double-read advantage may therefore be overstated. Results report flash reads per LPN both as coded and with an extra read charged for each wrong prediction (KI-20).
 
 ## Repository layout
@@ -40,26 +47,35 @@ What this fork adds on top of upstream:
 
 ```text
 experiments/
+  README.md               map of the folders and scripts, and how to reproduce every result
   docs/
-    METRICS.md            what every counter means, per FTL, with file:line references
-    KNOWN_ISSUES.md       20 behaviours of the authors' code that affect measurements (KI-1..KI-20)
-    BASELINE_PLAN.md      validation plan, invariant catalogue, milestones, status
-  traces/                 9 synthetic workloads (Git LFS): 8 × 10M ops, plus zipf-80-20 at 100k
+    BASELINE_PLAN.md      the plan, its status, every deviation, and the headline results
+    METRICS.md            what every counter means, per FTL
+    INVARIANTS.md         the 12 checks every run must pass
+    KNOWN_ISSUES.md       31 behaviours of the authors' code that affect measurements (KI-1..KI-31)
+  configs/                one file per stage: which FTLs, traces, preconditions and repeats to run
+  traces/
     TRACES.md             generated profile of every trace (do not edit by hand)
     profiles.json         the same data, machine-readable
-    manifest.json         generator parameters and seeds
-  validation-traces/      100k-op prefixes of each trace, for quick runs (plain git)
-  scripts/                trace generation, profiling, replay, stats trigger (see below)
+    manifest.csv/.json    generator parameters, seeds and hashes
+    full/                 9 synthetic workloads (Git LFS): 8 × 10M ops, plus zipf-80-20 at 100k
+    validation/           100k-op prefixes of each trace (plain git)
+    matrix/, real/        1M-op prefixes and the UMass traces (regenerated, not committed)
+    micro/                6 tiny hand-checked traces with expected.json
+  scripts/                build, run, validate, aggregate, trace generation and profiling
   tools/
     cachesim.c            exact LRU / LFU / perfect-LFU / Belady-OPT hit rates
     gclog_redirect.c      LD_PRELOAD shim for LeaFTL's hard-coded GC log path (KI-2)
-    test_*.{py,sh}        tests for both tools
-  results/runs.csv        early smoke-test rows (invalid; kept for history)
+    leaftl_replica.py     offline replica of LeaFTL's mapping logic (KI-28)
+  crosscheck/simplessd/   compares our LRU/LFU numbers with the cache in our SimpleSSD fork
+  results/                generated CSVs (baseline_summary.csv, baseline_runs.csv, request_costs.csv, ...)
 femu-scripts/run-blackbox-tcg.sh   boots FEMU under TCG with a cloud-init guest; needs no root
 hw/femu/bbssd/ftl_stats.h          shared JSON schema and per-request log
 ```
 
 ## Quick start (TCG, no root)
+
+The steps below boot FEMU by hand and replay one trace, to show how the pieces fit. The validated baselines are not made this way: they use `experiments/scripts/run_matrix.py`, which does all of this in one command per stage and checks every run. See [experiments/README.md](experiments/README.md).
 
 These steps work on a shared Linux server without sudo or `/dev/kvm`. TCG is much slower than KVM. Counters are still exact, but latency numbers from TCG are meaningless (KI-19).
 
@@ -70,10 +86,10 @@ These steps work on a shared Linux server without sudo or `/dev/kvm`. TCG is muc
 ```bash
 git clone https://github.com/notmohsin/LearnedFTL-Implementation.git LearnedFTL
 cd LearnedFTL
-git lfs pull          # fetches experiments/traces/*.trace (~2 GB)
+git lfs pull          # fetches experiments/traces/full/*.trace (~2 GB)
 ```
 
-You can skip `git lfs pull` if you only need `experiments/validation-traces/`.
+You can skip `git lfs pull` if you only need `experiments/traces/validation/`.
 
 ### 2. Build FEMU
 
@@ -142,7 +158,7 @@ EOF
 xorriso -as mkisofs -o femu-seed.iso -V cidata -J -r seed/
 ```
 
-After the first boot has finished, shut the guest down and save a pristine copy: `cp u20s.qcow2 femu-pristine.qcow2`. Before each run, `experiments/scripts/reset_femu_image.sh [target]` copies the pristine image to a fresh disk. Point `FEMU_OS_IMAGE` at that disk so every run starts from the same state.
+After the first boot has finished, shut the guest down and save a pristine copy: `cp u20s.qcow2 femu-pristine.qcow2`. Also record its hash: `sha256sum femu-pristine.qcow2 > femu-pristine.qcow2.sha256`. The baseline pipeline (`experiments/scripts/run_femu.py`) never writes to the pristine image: every run boots from a fresh qcow2 overlay on top of it. For the manual steps below, point `FEMU_OS_IMAGE` at a copy of the pristine image.
 
 ### 4. Boot FEMU
 
@@ -170,7 +186,7 @@ From the host, copy the scripts and a trace into the guest:
 ```bash
 scp -P 8080 -i ~/images/femu_id_ed25519 \
   experiments/scripts/{replay_trace.py,femu_stat.py} \
-  experiments/validation-traces/uniform-mixed.trace ubuntu@localhost:
+  experiments/traces/validation/uniform-mixed.trace ubuntu@localhost:
 ssh -p 8080 -i ~/images/femu_id_ed25519 ubuntu@localhost
 ```
 
@@ -190,7 +206,7 @@ grep '{"ftl"' build-femu/log
 
 > The stats-reset command (`femu_stat.py 8`) is a no-op in the authors' code (KI-1). Use the print-twice snapshot pattern above. Counters that never reset (`write_cnt`, `gc_cnt`, `wa_cnt`) are only meaningful as before/after differences.
 
-`replay_trace.py` still issues buffered I/O, so the guest kernel can merge, split or read ahead on requests. Until the `O_DIRECT` replay lands, compare `read_lpns` / `write_lpns` in the JSON against the trace's expected counters in [TRACES.md](experiments/traces/TRACES.md).
+`replay_trace.py` uses `O_DIRECT`, one request at a time. The guest block layer can still merge or split requests unless you also run `sudo bash guest_prep.sh` first (copy it from `experiments/scripts/`). Compare `read_lpns` / `write_lpns` in the JSON against the trace's expected counters in [TRACES.md](experiments/traces/TRACES.md).
 
 ## Switching FTL
 
@@ -199,7 +215,7 @@ Two lines select the FTL that gets built:
 1. **`hw/femu/meson.build`**: replace `'bbssd/leaftl.c'` with the FTL's source file, e.g. `'bbssd/ld-tpftl.c'`.
 2. **`hw/femu/bbssd/bb.c`**: change `#include "./leaftl.h"` to the matching header, e.g. `"./ld-tpftl.h"`.
 
-Then rebuild with `make -j"$(nproc)"` in `build-femu/` (or run `./femu-compile.sh` for a clean build). `main` stays on LeaFTL. Planned: `build_ftl.sh` will build each FTL in its own git worktree so the committed source never changes.
+Then rebuild with `make -j"$(nproc)"` in `build-femu/` (or run `./femu-compile.sh` for a clean build). `main` stays on LeaFTL. For the baselines, `experiments/scripts/build_ftl.sh leaftl|learnedftl` does this switch in a separate git worktree (`build-ftl/<ftl>/`) and builds there, so the committed source never changes.
 
 ## Traces and experiment tooling
 
@@ -209,13 +225,12 @@ Every trace uses the format `timestamp operation offset_bytes length_bytes` (one
 |---|---|
 | `scripts/generate_workloads.py` | Regenerate the synthetic suite and its manifest (`--operations`, `--seed`, `--workload`) |
 | `scripts/generate_8020_trace.py` | Generate the `zipf-80-20` hot/cold trace |
-| `scripts/prepare_validation_traces.py` | Cut fixed-length prefixes into `validation-traces/` (`--operations`, default 100k) |
+| `scripts/prepare_validation_traces.py` | Cut fixed-length prefixes of the full traces (`--operations`, default 100k) |
 | `scripts/profile_traces.py` | Regenerate `TRACES.md` and `profiles.json` byte-identically (`--only <stem>` for one trace) |
 | `scripts/belady.py` | Belady-OPT CMT bound keyed by LeaFTL translation page (assumes every miss inserts) |
 | `scripts/replay_trace.py` | Replay a trace on a raw block device inside the guest |
 | `scripts/femu_stat.py` | Send FEMU's stats command from the guest (`9` = print) |
-| `scripts/reset_femu_image.sh` | Copy the pristine guest image to a fresh run image |
-| `scripts/update_csv.py`, `clone_run.py` | Legacy: hand-maintained `runs.csv`. To be replaced by generated summaries |
+| `scripts/build_ftl.sh`, `run_matrix.py`, `run_femu.py`, `validate_run.py`, `aggregate.py` | The baseline pipeline: build, run a stage, check each run, build the CSVs (see [experiments/README.md](experiments/README.md)) |
 
 Run the tool tests from the repository root:
 
@@ -234,7 +249,9 @@ If you have root and `/dev/kvm`, the authors' `build-femu/run-blackbox.sh` boots
 |---|---|
 | [METRICS.md](experiments/docs/METRICS.md) | Exactly what each counter counts in each FTL, the headline cross-FTL metrics, and how this setup differs from the papers' |
 | [KNOWN_ISSUES.md](experiments/docs/KNOWN_ISSUES.md) | Behaviours of the authors' code that affect results, each with file:line and how the experiments handle it |
-| [BASELINE_PLAN.md](experiments/docs/BASELINE_PLAN.md) | Invariant catalogue, validation gates, the run pipeline and milestones |
+| [experiments/README.md](experiments/README.md) | Where everything is, and how to reproduce every result |
+| [BASELINE_PLAN.md](experiments/docs/BASELINE_PLAN.md) | The plan, what was built, every deviation, and the headline results |
+| [INVARIANTS.md](experiments/docs/INVARIANTS.md) | The 12 checks every run must pass |
 | [TRACES.md](experiments/traces/TRACES.md) | Per-trace mix, footprint, locality, read-after-write share and cache bounds |
 
 ## Citation
