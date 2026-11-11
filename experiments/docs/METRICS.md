@@ -100,7 +100,7 @@ Each read LPN ends in one bucket:
 | **CMT hit rate (mapped)** | Served LPNs whose CMT lookup hit / served. Same definition for both FTLs, but a LeaFTL entry covers a translation page and a LearnedFTL entry one LPN. |
 | **Unmapped-read share** | Unmapped read LPNs / all read LPNs. Under `fill`/`steady` this is 0 for LearnedFTL and equals LeaFTL's lost-data share. |
 | **Stale-read share** | Mapped reads served from an already-invalidated page (LeaFTL write-buffer window, KI-23) / mapped. |
-| **Lost-data read share** | (Unmapped − never-written) read LPNs / read LPNs of written data: data the FTL failed to return (KI-5, KI-24). |
+| **Lost-data read share** | (Unmapped − never-written) read LPNs / read LPNs of written data: data the FTL failed to return (KI-27, KI-28; after GC also KI-24). |
 | **Gap to Belady** | Belady-OPT hit rate at 8192 entries on the trace's read stream (FTL-native keying) − CMT hit rate (mapped). |
 
 Per-FTL metrics, reported but **not compared across FTLs**:

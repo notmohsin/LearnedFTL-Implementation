@@ -148,7 +148,7 @@ between boots (a 1 MiB write became 516 + 508 KiB in one run and 4 + 512 + 508 K
 never affected (its requests are at most 64 KiB, and invariant 1 passed on every run), but preconditioning was, and
 under LeaFTL different split points change which writes KI-27 drops. Preconditioning now issues 256 KiB requests.
 
-### 12. Energy accounting (HARD, in FEMU)
+### 12. Energy accounting (HARD, offline; the in-FEMU flag is reported only)
 
 `read_joule`, `write_joule`, `erase_joule` are accumulated inside `ssd_advance_status` from operation counts only
 (`+= 3.5` per read, `16.7` per write, `132` per erase; `leaftl.c:811,835,863`, `ld-tpftl.c:1183,1207,1234`), so this
@@ -184,4 +184,4 @@ confirms that the per-purpose counters of invariants 4 and 5 cover every NAND op
 | 9 | Snapshot integrity | HARD | offline |
 | 10 | Trace-derived expectations | HARD (+ KNOWN lost data) | offline |
 | 11 | Determinism | HARD | offline, across repeats |
-| 12 | Energy accounting | HARD | FEMU |
+| 12 | Energy accounting | HARD | offline (in-FEMU flag reported only) |
