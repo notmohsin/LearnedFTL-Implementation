@@ -4,7 +4,8 @@
     ki28_attribution.py [--jobs N] [--out experiments/results/ki28_attribution.csv]
 
 For each run it (1) checks that the replica reproduces FEMU's counters exactly in every interval, and (2) replays
-the run again with each bug switched off (insert, sort, last, drop, compact, insert+compact, and all five) and reports the workload
+the run again with each bug switched off (insert, sort, last, drop, compact, crb, insert+compact,
+insert+compact+crb, and all six) and reports the workload
 interval's lost-data share: reads of written LPNs that the learned lookup could not resolve
 (invalid_but_mapped) over reads of written LPNs.
 """
@@ -23,8 +24,9 @@ import leaftl_replica as lr  # noqa: E402
 
 ROOT = HERE.parents[1]
 VARIANTS = [("authors", set()), ("fix_insert", {"insert"}), ("fix_sort", {"sort"}), ("fix_last", {"last"}),
-            ("fix_drop", {"drop"}), ("fix_compact", {"compact"}), ("fix_insert_compact", {"insert", "compact"}),
-            ("fix_all", {"insert", "sort", "last", "drop", "compact"})]
+            ("fix_drop", {"drop"}), ("fix_compact", {"compact"}), ("fix_crb", {"crb"}),
+            ("fix_insert_compact", {"insert", "compact"}), ("fix_insert_compact_crb", {"insert", "compact", "crb"}),
+            ("fix_all", {"insert", "sort", "last", "drop", "compact", "crb"})]
 
 
 def lost_share(c) -> float:

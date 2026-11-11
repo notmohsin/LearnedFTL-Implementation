@@ -8,20 +8,27 @@ changing the authors' code. The replica re-implements, line for line, the parts 
 decide whether a read LPN can be resolved:
 
   ssd_write             buffer insertion, the carried-over `update_in_buffer` flag and the 2048-slot scan (KI-27),
-                        compact() every 1,000,000 written LPNs of an interval
+                        compact() every 1,000,000 written LPNs since boot (write_cnt is never zeroed, KI-17)
   buffer_flush          quick_sort(buffer_lpns, 0, buffer_size) with an inclusive upper bound, i.e. 2049 slots;
                         maptbl/GTD updates (LPN-0 sentinel, KI-10); segmentation (threshold 10, TRAIN_LEN 256,
                         group boundary, last LPN excluded: KI-9)
   regression            accuracy flag (consecutive LPNs) and the conflict-resolution buffer (CRB) of an
                         inaccurate segment
   segment_insert_simple_segment / level_seg_mgmt_insert   sorted insert into the top level, overlap -> new level
-  all_seg_get_ppn       level-by-level search; CRB search over every CRB of the group
+  all_seg_get_ppn       level-by-level search; CRB search over every CRB of the group. A CRB match is found and
+                        then discarded (the inner `flag` hides the function's `flag`, KI-31), so an LPN covered
+                        by an inaccurate segment never resolves at that level
   process_translation_page_read / cmt_hit   tvpn-keyed LRU CMT of 8192 entries; only accurate lookups inserted
   compact / get_valid_lpns / delete_seg
 
 PPN values are not modelled (they decide only whether a served read needs an extra flash read), so the replica
 predicts the counters that classify read LPNs: model_queries/hits/corrections/misses, cmt_hits/misses,
-unmapped_tp, invalid_read_cnt, invalid_but_mapped, buffer_hits, pre_first_write, writes_*, buffer_flushes.
+unmapped_tp, invalid_read_cnt, invalid_but_mapped, buffer_hits, pre_first_write, writes_*, buffer_flushes,
+crb_match_discarded.
+
+What the exact match with FEMU proves, and what it does not: the compared counters depend on the write buffer,
+the segment insert, the lookup and the CMT. They hardly depend on compact() (a replica without compact() still
+matches most runs), so the match does not validate the compact() model or the --fix variants that rely on it.
 Runs with GC are refused (GC_flush and do_gc are not modelled).
 
 The slot past the end of buffer_lpns: g_malloc0(2048 * 8) returns a glibc chunk whose usable size is 16,392
@@ -34,6 +41,7 @@ private 2049th slot; an exact match with FEMU's counters is the evidence that th
   sort    sort the 2048 buffer slots only
   last    the last LPN of a flush is included in its segment
   drop    `update_in_buffer` reset per LPN and only live buffer slots searched
+  crb     a CRB match is returned as a (corrected) mapping instead of being discarded (KI-31)
   compact get_valid_lpns marks CRB LPNs valid (the authors' code writes 0) and includes the last LPN of an
           accurate segment, so compact() deletes only levels that are fully shadowed
 """
@@ -91,11 +99,11 @@ class Replica:
         self.vppn = "garbage"                  # ssd_read's uninitialised local; see read()
         self.lost_segments = 0
         self.total_segments = 0
+        self.write_cnt = 0                     # since boot: leaftl.c never zeroes it (KI-17)
         self.reset()
 
     def reset(self):
         self.c = Counter()
-        self.write_cnt = 0
 
     # ---- write path ---------------------------------------------------------------------------------
     def write(self, start: int, end: int):
@@ -230,7 +238,7 @@ class Replica:
 
     # ---- read path ----------------------------------------------------------------------------------
     def lookup(self, lpn: int):
-        """all_seg_get_ppn: returns ('hit'|'correction'|'miss', cacheable)."""
+        """all_seg_get_ppn: returns ('hit'|'correction'|'miss', cacheable). 'correction' only with --fix crb."""
         group = lpn // ENTS_PER_TP
         off = lpn - group * ENTS_PER_TP
         for level in self.levels.get(group, []):
@@ -239,7 +247,9 @@ class Replica:
                     if seg.accurate:
                         return "hit", True
                     if self.crb_count.get(group, {}).get(lpn, 0) > 0:
-                        return "correction", False
+                        if "crb" in self.fix:
+                            return "correction", False
+                        self.c["crb_match_discarded"] += 1   # authors': found, then discarded (KI-31)
                     break                       # flag 0: next level
         return "miss", False
 
@@ -289,7 +299,7 @@ class Replica:
 COMPARED = ["read_lpns", "write_lpns", "pre_first_write", "buffer_hits", "cmt_hits", "cmt_misses", "unmapped_tp",
             "model_queries", "model_hits", "model_corrections", "model_misses", "invalid_read_cnt",
             "invalid_but_mapped", "served_lpns", "true_unmapped", "writes_buffered", "writes_absorbed",
-            "writes_dropped", "buffer_flushes"]
+            "writes_dropped", "buffer_flushes", "crb_match_discarded"]
 
 
 def replay(run: Path, fix: set[str]):
