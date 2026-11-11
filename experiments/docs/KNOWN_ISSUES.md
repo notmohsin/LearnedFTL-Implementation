@@ -234,7 +234,7 @@ are stable). None is fixed; each is measured and reported.
 - **Effect:** every GC pass rewrites the translation pages of whatever happens to be in the host write buffer
   (about 340 per victim block on `uniform-mixed`) and never rewrites the translation pages of the LPNs it moved.
   Measured on `uniform-mixed`, 100k ops after `fill`: 23.1M translation-page writes for 286k host-written LPNs,
-  WAF 81.8. Together with KI-23 it leaves the mapping state inconsistent (KI-24).
+  WAF 81.7. Together with KI-23 it leaves the mapping state inconsistent (KI-24).
 - **Handling:** measured (`nand_writes_translation`, `waf`). Every LeaFTL result in which GC runs (all `fill` and
   `steady` runs) carries this caveat in its `notes`.
 
@@ -263,9 +263,9 @@ are stable). None is fixed; each is measured and reported.
 ### KI-24: Mapping state inconsistent after GC (LeaFTL)
 
 - **Where:** consequence of KI-21 and KI-23 (and KI-4/KI-6 on the read side); visible only once GC has run.
-- **Effect:** after `fill` + 100k `uniform-mixed` ops: 8,651 blocks whose valid-page count differs from the number
-  of map entries pointing into them, 14,274 valid pages whose reverse map does not resolve back, 2,402 map entries
-  pointing at non-valid pages (more than the 2,048-LPN buffer can explain), and 5.1% of reads of written data not
+- **Effect:** after `fill` + 100k `uniform-mixed` ops: 8,671 blocks whose valid-page count differs from the number
+  of map entries pointing into them, 14,317 valid pages whose reverse map does not resolve back, 2,534 map entries
+  pointing at non-valid pages (more than the 2,048-LPN buffer can explain), and 8.3% of reads of written data not
   returned (`invalid_but_mapped`: the FTL found no mapping although the page map has one).
 - **Handling:** for LeaFTL, invariant 7's block, reverse-map and stale-entry parts are KNOWN (reported with counts);
   its line-list part stays HARD. The lost reads are reported as `lost_data_read_share`. For LearnedFTL the whole of
@@ -300,7 +300,7 @@ are stable). None is fixed; each is measured and reported.
   earlier flush, or LPN 0 against a zero slot), that LPN and every later LPN of the request are neither buffered nor
   flushed. If the LPN was mapped, its old page has already been invalidated (KI-23), so the map points at a dead page;
   if not, the write is lost and later reads are unmapped. The first request of every run touching LPN 0 is dropped
-  entirely: the first 1 MiB of the `fill` precondition, and the first request of the micro-traces.
+  entirely: the first 256 KiB (64 LPNs) of the `fill` precondition, and the first request of the micro-traces.
 - **Handling:** measured: `writes_buffered + writes_absorbed + writes_dropped = write_lpns` (HARD), where absorbed
   means a genuine live duplicate. `writes_dropped` and `dropped_write_share` are reported (KNOWN). The micro-traces
   `write-read-buffered`, `overwrite-then-read` and `size-buckets` predict the dropped counts exactly.

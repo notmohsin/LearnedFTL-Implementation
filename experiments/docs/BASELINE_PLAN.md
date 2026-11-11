@@ -470,7 +470,7 @@ How to read it:
 - **LeaFTL (the LearnedFTL authors' FEMU port) has correctness bugs that dominate its numbers once GC runs**: GC
   rewrites the translation pages of the host write buffer instead of the migrated LPNs (KI-21, WAF ~82 on
   `uniform-mixed` after `fill`), never programs migrated data (KI-22), serves reads from invalidated pages in the
-  write-buffer window (KI-23), loses ~5% of reads of written data after GC (KI-24), and silently drops host writes
+  write-buffer window (KI-23), loses ~8% of reads of written data after GC (KI-24), and silently drops host writes
   through its buffer duplicate check (KI-27; the first request touching LPN 0 is always lost).
 - LearnedFTL detects wrong model predictions for free (KI-20) and never charges translation-page writes (KI-25):
   both flatter it relative to LeaFTL and are reported separately.
