@@ -294,8 +294,8 @@ are stable). None is fixed; each is measured and reported.
 
 ### KI-27: Host writes silently dropped by the buffer duplicate check (LeaFTL)
 
-- **Where:** `ssd_write` (`leaftl.c:3006`) declares `bool update_in_buffer = false` once per request
-  (`leaftl.c:3019`) and sets it when an LPN is found in the write buffer (`leaftl.c:3055-3060`), but never resets it
+- **Where:** `ssd_write` (`leaftl.c:3011`) declares `bool update_in_buffer = false` once per request
+  (`leaftl.c:3024`) and sets it when an LPN is found in the write buffer (`leaftl.c:3061-3066`), but never resets it
   for the next LPN. The search scans all 2048 slots of `buffer_lpns`, which is zero-initialised and never cleared
   after a flush (`buffer_pointer` is reset to 0 and old LPNs stay in the slots).
 - **Effect:** once one LPN of a request matches any slot (an LPN still live in the buffer, an LPN left over from an
@@ -309,30 +309,47 @@ are stable). None is fixed; each is measured and reported.
 
 ### KI-28: The learned lookup fails for many written LPNs (LeaFTL)
 
-- **Where:** two bugs in the segment store; the read then takes the `vppn == INVALID_VAL` branch of `ssd_read` and
-  returns no data.
-  1. `segment_insert_simple_segment` (`leaftl.c:1584-1634`): when the group's top level holds exactly one segment,
-     `q = sg->segment_head->next` is NULL, the `while (q)` loop (`:1606`) never runs, and the function returns
-     without linking the new segment (unless it lies entirely below the head, `:1596`). A level holds exactly one
-     segment after a group's first insert and after every overlap (`level_seg_mgmt_insert`, `:1749-1757`), so this
-     is the common case: 82% of all segments built in the 80 replayed runs were dropped.
-  2. `compact` (`:1859`), called every 1,000,000 written LPNs of an interval (`ssd_write`, `:3053`), deletes lower
-     levels that `get_valid_lpns` (`:1650`) reports as fully shadowed. `get_valid_lpns` marks the LPNs of a
-     conflict-resolution buffer (CRB) as 0 instead of 1 (`:1672`) and skips the last LPN of an accurate segment
-     (`:1658`), so levels that hold the only mapping for some LPNs are freed.
+- **Where:** three bugs in the segment store and its lookup; the read then takes the `vppn == INVALID_VAL` branch of
+  `ssd_read` and returns no data.
+  1. `segment_insert_simple_segment` (`leaftl.c:1588-1638`): when the group's top level holds exactly one segment,
+     `q = sg->segment_head->next` is NULL, the `while (q)` loop (`:1610`) never runs, and the function returns
+     without linking the new segment (unless it lies entirely below the head, `:1600`). A level holds exactly one
+     segment after a group's first insert and after every overlap (`level_seg_mgmt_insert`, `:1753-1761`), so this
+     is the common case: 82% of all segments built in the 82 replayed runs were dropped.
+  2. A match in a conflict-resolution buffer (CRB) is found and then discarded (KI-31), so an LPN that lies in an
+     approximate (inaccurate) segment is never resolved through that segment.
+  3. `compact` (`:1859`), called every 1,000,000 written LPNs since boot (`ssd_write`, `:3055`; `write_cnt` is never
+     zeroed, KI-17), deletes lower levels that `get_valid_lpns` (`:1654`) reports as fully shadowed.
+     `get_valid_lpns` marks the LPNs of a CRB as 0 instead of 1 (`:1676`) and skips the last LPN of an accurate
+     segment (`:1662`), so levels that hold the only mapping for some LPNs are freed. Its measured effect is small
+     (see Evidence).
 
-  A dropped segment's CRB has already been pushed onto the group's CRB list by `regression` (`:1494-1509`), and the
-  CRB search scans every CRB of the group (`:1556-1571`), so scattered (inaccurate) writes stay partly findable as
-  model corrections; contiguous (accurate) segments have no CRB and are lost outright.
+  Bugs 1 and 2 hit different writes. Contiguous writes build accurate segments: they are lost when bug 1 drops the
+  segment. Scattered writes build approximate segments: they are lost through bug 2 even when the segment is linked.
 - **Evidence:** `experiments/tools/leaftl_replica.py` re-implements the write buffer, `buffer_flush`, `regression`,
-  segment insertion, `all_seg_get_ppn`, the CMT and `compact`, driven by each run's FEMU request log. On all 80
-  LeaFTL runs without GC it reproduces FEMU's read-partition, model, CMT and write counters exactly (3,040
-  counters, 0 mismatches; `experiments/tools/ki28_attribution.py`). Replayed with bug 1 switched off, the
-  lost-data share is at most 0.0002 on every 100k-request and real-trace run, and 0.003-0.117 on the 1M-request runs
-  that reach `compact`; with bugs 1 and 2 off it is at most 0.0002 everywhere, and 0 with KI-9, KI-27 and KI-30 also
-  off. Fixed alone, KI-9, KI-27 and KI-30 never remove the loss: they only change which segments bug 1 drops (KI-30
-  alone moves the share by up to +0.21). Per-run values: `experiments/results/ki28_attribution.csv`.
-- **Effect:** under `warm`, 8-63% of reads of written data are not returned (`invalid_but_mapped`,
+  segment insertion, `all_seg_get_ppn`, the CMT and `compact`, driven by each run's FEMU request log. On all 82
+  LeaFTL runs without GC it reproduces FEMU's read-partition, model, CMT and write counters exactly (3,280
+  counters, 0 mismatches; `experiments/tools/ki28_attribution.py`). The lost-data share of the workload interval,
+  replayed with bugs switched off (76 runs; the 6 micro-trace runs are left out of this table: one of them,
+  `evict-then-read`, keeps a share of 0.25 until KI-9, KI-27 and KI-30 are also off):
+
+  | Switched off in the replica | Lost-data share, `warm` runs |
+  |---|---|
+  | nothing (authors' code) | up to 0.879 |
+  | bug 1 (insert) | up to 0.668 |
+  | bug 2 (CRB match, KI-31) | up to 0.629 |
+  | bug 3 (`compact`) | unchanged in every run |
+  | bugs 1 and 3 | up to 0.668 (at most 0.0014 below "bug 1" alone) |
+  | bugs 1, 2 and 3 | at most 0.0002 |
+  | bugs 1, 2, 3 and KI-9, KI-27, KI-30 | 0 in every run |
+
+  Fixed alone, KI-9 and KI-30 move the share by at most 0.0005 and 0.0026. KI-27 fixed alone moves it by -0.08 to
+  +0.68: it changes which segments exist, and so which ones bugs 1 and 2 hit. Per-run values:
+  `experiments/results/ki28_attribution.csv`.
+  Limit of this evidence: the compared counters hardly depend on `compact` (a replica without it still matches most
+  runs), so the exact match does not validate the replica's `compact` model. The rows that rely on it are "bug 3"
+  and "bugs 1 and 3".
+- **Effect:** under `warm`, 10-88% of reads of written data are not returned (`invalid_but_mapped`,
   `model_misses == invalid_read_cnt`).
 - **Handling:** measured as `invalid_but_mapped` and `lost_data_read_share` (KNOWN, invariant 10). LeaFTL's
   translation-free ratio and flash reads per read are computed over the reads it did serve, so they must always be

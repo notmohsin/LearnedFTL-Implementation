@@ -374,7 +374,7 @@ These gates apply the Phase 2b invariant catalogue, evaluated by `validate_run.p
    `baseline_summary.csv`, `baseline_runs.csv` and `baseline_summary_columns.csv` regenerate byte-identically from raw JSONL alone.
    Every column in the summary has a dictionary entry, and a test in `aggregate.py` fails if one is missing.
 
-## Status (updated 2026-11-10)
+## Status (updated 2026-11-11)
 
 Living copy of this plan: `LearnedFTL/experiments/docs/BASELINE_PLAN.md`. Keep the two in sync, and update the status there.
 
@@ -383,14 +383,14 @@ Living copy of this plan: `LearnedFTL/experiments/docs/BASELINE_PLAN.md`. Keep t
 | Phase | Deliverable | Where |
 |---|---|---|
 | 0 | GC-log shim (also makes FEMU's stdout line-buffered); KVM pending (request sent to the server's professor) | `experiments/tools/gclog_redirect.c` |
-| 1, 1b | KNOWN_ISSUES (KI-1..KI-30), METRICS, TRACES.md for 31 traces | `experiments/docs/`, `experiments/traces/` |
+| 1, 1b | KNOWN_ISSUES (KI-1..KI-31), METRICS, TRACES.md for 31 traces | `experiments/docs/`, `experiments/traces/` |
 | 2 | Request-flow counters, read partition, `FEMU_REQLOG`, shared JSON schema | `hw/femu/bbssd/{leaftl,ld-tpftl}.c`, `ftl_stats.h` |
 | 2b | Invariants 1-12 (in FEMU and offline), per-LPN flash-read accounting, micro-traces, validator self-test | `INVARIANTS.md`, `validate_run.py`, `test_validate_run.py`, `traces/micro/` |
 | 3 | One binary per FTL from a commit (git worktrees), KVM/TCG launcher, 30 GiB device (~7% OP) | `build_ftl.sh`, `launch_femu.sh` |
 | 4 | O_DIRECT QD1 replay with read verification, guest prep, one-command runs | `replay_trace.py`, `guest_prep.sh`, `run_femu.py` |
 | 5, 6 | Resumable parallel stages, mentor CSVs with data dictionary | `run_matrix.py`, `experiments/configs/*.json`, `aggregate.py` |
 | M4 | Real traces: UMass WebSearch1-3 and Financial1-2 (first 1M requests, normalised) | `normalize_trace.py`, `experiments/traces/real/*.json` |
-| - | KI-28 root cause: exact offline replica of LeaFTL's mapping logic | `experiments/tools/leaftl_replica.py`, `ki28_attribution.py` |
+| - | KI-28 root causes: exact offline replica of LeaFTL's mapping logic | `experiments/tools/leaftl_replica.py`, `ki28_attribution.py` |
 
 ### Deviations from the plan, with the measurement behind each
 
@@ -419,51 +419,63 @@ Living copy of this plan: `LearnedFTL/experiments/docs/BASELINE_PLAN.md`. Keep t
    `reset_femu_image.sh` and the hand-edited `results/runs.csv` were removed. Saved manifests record the old trace
    path under `moved`; the CSVs regenerate byte-identically after the move.
 
-### Results (2026-11-10)
+### Results (2026-11-11)
 
-All runs use TCG on commit `5f2e66c` (both FTL binaries), the 30 GiB device, and the scripts at the commit that
-produced `experiments/results/baseline_summary.csv`.
+All runs use TCG, the 30 GiB device, and the scripts at the commit that produced
+`experiments/results/baseline_summary.csv`. The LearnedFTL binary is built from commit `5f2e66c`. The LeaFTL binary is
+built from commit `609139db0`, which restores the authors' CRB lookup (KI-31): commit `2298bfac2` had changed it by
+mistake, and all 102 LeaFTL runs were repeated on 2026-11-11. The replaced runs are in
+`experiments/results/_superseded/batch-changed-lookup-1111/`.
 
-- **186 runs, 186 valid** (every HARD invariant passes): 8 micro, 144 validation (100k ops: none / warm / fill),
+- **190 runs, 190 valid** (every HARD invariant passes): 12 micro, 144 validation (100k ops: none / warm / fill),
   24 matrix (1M ops, warm), 10 real (UMass, 1M requests, warm).
 - **Request flow**: FEMU received exactly the trace, request by request, in every run (invariant 1).
-- **Determinism**: all 49 groups with repeats produced identical counters (invariant 11); 39 configurations are single runs.
-- **Micro-traces**: all 8 match the hand-derived expectations; the validator self-test catches all 13 mutations.
+- **Determinism**: all 49 groups with repeats produced identical counters (invariant 11); 43 configurations are single runs.
+- **Micro-traces**: all 12 runs (6 traces x 2 FTLs) match the hand-derived expectations; the validator self-test
+  catches all 13 mutations.
 
-Main condition (`warm`, 1M requests, LeaFTL / LearnedFTL):
+Main condition (`warm`, 1M requests, LeaFTL / LearnedFTL). The first three columns are over the reads each FTL
+served. The last two columns are LeaFTL only.
 
-| Workload | Translation-free | Double reads | Flash reads per mapped read | LeaFTL lost-data share | LeaFTL gap to Belady |
+| Workload | Translation-free | Double reads | Flash reads per mapped read | LeaFTL lost-data share | LeaFTL gap to Belady, all lookups |
 |---|---|---|---|---|---|
-| financial1 | 0.801 / 0.829 | 0.385 / 0.162 | 1.74 / 1.18 | 0.083 | 0.182 |
-| financial2 | 0.500 / 0.849 | 0.393 / 0.136 | 2.30 / 1.17 | 0.301 | 0.363 |
-| mixed-50-seq-50-random | 0.503 / 0.768 | 0.511 / 0.186 | 2.37 / 1.28 | 0.553 | 0.411 |
-| seq-mixed | 0.955 / 0.845 | 0.829 / 0.150 | 1.89 / 1.16 | 0.303 | 0.005 |
-| uniform-mixed | 0.300 / 0.702 | 0.352 / 0.214 | 2.59 / 1.38 | 0.628 | 0.619 |
-| uniform-read | 0.364 / 0.701 | 0.417 / 0.299 | 2.52 / 1.30 | 0.583 | 0.536 |
-| websearch1 | 0.742 / 0.714 | 0.584 / 0.286 | 2.02 / 1.29 | 0.235 | 0.249 |
-| websearch2 | 0.738 / 0.710 | 0.590 / 0.290 | 2.04 / 1.29 | 0.236 | 0.253 |
-| websearch3 | 0.742 / 0.720 | 0.582 / 0.280 | 2.02 / 1.28 | 0.222 | 0.249 |
-| zipf-hot10-access90-a1.2 | 0.226 / 0.954 | 0.215 / 0.033 | 2.76 / 1.06 | 0.078 | 0.028 |
-| zipf-hot20-access80-a0.8 | 0.560 / 0.798 | 0.526 / 0.149 | 2.35 / 1.26 | 0.227 | 0.269 |
-| zipf-hot20-access80-a1.2 | 0.240 / 0.922 | 0.230 / 0.057 | 2.74 / 1.10 | 0.153 | 0.037 |
+| financial1 | 0.980 / 0.829 | 0.449 / 0.162 | 1.49 / 1.18 | 0.251 | 0.250 |
+| financial2 | 0.786 / 0.849 | 0.549 / 0.136 | 1.98 / 1.17 | 0.555 | 0.554 |
+| mixed-50-seq-50-random | 0.896 / 0.768 | 0.800 / 0.186 | 1.99 / 1.28 | 0.749 | 0.717 |
+| seq-mixed | 0.955 / 0.845 | 0.829 / 0.150 | 1.89 / 1.16 | 0.303 | 0.301 |
+| uniform-mixed | 0.918 / 0.702 | 0.842 / 0.214 | 1.99 / 1.38 | 0.879 | 0.821 |
+| uniform-read | 0.891 / 0.701 | 0.813 / 0.299 | 2.02 / 1.30 | 0.830 | 0.773 |
+| websearch1 | 0.994 / 0.714 | 0.734 / 0.286 | 1.74 / 1.29 | 0.429 | 0.424 |
+| websearch2 | 0.994 / 0.710 | 0.744 / 0.290 | 1.75 / 1.29 | 0.432 | 0.427 |
+| websearch3 | 0.994 / 0.720 | 0.729 / 0.280 | 1.74 / 1.28 | 0.419 | 0.414 |
+| zipf-hot10-access90-a1.2 | 0.233 / 0.954 | 0.221 / 0.033 | 2.75 / 1.06 | 0.109 | 0.103 |
+| zipf-hot20-access80-a0.8 | 0.784 / 0.798 | 0.701 / 0.149 | 2.13 / 1.26 | 0.448 | 0.430 |
+| zipf-hot20-access80-a1.2 | 0.252 / 0.922 | 0.237 / 0.057 | 2.73 / 1.10 | 0.194 | 0.182 |
 
 How to read it:
 
 - LearnedFTL needs fewer double reads than LeaFTL in 19 of 20 `warm` comparisons (the exception is `zipf-80-20` at
   100k, where LeaFTL's reads are mostly triple reads instead), consistent with the LearnedFTL paper's trend. In the
-  1M-request rows above its flash reads per read are 1.06-1.38 against LeaFTL's 1.74-2.76 (LeaFTL reaches 2.89 in
+  1M-request rows above its flash reads per read are 1.06-1.38 against LeaFTL's 1.49-2.75 (LeaFTL reaches 2.90 in
   the 100k `warm` rows).
-- LeaFTL's numbers cover only the reads it served: it fails to return 8-63% of reads of written data (KI-27, KI-28).
-  Any comparison must quote this alongside.
-  Root cause (KI-28), proven with an exact offline replica of LeaFTL's mapping logic (`experiments/tools/leaftl_replica.py`,
-  0 mismatches on 3,040 counters over 80 runs): new segments are silently dropped when a group's top level holds
-  exactly one segment, and `compact()` deletes levels that still hold the only mapping. With both switched off in the
-  replica the lost-data share is at most 0.0002 in every run (`experiments/results/ki28_attribution.csv`).
-- LeaFTL's gap to Belady-OPT is 0.54-0.62 on uniform traces, ~0.25 on WebSearch, and 0.03-0.04 on the two zipf
-  traces with alpha 1.2 (0.27 on the zipf trace with alpha 0.8):
-  this is the headroom a better replacement policy could target for a TP-keyed cache.
+- LeaFTL's numbers cover only the reads it served: it fails to return 10-88% of reads of written data in the `warm`
+  rows (KI-27, KI-28, KI-31). Any comparison must quote this alongside. On the 1M uniform traces LeaFTL serves only
+  12-17% of the reads of written data, so its per-read numbers there describe a small, easy subset.
+  Root causes (KI-28), measured with an exact offline replica of LeaFTL's mapping logic
+  (`experiments/tools/leaftl_replica.py`, 0 mismatches on 3,280 counters over 82 runs): (1) new segments are silently
+  dropped when a group's top level holds exactly one segment; (2) a match in a conflict-resolution buffer is found
+  and then discarded (KI-31), so LPNs in approximate segments are never resolved; (3) `compact()` deletes levels
+  that still hold the only mapping (small effect). With (1) off in the replica the largest `warm` lost-data share
+  falls from 0.88 to 0.67; with (2) off, to 0.63; with all three off it is at most 0.0002 in every run
+  (`experiments/results/ki28_attribution.csv`).
+- Gap to Belady-OPT. Over the reads LeaFTL served, its CMT hit rate is 0.98-1.00 at 1M requests, and the
+  gap to Belady is between -0.05 and +0.02 in the `warm` rows (`gap_to_belady`; negative in 19 of all 34 rows, because
+  the populations differ). Over all lookups (`gap_to_belady_all_lookups`) the gap is 0.09-0.82 in the `warm` rows, and
+  it is within 0.06 of the lost-data share in each of them.
+  So the gap is made of lookups that fail (KI-28, KI-31), not of cache misses. These runs do not show headroom for a
+  better replacement policy on LeaFTL as ported.
 - `fill` rows are GC stress only: LeaFTL's translation writes explode (WAF 19-91 on four of the eight traces with
-  writes, 0.5-3.8 on the other four; KI-21) and LearnedFTL thrashes
+  writes, 0.5-3.7 on the other four; KI-21) and LearnedFTL thrashes
   (WAF up to 5,338, KI-29). Neither is a cache comparison.
 - LearnedFTL's advantage is flattered by two accounting gaps (KI-20 free misprediction checks, KI-25 uncharged
   translation writes); `flash_reads_per_mapped_read_mispred_charged` and the NAND write split show their size.
